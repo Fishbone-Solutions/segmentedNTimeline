@@ -110,8 +110,15 @@ export class segmentedBar extends React.Component<any, State>{
         var weeksSeg2 = []; var activitySeg2 = []; var commentarySeg2 = []; var statusSeg2 = []; var milestoneCategoryListSeg2 = [];
         var weeksSeg3 = []; var activitySeg3 = []; var commentarySeg3 = []; var statusSeg3 = [];
         var weeksSeg4 = [];
+        var weeksSeg5 = [];
+        var weeksSeg6 = [];
+
 
         var activitySeg4 = []; var commentarySeg4 = []; var statusSeg4 = [];
+        var activitySeg5 = []; var commentarySeg5 = []; var statusSeg5 = [];
+        var activitySeg6 = []; var commentarySeg6 = []; var statusSeg6 = [];
+
+
 
       
 
@@ -120,6 +127,8 @@ export class segmentedBar extends React.Component<any, State>{
         var Seg3Values = [];
         var Seg4Values = [];
 
+        var Seg5Values = [];
+        var Seg6Values = [];
 
 
         var weekDates = []
@@ -133,15 +142,10 @@ export class segmentedBar extends React.Component<any, State>{
 
 
 
-        
-        const categoryListDisplayArray = categoryListDisplay.map((category) =>
-            <>
-                <button style={{ width: 48, padding: 0, border: 0 }}>{category}</button>
-                
-            </>
-        )
+      
 
-          
+
+          console.log(categoryListDisplay)
 
 
 
@@ -555,7 +559,7 @@ export class segmentedBar extends React.Component<any, State>{
 
                 <Line
 
-                    points={[Seg2Values[index]['x'], yBarListSeg2[index], Seg2Values[index]['x'], 352]}
+                    points={[Seg2Values[index]['x'], yBarListSeg2[index], Seg2Values[index]['x'], 317]}
 
 
                     stroke={statusSeg2[index]}
@@ -593,7 +597,7 @@ export class segmentedBar extends React.Component<any, State>{
                 />
                 <Line
 
-                    points={[Seg3Values[index]['x'], yBarListSeg3[index], Seg3Values[index]['x'], 360]}
+                    points={[Seg3Values[index]['x'], yBarListSeg3[index], Seg3Values[index]['x'], 330]}
 
 
                     stroke={statusSeg3[index]}
@@ -635,7 +639,7 @@ export class segmentedBar extends React.Component<any, State>{
                 />
                 <Line
 
-                    points={[Seg4Values[index]['x'], yBarListSeg4[index], Seg4Values[index]['x'], 372]}
+                    points={[Seg4Values[index]['x'], yBarListSeg4[index], Seg4Values[index]['x'], 343]}
 
 
                     stroke={statusSeg4[index]}
@@ -650,13 +654,13 @@ export class segmentedBar extends React.Component<any, State>{
             </>
 
         )
-        const Segment5Categories = weeksSeg4.map((week, index) =>
+        const Segment5Categories = weeksSeg5.map((week, index) =>
 
         <>
 
-            <Text text={activitySeg4[index]}
+            <Text text={activitySeg5[index]}
 
-                x={Seg4Values[index]['x'] + 3} y={yBarListSeg4[index]}
+                x={Seg5Values[index]['x'] + 3} y={yBarListSeg5[index]}
 
                 fontSize={12}
                 fill={textColor}
@@ -676,10 +680,10 @@ export class segmentedBar extends React.Component<any, State>{
             />
             <Line
 
-                points={[Seg4Values[index]['x'], yBarListSeg4[index], Seg4Values[index]['x'], 372]}
+                points={[Seg5Values[index]['x'], yBarListSeg4[index], Seg5Values[index]['x'], 343]}
 
 
-                stroke={statusSeg4[index]}
+                stroke={statusSeg5[index]}
 
             />
 
@@ -691,13 +695,13 @@ export class segmentedBar extends React.Component<any, State>{
         </>
 
     )
-        const Segment6Categories = weeksSeg4.map((week, index) =>
+        const Segment6Categories = weeksSeg6.map((week, index) =>
 
     <>
 
-        <Text text={activitySeg4[index]}
+        <Text text={activitySeg6[index]}
 
-            x={Seg4Values[index]['x'] + 3} y={yBarListSeg4[index]}
+            x={Seg4Values[index]['x'] + 3} y={yBarListSeg6[index]}
 
             fontSize={12}
             fill={textColor}
@@ -708,8 +712,8 @@ export class segmentedBar extends React.Component<any, State>{
 
 
                 this.setState({
-                    activityPlaceholder: activitySeg4[index],
-                    commentaryPlaceholder: commentarySeg4[index],
+                    activityPlaceholder: activitySeg6[index],
+                    commentaryPlaceholder: commentarySeg6[index],
 
 
                 })}
@@ -763,18 +767,16 @@ export class segmentedBar extends React.Component<any, State>{
 <rect x="20" y="190" width="220" height="25" fill="yellow"></rect>
 <rect x="20" y="230" width="220" height="25" fill="orange"></rect>
 <rect x="20" y="270" width="220" height="25" fill="purple"></rect>
-<rect x="20" y="310" width="220" height="25" fill="pink"></rect>
-<rect x="20" y="350" width="220" height="25" fill="brown"></rect>
+
 
 
     <text x="25" y="90" fontSize="13" fill="black">{categoryListDisplay[0]}</text>
     <text x="25" y="130" fontSize="13" fill="black">{categoryListDisplay[1]}</text>
     <text x="25" y="170" fontSize="13" fill="black">{categoryListDisplay[2]}</text>
     <text x="25" y="210" fontSize="13" fill="black">{categoryListDisplay[3]}</text>
-    <text x="25" y="250" fontSize="13" fill="black">{categoryListDisplay[3]}</text>
-    <text x="25" y="290" fontSize="13" fill="black">{categoryListDisplay[3]}</text>
-    <text x="25" y="330" fontSize="13" fill="black">{categoryListDisplay[3]}</text>
-    <text x="25" y="370" fontSize="13" fill="black">{categoryListDisplay[3]}</text>
+    <text x="25" y="250" fontSize="13" fill="black">{categoryListDisplay[4]}</text>
+    <text x="25" y="290" fontSize="13" fill="black">{categoryListDisplay[5]}</text>
+
 
 
   </g>
@@ -912,6 +914,13 @@ export class segmentedBar extends React.Component<any, State>{
                         </Layer>
                         <Layer>
                            {Segment1Categories}
+                           {Segment2Categories}
+                           {Segment3Categories}
+                           {Segment4Categories}
+                           {Segment5Categories}
+                           {Segment6Categories}
+
+
                             {ElectricalEvents}
 
                         </Layer>
