@@ -1,20 +1,43 @@
 {
     "dataRoles": [
         {
-            "displayName": "Category Data",
-            "name": "category",
+            "displayName": "Activity",
+            "name": "c1",
             "kind": "Grouping"
         },
         {
-            "displayName": "Measure Data",
-            "name": "measure",
+            "displayName": "Dates",
+            "name": "c2",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Category",
+            "name": "c3",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Milestone Category",
+            "name": "c4",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Status",
+            "name": "c5",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Commentary",
+            "name": "c6",
             "kind": "Measure"
         }
     ],
     "objects": {
-        "dataPoint": {
+        "circle": {
+            "displayName": "Milestone Color",
             "properties": {
-                "defaultColor": {
+                "Segment1Color": {
+                    "displayName": "Segment 1 Color",
+                    "description": "The fill color of the Segment 1.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -23,12 +46,9 @@
                         }
                     }
                 },
-                "showAllDataPoints": {
-                    "type": {
-                        "bool": true
-                    }
-                },
-                "fill": {
+                "Segment2Color": {
+                    "displayName": "Segment 2 Color",
+                    "description": "The fill color of the Segment 2.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -37,15 +57,47 @@
                         }
                     }
                 },
-                "fillRule": {
+                "Segment3Color": {
+                    "displayName": "Segment 3 Color",
+                    "description": "The fill color of the Segment 3.",
                     "type": {
-                        "fill": {}
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
                     }
                 },
-                 "fontSize": {
+                "Segment4Color": {
+                    "displayName": "Segment 4 Color",
+                    "description": "The fill color of the Segment 4",
                     "type": {
-                        "formatting": {
-                            "fontSize": true
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "textColor": {
+                    "displayName": "Text Color",
+                    "description": "Text Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "circleColor": {
+                    "displayName": "Background Color",
+                    "description": "The fill color of the circle.",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
                         }
                     }
                 }
@@ -54,26 +106,47 @@
     },
     "dataViewMappings": [
         {
-            "categorical": {
-                "categories": {
-                    "for": {
-                        "in": "category"
-                    },
-                    "dataReductionAlgorithm": {
-                        "top": {}
-                    }
-                },
-                "values": {
+            "single": {
+                "role": "dates"
+            },
+            "table": {
+                "rows": {
                     "select": [
                         {
-                            "bind": {
-                                "to": "measure"
+                            "for": {
+                                "in": "c1"
+                            }
+                        },
+                        {
+                            "for": {
+                                "in": "c2"
+                            }
+                        },
+                        {
+                            "for": {
+                                "in": "c3"
+                            }
+                        },
+                        {
+                            "for": {
+                                "in": "c4"
                             }
                         }
                     ]
                 }
             }
         }
-    ],
-    "privileges": []
+    ]
+,
+    "privileges": [
+        {
+            "name": "WebAccess",
+            "essential": true,
+            "parameters": [ "https://*.virtualearth.net" ]
+        },
+        {
+            "name": "ExportContent",
+            "essential": false
+        }
+    ]
 }

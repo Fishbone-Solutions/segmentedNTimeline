@@ -2,7 +2,7 @@
 node_modules/
 .DS_Store
 .vscode/
-
+.tmp/
 # Ignore Git tracking files
 .git/
 
@@ -41,3 +41,4 @@ node_modules/@(npm|yarn)/**/*
 
 # Ignore dotfiles in the root directory
 ./*.dot
+./*.tmp
