@@ -11,6 +11,8 @@ export interface State {
     Segment2Color?: string,
     Segment3Color?: string,
     Segment4Color?: string,
+    Segment5Color?: string,
+    Segment6Color?: string,
     textColor?: string,
     activityList?: string[]
     commentaryList?: string[],
@@ -91,6 +93,8 @@ export class segmentedBar extends React.Component<any, State>{
             Segment2Color,
             Segment3Color,
             Segment4Color,
+            Segment5Color,
+            Segment6Color,
             textColor,
             activityList,
             weeknoList,
@@ -471,6 +475,9 @@ export class segmentedBar extends React.Component<any, State>{
         var yBarListSeg2 = [40, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280]
         var yBarListSeg3 = [400, 420, 440, 460, 480, 500, 400, 420, 440, 460, 480, 500, 400, 420, 440, 460, 480, 500]
         var yBarListSeg4 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
+        var yBarListSeg5 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
+        var yBarListSeg6 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
+
 
 
 
@@ -504,7 +511,7 @@ export class segmentedBar extends React.Component<any, State>{
 
                 <Line
 
-                    points={[Seg1Values[index]['x'], yBarList[index], Seg1Values[index]['x'], 340]}
+                    points={[Seg1Values[index]['x'], yBarList[index], Seg1Values[index]['x'], 304]}
 
 
                     stroke={statusSeg1[index]}
@@ -734,7 +741,9 @@ export class segmentedBar extends React.Component<any, State>{
         const handleClick = (e) => {
             this.scrollReference.current.scrollLeft = todayDateLocation - 250;
         }
+     
 
+        
 
 
 
@@ -784,74 +793,125 @@ export class segmentedBar extends React.Component<any, State>{
 
 
 
- {/*
                     <Stage width={19000} height={560}  >
 
                     <Layer>
 <Rect
                                 x={0}
-                                y={336.5}
-                                width={29000}
+                                y={304}
+                                width={18000}
                                 height={4}
                                 fill={Segment1Color}
                                 draggable={true}
-                               
-                            ></Rect>
+                          
+                                onDragMove={(e) => {
+
+                    this.setState({
+                        activityPlaceholder:  String(e.target.y())
+
+
+                    })}
+                }
+                onClick={(e) => {
+
+                    this.setState({
+                        activityPlaceholder:  String(e.target.y())
+
+
+                    })}
+                }
+                       
+
+                                  
+                            />
                             <Rect
                                 x={0}
-                                y={347.3}
-                                width={29000}
+                                y={317}
+                                width={18000}
                                 height={4 }
                                 fill={Segment2Color}
                                 draggable={true}
+                                onClick={(e) => {
+
+                                    this.setState({
+                                        activityPlaceholder:  String(e.target.y())
+                
+                
+                                    })}}
 
 
                             ></Rect>
                             <Rect
                                 x={0}
-                                y={359.6}
-                                width={29000}
+                                y={330}
+                                width={18000}
                                 height={4}
                                 fill={Segment3Color}
                                 draggable={true}
+                                onClick={(e) => {
+
+                                    this.setState({
+                                        activityPlaceholder:  String(e.target.y())
+                
+                
+                                    })}}
 
 
                             ></Rect>
                             
                             <Rect
                                 x={0}
-                                y={373.5}
-                                width={29000}
-                                height={4}
-                                fill={Segment4Color}
-
-                           / >
-                             <Rect
-                                x={0}
-                                y={393.5}
-                                width={29000}
+                                y={343}
+                                width={18000}
                                 height={4}
                                 fill={Segment4Color}
                                 draggable={true}
+
+                                onClick={(e) => {
+
+                                    this.setState({
+                                        activityPlaceholder:  String(e.target.y())
+                
+                
+                                    })}}
+                           / >
+                             <Rect
+                                x={0}
+                                y={356}
+                                width={18000}
+                                height={4}
+                                fill={Segment5Color}
+                                draggable={true}
+                                onClick={(e) => {
+
+                                    this.setState({
+                                        activityPlaceholder:  String(e.target.y())
+                
+                
+                                    })}}
 
 
                            / >
                             <Rect
                                 x={0}
-                                y={410}
-                                width={29000}
+                                y={369}
+                                width={18000}
                                 height={4}
-                                fill={Segment4Color}
+                                fill={Segment6Color}
                                 draggable={true}
+                                onClick={(e) => {
+
+                                    this.setState({
+                                        activityPlaceholder:  String(e.target.y())
+                
+                
+                                    })}}
 
 
                            / >
                         </Layer>
                         <Layer>
-                            {Segment1Categories}
-                            {Segment2Categories}
-                            {Segment3Categories}
-                            {Segment4Categories}j
+                           {Segment1Categories}
                             {ElectricalEvents}
 
                         </Layer>
@@ -873,7 +933,7 @@ export class segmentedBar extends React.Component<any, State>{
                     </Stage>
 
 
-        */}
+
 
 
 

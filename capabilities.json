@@ -79,6 +79,28 @@
                         }
                     }
                 },
+                "Segment5Color": {
+                    "displayName": "Segment 5 Color",
+                    "description": "The fill color of the Segment 5",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "Segment6Color": {
+                    "displayName": "Segment 6 Color",
+                    "description": "The fill color of the Segment 6",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
                 "textColor": {
                     "displayName": "Text Color",
                     "description": "Text Color",

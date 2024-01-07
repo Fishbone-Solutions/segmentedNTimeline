@@ -73,6 +73,9 @@ export class Visual implements IVisual {
                 Segment2Color: object && object.Segment2Color ? object.Segment2Color : undefined,
                 Segment3Color: object && object.Segment3Color ? object.Segment3Color : undefined,
                 Segment4Color: object && object.Segment4Color ? object.Segment4Color : undefined,
+                Segment5Color: object && object.Segment5Color ? object.Segment5Color : undefined,
+                Segment6Color: object && object.Segment6Color ? object.Segment6Color : undefined,
+
                 textColor: object && object.textColor ? object.textColor : undefined,
                 activityList: activityList,
                 weeknoList: weeksList,
