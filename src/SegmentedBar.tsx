@@ -106,17 +106,35 @@ export class segmentedBar extends React.Component<any, State>{
             activityPlaceholder,
         } = this.state;
 
-        var weeksSeg1 = []; var activitySeg1 = []; var commentarySeg1 = []; var statusSeg1 = []; var elecrificationSeg1 = []; var milestoneCategoryListSeg1 = [];
-        var weeksSeg2 = []; var activitySeg2 = []; var commentarySeg2 = []; var statusSeg2 = []; var milestoneCategoryListSeg2 = [];
-        var weeksSeg3 = []; var activitySeg3 = []; var commentarySeg3 = []; var statusSeg3 = [];
-        var weeksSeg4 = [];
-        var weeksSeg5 = [];
+        var weeksSeg1 = [];
+        var activitySeg1 = []; 
+        var commentarySeg1 = []; 
+        var statusSeg1 = []; 
+        var elecrificationSeg1 = []; 
+        var milestoneCategoryListSeg1 = [];
+        
+        var weeksSeg2 = []; 
+        var activitySeg2 = []; 
+        var commentarySeg2 = []; 
+        var statusSeg2 = []; 
+        var milestoneCategoryListSeg2 = [];
+        var weeksSeg3 = []; 
+        var activitySeg3 = [];
+        var commentarySeg3 = [];
+         var statusSeg3 = [];
+        
+         var weeksSeg4 = [];
+         var weeksSeg5 = [];
         var weeksSeg6 = [];
-
-
-        var activitySeg4 = []; var commentarySeg4 = []; var statusSeg4 = [];
-        var activitySeg5 = []; var commentarySeg5 = []; var statusSeg5 = [];
-        var activitySeg6 = []; var commentarySeg6 = []; var statusSeg6 = [];
+        var activitySeg4 = []; 
+        var commentarySeg4 = []; 
+        var statusSeg4 = [];
+        var activitySeg5 = []; 
+        var commentarySeg5 = []; 
+        var statusSeg5 = [];
+        var activitySeg6 = []; 
+        var commentarySeg6 = []; 
+        var statusSeg6 = [];
 
 
 
@@ -139,18 +157,6 @@ export class segmentedBar extends React.Component<any, State>{
         var categoryListDisplay = [...new Set(categoryList)];
 
         categoryListDisplay.sort((a, b) => a.localeCompare(b));
-
-
-
-      
-
-
-          console.log(categoryListDisplay)
-
-
-
-        
-
 
         for (let i = 0; i < weeknoList.length; i++) {
             weekDates.push(new Date(Date.parse(weeknoList[i])))
@@ -200,16 +206,7 @@ export class segmentedBar extends React.Component<any, State>{
 
 
         const todayDateLocation = Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 48 + currentWeek * 48 - 24;
-
-
-
-
-
-
-
-
-
-
+        
         const weeksArray = months.map((week, index) =>
             <>
                 <button style={{ width: 48, padding: 0, border: 0 }}>{1}</button>
@@ -420,7 +417,7 @@ export class segmentedBar extends React.Component<any, State>{
 
 
             }
-            if (categoryList[i].includes(categoryListDisplay[2])) {
+            if (categoryList[i].includes(categoryListDisplay[3])) {
                 weeksSeg4.push(parseInt(weekNoFromList[i]))
                 activitySeg4.push(activityList[i])
                 commentarySeg4.push(commentaryList[i])
@@ -450,6 +447,72 @@ export class segmentedBar extends React.Component<any, State>{
                     id: 'SEG4' + i,
                 };
                 Seg4Values.push(rectobjects4);
+
+
+            }
+            if (categoryList[i].includes(categoryListDisplay[4])) {
+                weeksSeg5.push(parseInt(weekNoFromList[i]))
+                activitySeg5.push(activityList[i])
+                commentarySeg5.push(commentaryList[i])
+
+
+
+                if (statusList[i].toLowerCase().includes('grey')) {
+                    statusSeg5.push("black")
+
+                }
+                if (statusList[i].toLowerCase().includes('amber')) {
+                    statusSeg5.push("yellow")
+
+                }
+                if (statusList[i].toLowerCase().includes('green')) {
+                    statusSeg5.push("green")
+
+                }
+
+                var rectobjects5 = {
+                    x: 48 * Number(weekNoFromList[i]) + 10,
+                    y: 490,
+                    y_bar: 375,
+                    width: 3.1,
+                    height: 150,
+                    fill: statusSeg5[i],
+                    id: 'SEG5' + i,
+                };
+                Seg5Values.push(rectobjects5);
+
+
+            }
+            if (categoryList[i].includes(categoryListDisplay[5])) {
+                weeksSeg6.push(parseInt(weekNoFromList[i]))
+                activitySeg6.push(activityList[i])
+                commentarySeg6.push(commentaryList[i])
+
+
+
+                if (statusList[i].toLowerCase().includes('grey')) {
+                    statusSeg6.push("black")
+
+                }
+                if (statusList[i].toLowerCase().includes('amber')) {
+                    statusSeg6.push("yellow")
+
+                }
+                if (statusList[i].toLowerCase().includes('green')) {
+                    statusSeg6.push("green")
+
+                }
+
+                var rectobjects6 = {
+                    x: 48 * Number(weekNoFromList[i]) + 10,
+                    y: 490,
+                    y_bar: 375,
+                    width: 3.1,
+                    height: 150,
+                    fill: statusSeg6[i],
+                    id: 'SEG6' + i,
+                };
+                Seg6Values.push(rectobjects6);
 
 
             }
