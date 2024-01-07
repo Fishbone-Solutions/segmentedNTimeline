@@ -1,0 +1,43 @@
+# Ignore files and folders that are not relevant to the project
+node_modules/
+.DS_Store
+.vscode/
+
+# Ignore Git tracking files
+.git/
+
+# Ignore node_modules and npm files
+node_modules/
+npm-debug.log*
+npm-error.log*
+
+# Ignore TypeScript cache files
+tsc-watch-*
+
+# Ignore JavaScript and TypeScript source maps
+*.js.map
+*.ts.map
+
+# Ignore React's cache files
+react-*.json
+
+# Ignore package-lock.json file
+package-lock.json
+
+# Ignore yarn.lock file
+yarn.lock
+
+# Ignore dotfiles
+*.dot
+
+# Ignore VSCode metadata files
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions/
+
+# Ignore node_modules and npm3 files
+node_modules/@(npm|yarn)/**/*
+
+# Ignore dotfiles in the root directory
+./*.dot
