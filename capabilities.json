@@ -29,6 +29,11 @@
             "displayName": "Commentary",
             "name": "c6",
             "kind": "Measure"
+        },
+        {
+            "displayName": "Flag Tracker",
+            "name": "c7",
+            "kind": "Measure"
         }
     ],
     "objects": {

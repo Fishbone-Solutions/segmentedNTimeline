@@ -29,7 +29,7 @@ export class Visual implements IVisual {
         this.reactRoot = React.createElement(segmentedBar, {});
         ReactDOM.render(this.reactRoot, this.target);
         this.columnIndices = [];
-        for (let i = 1; i < 7; i++) {
+        for (let i = 1; i < 8; i++) {
             let name = "c" + i;
             this.columnIndices[name] = 0;
         }
@@ -55,6 +55,7 @@ export class Visual implements IVisual {
             let milestoneList: string[] = []
             let statusList: string[] = []
             let commentaryList: string[] = []
+            let flagtrackerList: string[] = [] 
             for (let i = 0; i < rows.length; i++) {
                 let row = rows[i];
                 activityList[i] = `${(row[this.columnIndices['c1']])}`
@@ -63,6 +64,7 @@ export class Visual implements IVisual {
                 milestoneList[i] = `${(row[this.columnIndices['c4']])}`
                 statusList[i] = `${(row[this.columnIndices['c5']])}`
                 commentaryList[i] = `${(row[this.columnIndices['c6']])}`
+                flagtrackerList[i] =  `${(row[this.columnIndices['c7']])}`
 
             }
             segmentedBar.update({
@@ -83,6 +85,7 @@ export class Visual implements IVisual {
                 milestoneCategoryList: milestoneList,
                 statusList: statusList,
                 commentaryList: commentaryList,
+                flagTrackerList:flagtrackerList,
                 backgroundColorVis: object && object.circleColor ? object.circleColor : undefined,
 
 
