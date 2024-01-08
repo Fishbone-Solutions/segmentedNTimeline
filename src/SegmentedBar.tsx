@@ -889,7 +889,7 @@ export class segmentedBar extends React.Component<any, State>{
         return (
             <>
 
-                <div className="block-left" style={{ backgroundColor: "red" }}>
+                <div className="block-left" style={{ backgroundColor: backgroundColorVis }}>
                   <button className="todaybutton" onClick={(e) => handleClick(e)}>Scroll To Today</button>     
                     <div className="imageplaceholder" style={{ position: "relative" }}>
     <svg height="100%" stroke-miterlimit="10" version="1.1" viewBox="0 0 300 700" width="100%" transform="translate(0,27.2)">
@@ -912,13 +912,20 @@ export class segmentedBar extends React.Component<any, State>{
     <text x="25" y="415" fontSize="13" fill={textColor}>{categoryListDisplay[4]}</text>
     <text x="25" y="465" fontSize="13" fill={textColor}>{categoryListDisplay[5]}</text>
 
-<rect x="268" y="320.1" width="30" height="4" fill={Segment1Color}></rect>
-<rect x="268" y="333.1" width="30" height="4" fill={Segment2Color}></rect>
-<rect x="268" y="345.1" width="30" height="4" fill={Segment3Color}></rect>
-<rect x="268" y="361.1" width="30" height="4" fill={Segment4Color}></rect>
-<rect x="268" y="373.1" width="30" height="4" fill={Segment5Color}></rect>
-<rect x="268" y="386.1" width="30" height="4" fill={Segment6Color}></rect>
 
+    <rect x="268" y="319" width="30" height="6" fill={Segment1Color}/>
+    <rect x="268" y="332" width="30" height="6" fill={Segment2Color}/>
+    <rect x="268" y="344" width="30" height="6" fill={Segment3Color}/>
+    <rect x="268" y="360" width="30" height="6" fill={Segment4Color}/>
+    <rect x="268" y="372.1" width="30" height="6" fill={Segment5Color}/>
+    <rect x="268" y="385.1" width="30" height="6" fill={Segment6Color}/>
+
+<path  fill={Segment1Color} d="M 240.628 225.923 L 268.891 324.375 L 240.527 199.46 C 240.527 199.46 240.886 224.702 240.628 225.923 Z" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
+  <path fill={Segment1Color} d="M 240.061 273.443 L 268.138 336.505 L 240.493 252.449 L 240.061 273.443 Z" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
+  <path fill={Segment1Color}d="M 239.431 322.535 L 269.86 348.202 L 238.613 302.512 L 239.431 322.535 Z" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
+  <path fill={Segment1Color} d="M 238.403 373.957 L 268.217 363.895 C 268.217 363.895 239.845 351.276 239.845 351.115 C 239.845 350.954 239.551 372.041 238.403 373.957 Z" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
+  <path fill={Segment1Color} d="M 239.434 401.105 L 267.836 373.225 L 240.707 424.684 L 239.434 401.105 Z" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
+  <path  fill={Segment1Color} d="M 240.563 450.845 L 267.238 387.414 L 240.62 478.069 L 240.563 450.845 Z" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
 
 
 
