@@ -406,7 +406,7 @@ export class segmentedBar extends React.Component<any, State>{
                 }
                 var rectobjects3 = {
                     x: 48 * Number(weekNoFromList[i]) + 2,
-                    y: 410,
+                    y: 200,
                     width: 3.1,
                     height: 120,
                     fill: statusSeg3[i],
@@ -472,7 +472,7 @@ export class segmentedBar extends React.Component<any, State>{
 
                 var rectobjects5 = {
                     x: 48 * Number(weekNoFromList[i]) + 10,
-                    y: 490,
+                    y: 356,
                     y_bar: 375,
                     width: 3.1,
                     height: 150,
@@ -505,7 +505,7 @@ export class segmentedBar extends React.Component<any, State>{
 
                 var rectobjects6 = {
                     x: 48 * Number(weekNoFromList[i]) + 10,
-                    y: 490,
+                    y: 356,
                     y_bar: 375,
                     width: 3.1,
                     height: 150,
@@ -516,6 +516,8 @@ export class segmentedBar extends React.Component<any, State>{
 
 
             }
+       
+         
         }
 
         for (let i = 0; i < milestoneCategoryList.length; i++) {
@@ -538,13 +540,33 @@ export class segmentedBar extends React.Component<any, State>{
 
 
 
-        var yBarList = [10, 50, 80, 100, 120, 180, 200, 155, 40, 140, 120, 180, 10, 50, 80, 100, 120, 180, 10, 50, 80, 100, 120, 180, 65, 140, 120, 180, 10, 50, 80, 100, 120, 180, 10, 50, 80, 100, 120, 180]
-        var yBarListSeg2 = [40, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280]
-        var yBarListSeg3 = [400, 420, 440, 460, 480, 500, 400, 420, 440, 460, 480, 500, 400, 420, 440, 460, 480, 500]
-        var yBarListSeg4 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
-        var yBarListSeg5 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
-        var yBarListSeg6 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
+ //       var yBarList = [10, 50, 80, 100, 120, 180, 200, 155, 40, 140, 120, 180, 10, 50, 80, 100, 120, 180, 10, 50, 80, 100, 120, 180, 65, 140, 120, 180, 10, 50, 80, 100, 120, 180, 10, 50, 80, 100, 120, 180]
+//        var yBarListSeg2 = [40, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280]
+//        var yBarListSeg3 = [40, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280] 
+     //   var yBarListSeg4 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
+     //   var yBarListSeg5 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
+     //   var yBarListSeg6 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
 
+        function generateArray(start, end, count,variance) {
+            var step = (end - start) / (count - 1);
+            var array = [];
+          
+            for (var i = 0; i < count; i++) {
+                var fraction = i / (count - 1);
+    var randomOffset = (Math.random() * 2 - 1) * variance;
+    var value = start + (end - start) * fraction + randomOffset;
+    array.push(value);
+  }
+
+  return array;
+
+          }
+          var yBarList = generateArray(50, 100, activityList.length, 100);
+          var yBarListSeg2 = generateArray(100, 200, activityList.length, 80);
+          var yBarListSeg3 = generateArray(200, 280, activityList.length, 80);
+          var yBarListSeg4 = generateArray(430, 530,  activityList.length, 50);
+          var yBarListSeg5 = generateArray(430, 530, activityList.length, 50);
+          var yBarListSeg6 = generateArray(430, 530,  activityList.length, 50);
 
 
 
@@ -743,7 +765,7 @@ export class segmentedBar extends React.Component<any, State>{
             />
             <Line
 
-                points={[Seg5Values[index]['x'], yBarListSeg4[index], Seg5Values[index]['x'], 343]}
+                points={[Seg5Values[index]['x'], yBarListSeg4[index], Seg5Values[index]['x'], 356]}
 
 
                 stroke={statusSeg5[index]}
@@ -758,13 +780,13 @@ export class segmentedBar extends React.Component<any, State>{
         </>
 
     )
-        const Segment6Categories = weeksSeg6.map((week, index) =>
+       const Segment6Categories = weeksSeg6.map((week, index) =>
 
     <>
 
         <Text text={activitySeg6[index]}
 
-            x={Seg4Values[index]['x'] + 3} y={yBarListSeg6[index]}
+            x={Seg6Values[index]['x'] + 3} y={yBarListSeg6[index]}
 
             fontSize={12}
             fill={textColor}
@@ -784,10 +806,10 @@ export class segmentedBar extends React.Component<any, State>{
         />
         <Line
 
-            points={[Seg4Values[index]['x'], yBarListSeg4[index], Seg4Values[index]['x'], 372]}
+            points={[Seg6Values[index]['x'], yBarListSeg6[index], Seg6Values[index]['x'], 369]}
 
 
-            stroke={statusSeg4[index]}
+            stroke={statusSeg6[index]}
 
         />
 
@@ -799,9 +821,10 @@ export class segmentedBar extends React.Component<any, State>{
     </>
 
 )
+ 
 
         const ElectricalEvents = elecrificationSeg1.map(electric =>
-            <Text text="⚡" fontSize={27} x={48 * electric - 18} y={329} />
+            <Text text="⚡" fontSize={27} x={48 * electric - 18} y={304} />
         )
 
 
