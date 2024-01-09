@@ -133,37 +133,49 @@
     },
     "dataViewMappings": [
         {
-            "single": {
-                "role": "dates"
-            },
-            "table": {
-                "rows": {
-                    "select": [
-                        {
-                            "for": {
-                                "in": "c1"
-                            }
-                        },
-                        {
-                            "for": {
-                                "in": "c2"
-                            }
-                        },
-                        {
-                            "for": {
-                                "in": "c3"
-                            }
-                        },
-                        {
-                            "for": {
-                                "in": "c4"
-                            }
-                        }
-                    ]
+          "table": {
+            "rows": {
+              "select": [
+                {
+                  "for": {
+                    "in": "c1"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c2"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c3"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c4"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c5"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c6"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c7"
+                  }
                 }
+              ]
             }
+          }
         }
-    ]
+      ]
 ,
     "privileges": [
         {

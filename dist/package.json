@@ -1,0 +1,17 @@
+{
+		"version": "1.0.0.0",
+		"author": {"name":"Mohammed Saif","email":"mohammed.saif@fishbonesolutions.co.uk"},
+		"resources": [
+			{
+				"resourceId": "rId0",
+				"sourceType": 5,
+				"file": "resources/segmentedNtidsdsdaasddsmeline6841085FFCE149249A025B2BB08E3721.pbiviz.json"
+			}
+		],
+		"visual": {"name":"segmentedNtimeline","displayName":"segmentedNtimeline","guid":"segmentedNtidsdsdaasddsmeline6841085FFCE149249A025B2BB08E3721","visualClassName":"Visual","version":"1.0.0.0","description":"Segmented Timelines","supportUrl":"www.fishbonesolutions.co.uk/support","gitHubUrl":""},
+		"metadata": {
+			"pbivizjson": {
+				"resourceId": "rId0"
+			}
+		}
+	}
