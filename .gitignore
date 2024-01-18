@@ -5,7 +5,7 @@ node_modules/
 .tmp/
 .tmp
 # Ignore Git tracking files
-.git/
+.git/ 
 
 # Ignore node_modules and npm files
 node_modules/

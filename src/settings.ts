@@ -5,12 +5,12 @@ import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
 
 export class CircleSettings {
     public circleColor: string = "#757171";
-    public Segment1Color: string = "#8FAADC";
-    public Segment2Color: string = "#2F5597";
-    public Segment3Color: string = "#2F5597";
-    public Segment4Color: string = "#FFFFFF";
-    public Segment5Color: string = "#8FAADC";
-    public Segment6Color: string = "#8FAADC";
+    public Segment1Color: string = "#0A4780";
+    public Segment2Color: string = "#0B6ABF";
+    public Segment3Color: string = "#41A4FD";
+    public Segment4Color: string = "#71BBFD";
+    public Segment5Color: string = "#8EAADC";
+    public Segment6Color: string = "#A0D1FE";
     public textColor: string = "white";
 
 }
