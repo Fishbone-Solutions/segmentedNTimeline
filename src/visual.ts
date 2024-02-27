@@ -29,7 +29,7 @@ export class Visual implements IVisual {
         this.reactRoot = React.createElement(segmentedBar, {});
         ReactDOM.render(this.reactRoot, this.target);
         this.columnIndices = [];
-        for (let i = 1; i < 8; i++) {
+        for (let i = 1; i < 18; i++) {
             let name = "c" + i;
             this.columnIndices[name] = 0;
         }
@@ -51,46 +51,88 @@ export class Visual implements IVisual {
 
             let activityList: string[] = []
             let weeksList: string[] = []
-            let categoryList: string[] = []
-            let milestoneList: string[] = []
             let statusList: string[] = []
-            let commentaryList: string[] = []
             let flagtrackerList: string[] = [] 
+
+            let activityIDList: string[] = []
+            let categoryList: string[] = []
+            let activityLevelList: string[] = []
+            let ActivityNameList: string[] = []
+            let StatusNameList: string[] = []
+            let StartDateList: string[] = []
+            let FinishDateList: string[] = []
+            let ProjectedStartDate: string[] = []
+            let ProjectedFinishDate: string[] = []
+             let OwnerList: string[] = []
+            let PredecessorsList: string[] = []
+            let SuccessorsList: string[] = []
+            let milestoneList: string[] = []
+            let commentaryList: string[] = []
+            let totalFloatList: string[] = []
+            let trendLists: string[] = []
+            let ImpactedByList: string[] = []
+            let LastReportedEnddate: string[] = []
+
+
+        
+
+
+
+
+
+
+
+
+
+
             for (let i = 0; i < rows.length; i++) {
                 let row = rows[i];
-                activityList[i] = `${(row[this.columnIndices['c1']])}`
-                weeksList[i] = `${(row[this.columnIndices['c2']])}`
-                categoryList[i] = `${(row[this.columnIndices['c3']])}`
-                milestoneList[i] = `${(row[this.columnIndices['c4']])}`
-                statusList[i] = `${(row[this.columnIndices['c5']])}`
-                commentaryList[i] = `${(row[this.columnIndices['c6']])}`
-                flagtrackerList[i] =  `${(row[this.columnIndices['c7']])}`
-
+                activityIDList[i] = `${(row[this.columnIndices['c1']])}`;
+                activityLevelList[i] = `${(row[this.columnIndices['c2']])}`;
+                ActivityNameList[i] = `${(row[this.columnIndices['c3']])}`;
+                StatusNameList[i] = `${(row[this.columnIndices['c4']])}`;
+                StartDateList[i] = `${(row[this.columnIndices['c5']])}`;
+                FinishDateList[i] = `${(row[this.columnIndices['c6']])}`;
+                ProjectedStartDate[i] = `${(row[this.columnIndices['c7']])}`;
+                ProjectedFinishDate[i] = `${(row[this.columnIndices['c8']])}`;
+                OwnerList[i] = `${(row[this.columnIndices['c9']])}`;
+                PredecessorsList[i] = `${(row[this.columnIndices['c10']])}`;
+                SuccessorsList[i] = `${(row[this.columnIndices['c11']])}`;
+                milestoneList[i] = `${(row[this.columnIndices['c12']])}`;
+                commentaryList[i] = `${(row[this.columnIndices['c13']])}`;
+                totalFloatList[i] = `${(row[this.columnIndices['c14']])}`;
+                trendLists[i] = `${(row[this.columnIndices['c15']])}`;
+                ImpactedByList[i] = `${(row[this.columnIndices['c16']])}`;
+                LastReportedEnddate[i] = `${(row[this.columnIndices['c17']])}`;
+                categoryList[i] = `${(row[this.columnIndices['c18']])}`;
             }
             segmentedBar.update({
-
-
-
                 Segment1Color: object && object.Segment1Color ? object.Segment1Color : undefined,
                 Segment2Color: object && object.Segment2Color ? object.Segment2Color : undefined,
                 Segment3Color: object && object.Segment3Color ? object.Segment3Color : undefined,
                 Segment4Color: object && object.Segment4Color ? object.Segment4Color : undefined,
                 Segment5Color: object && object.Segment5Color ? object.Segment5Color : undefined,
                 Segment6Color: object && object.Segment6Color ? object.Segment6Color : undefined,
-
                 textColor: object && object.textColor ? object.textColor : undefined,
-                activityList: activityList,
-                weeknoList: weeksList,
-                categoryList: categoryList,
-                milestoneCategoryList: milestoneList,
-                statusList: statusList,
+                activityIDList: activityIDList,
+                activityLevelList: activityLevelList,
+                ActivityNameList: ActivityNameList,
+                StatusNameList: StatusNameList,
+                StartDateList: StartDateList,
+                FinishDateList: FinishDateList,
+                ProjectedStartDate: ProjectedStartDate,
+                ProjectedFinishDate: ProjectedFinishDate,
+                OwnerList: OwnerList,
+                PredecessorsList: PredecessorsList,
+                SuccessorsList: SuccessorsList,
+                milestoneList: milestoneList,
                 commentaryList: commentaryList,
-                flagTrackerList:flagtrackerList,
+                totalFloatList: totalFloatList,
+                trendLists: trendLists,
+                ImpactedByList: ImpactedByList,
+                LastReportedEnddate: LastReportedEnddate,
+                categoryList: categoryList,
                 backgroundColorVis: object && object.circleColor ? object.circleColor : undefined,
-
-
-
-
             });
 
 

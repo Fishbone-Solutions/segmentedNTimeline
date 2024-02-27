@@ -5,10 +5,10 @@
 			{
 				"resourceId": "rId0",
 				"sourceType": 5,
-				"file": "resources/segmentedNtidsdsdaasddsmeline6841085FFCE149249A025B2BB08E3721.pbiviz.json"
+				"file": "resources/segmentedNNewBuild182Jan.pbiviz.json"
 			}
 		],
-		"visual": {"name":"segmentedNtimeline","displayName":"segmentedNtimeline","guid":"segmentedNtidsdsdaasddsmeline6841085FFCE149249A025B2BB08E3721","visualClassName":"Visual","version":"1.0.0.0","description":"Segmented Timelines","supportUrl":"www.fishbonesolutions.co.uk/support","gitHubUrl":""},
+		"visual": {"name":"segmentedNtimeline","displayName":"segmentedNtimeline","guid":"segmentedNNewBuild182Jan","visualClassName":"Visual","version":"1.0.0.0","description":"Segmented Timelines","supportUrl":"www.fishbonesolutions.co.uk/support","gitHubUrl":""},
 		"metadata": {
 			"pbivizjson": {
 				"resourceId": "rId0"

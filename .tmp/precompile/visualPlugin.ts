@@ -5,8 +5,8 @@ import VisualConstructorOptions = powerbiVisualsApi.extensibility.visual.VisualC
 import DialogConstructorOptions = powerbiVisualsApi.extensibility.visual.DialogConstructorOptions;
 var powerbiKey: any = "powerbi";
 var powerbi: any = window[powerbiKey];
-var segmentedNtimeline6841085FFCE149249A025B2BB08E3721_DEBUG: IVisualPlugin = {
-    name: 'segmentedNtimeline6841085FFCE149249A025B2BB08E3721_DEBUG',
+var segmentedNNewBuild182Jan_DEBUG: IVisualPlugin = {
+    name: 'segmentedNNewBuild182Jan_DEBUG',
     displayName: 'segmentedNtimeline',
     class: 'Visual',
     apiVersion: '5.3.0',
@@ -27,6 +27,6 @@ var segmentedNtimeline6841085FFCE149249A025B2BB08E3721_DEBUG: IVisualPlugin = {
 if (typeof powerbi !== "undefined") {
     powerbi.visuals = powerbi.visuals || {};
     powerbi.visuals.plugins = powerbi.visuals.plugins || {};
-    powerbi.visuals.plugins["segmentedNtimeline6841085FFCE149249A025B2BB08E3721_DEBUG"] = segmentedNtimeline6841085FFCE149249A025B2BB08E3721_DEBUG;
+    powerbi.visuals.plugins["segmentedNNewBuild182Jan_DEBUG"] = segmentedNNewBuild182Jan_DEBUG;
 }
-export default segmentedNtimeline6841085FFCE149249A025B2BB08E3721_DEBUG;
+export default segmentedNNewBuild182Jan_DEBUG;

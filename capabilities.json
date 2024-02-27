@@ -1,40 +1,96 @@
 {
     "dataRoles": [
         {
-            "displayName": "Activity",
+            "displayName": "Activity ID",
             "name": "c1",
             "kind": "Grouping"
         },
         {
-            "displayName": "Dates",
+            "displayName": "Category List",
+            "name": "c18",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Activity Level",
             "name": "c2",
-            "kind": "Measure"
+            "kind": "Grouping"
         },
         {
-            "displayName": "Category",
+            "displayName": "Activity Name",
             "name": "c3",
-            "kind": "Measure"
+            "kind": "Grouping"
         },
         {
-            "displayName": "Milestone Category",
+            "displayName": "Status Name",
             "name": "c4",
-            "kind": "Measure"
+            "kind": "Grouping"
         },
         {
-            "displayName": "Status",
+            "displayName": "Start Date",
             "name": "c5",
-            "kind": "Measure"
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Finish Date",
+            "name": "c6",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Projected Start Date",
+            "name": "c7",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Projected Finish Date",
+            "name": "c8",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Owner",
+            "name": "c9",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Predecessors",
+            "name": "c10",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Successors",
+            "name": "c11",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Milestone",
+            "name": "c12",
+            "kind": "Grouping"
         },
         {
             "displayName": "Commentary",
-            "name": "c6",
-            "kind": "Measure"
+            "name": "c13",
+            "kind": "Grouping"
         },
         {
-            "displayName": "Flag Tracker",
-            "name": "c7",
-            "kind": "Measure"
+            "displayName": "Total Float",
+            "name": "c14",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Trend",
+            "name": "c15",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Impacted By",
+            "name": "c16",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Last Reported End Date",
+            "name": "c17",
+            "kind": "Grouping"
         }
+       
     ],
     "objects": {
         "circle": {

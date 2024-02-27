@@ -1,39 +1,43 @@
 import * as React from "react";
-import { Stage, Layer, Rect, Text, Line } from 'react-konva';
+import { useRef } from "react";
+import { Stage, Layer, Rect, Text, Line, Circle } from 'react-konva';
 import * as moment from 'moment';
 import { differenceInCalendarMonths, addMonths, subMonths, getWeek } from 'date-fns';
 
-
 export interface State {
-    commentaryPlaceholder?: string,
-    backgroundColorVis?: string,
-    Segment1Color?: string,
-    Segment2Color?: string,
-    Segment3Color?: string,
-    Segment4Color?: string,
-    Segment5Color?: string,
-    Segment6Color?: string,
-    textColor?: string,
-    activityList?: string[]
-    commentaryList?: string[],
-    weeknoList?: string[],
-    categoryList?: string[],
-    milestoneCategoryList?: string[],
-    statusList?: string[],
-    activityPlaceholder?: string,
-    scrollReference?: string,
-    flagTrackerList?:string[]
+    commentaryPlaceholder?: string;
+    backgroundColorVis?: string;
+    Segment1Color?: string;
+    Segment2Color?: string;
+    Segment3Color?: string;
+    Segment4Color?: string;
+    Segment5Color?: string;
+    Segment6Color?: string;
+    textColor?: string;
+    activityIDList?: string[];
+    categoryList?: string[];
+    activityLevelList?: string[];
+    ActivityNameList?: string[];
+    StatusNameList?: string[];
+    StartDateList?: string[];
+    FinishDateList?: string[];
+    ProjectedStartDate?: string[];
+    ProjectedFinishDate?: string[];
+    OwnerList?: string[];
+    PredecessorsList?: string[];
+    SuccessorsList?: string[];
+    milestoneList?: string[];
+    commentaryList?: string[];
+    totalFloatList?: string[];
+    trendLists?: string[];
+    ImpactedByList?: string[];
+    LastReportedEnddate?: string[];
 }
 
 export const initialState: State = {
     backgroundColorVis: "white",
-    activityList: [],
-    weeknoList: [],
-    categoryList: [],
-    milestoneCategoryList: [],
-    statusList: [],
-    commentaryList: [],
-    flagTrackerList:[]
+    activityIDList: [],
+    textColor:"white"
 
 
 }
@@ -61,6 +65,16 @@ export class segmentedBar extends React.Component<any, State>{
         super(props);
         this.state = initialState;
         this.scrollReference = React.createRef();
+
+  // Scroll to the middle position in the constructor
+  const container = this.scrollReference.current;
+  console.log(container)
+  if (container) {
+    const containerWidth = container.offsetWidth;
+    const scrollPosition = containerWidth / 2;
+    container.scrollLeft = scrollPosition;
+  }
+
     }
 
     public componentWillMount() {
@@ -70,7 +84,7 @@ export class segmentedBar extends React.Component<any, State>{
     public componentWillUnmount() {
         segmentedBar.updateCallback = null;
     }
-
+  
 
     render() {
         const monthNames = [
@@ -98,16 +112,27 @@ export class segmentedBar extends React.Component<any, State>{
             Segment5Color,
             Segment6Color,
             textColor,
-            activityList,
-            weeknoList,
-            categoryList,
-            milestoneCategoryList,
-            statusList,
             commentaryList,
-            commentaryPlaceholder,
-            activityPlaceholder,
-            flagTrackerList
+
+           
         } = this.state;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         var weeksSeg1 = [];
         var activitySeg1 = []; 
@@ -139,9 +164,12 @@ export class segmentedBar extends React.Component<any, State>{
         var commentarySeg6 = []; 
         var statusSeg6 = [];
 
-
+        var categoryList = [];
+        var weeknoList=[];
 
       
+
+
 
         var Seg1Values = [];
         var Seg2Values = [];
@@ -165,9 +193,15 @@ export class segmentedBar extends React.Component<any, State>{
         var flagTrackerListSeg6 = [];
 
 
+        var activityIDList = [];
+
+        var StatusNameList = [];
+
+
 
 
         var categoryListDisplay = [...new Set(categoryList)];
+        console.log(categoryList)
 
         categoryListDisplay.sort((a, b) => a.localeCompare(b));
 
@@ -186,11 +220,16 @@ export class segmentedBar extends React.Component<any, State>{
           );
 
 
+        
 
-        let startDate4 = moment(new Date(Date.parse(result.min))).startOf('month');
+
+    //    let startDate4 = moment(new Date(Date.parse(result.min))).startOf('month');
+    let startDate4 = moment().startOf('year').set({ month: 0, date: 1, year: 2024 });
         const startDate = startDate4.subtract(1, 'months');
-        let endDate4 = moment(result.max).startOf('months');
+    //    let endDate4 = moment(result.max).startOf('months');
+    let endDate4 = moment().startOf('year').set({ month: 0, date: 1, year: 2025});
         const endDate = endDate4.add(1, 'months');
+ 
 
 
         // Define a variable to hold the current date
@@ -245,7 +284,7 @@ export class segmentedBar extends React.Component<any, State>{
         const monthsArray = months.map((month, index) =>
 
             <div className="monthitem" style={{ backgroundColor: backgroundColorVis }}>
-                <button >{month}</button><button>{years[index]}</button>
+                <button  >{month}</button><button>{years[index]}</button>
             </div >
 
 
@@ -273,9 +312,11 @@ export class segmentedBar extends React.Component<any, State>{
 
         }
 
+       categoryListDisplay = [ 'CVL Phasing Strategy',' Infrastructure Management', 'Infrastructure Transformation ', 'Operational Readiness','Rolling Stock','TT Readiness']
 
 
-        for (let i = 0; i < activityList.length; i++) {
+
+        for (let i = 0; i < activityIDList.length; i++) {
 
 
 
@@ -293,13 +334,10 @@ export class segmentedBar extends React.Component<any, State>{
                 var currentWeekDate = moment(new Date(Date.parse(weeknoList[i])));
                 var valueLayer: Number = Math.abs(startDate.diff(currentWeekDate, 'week'));
                 weeksSeg1.push(valueLayer);
-                activitySeg1.push(activityList[i])
+                activitySeg1.push([i])
                 
 
-                if (flagTrackerList[i].toLowerCase().includes('flag')){
-                    flagTrackerListSeg1.push("🚩")
-
-                }
+            
 
 
 
@@ -312,40 +350,23 @@ export class segmentedBar extends React.Component<any, State>{
 
                 }
 
-                if (statusList[i].toLowerCase().includes('grey')) {
+                if (StatusNameList[i].toLowerCase().includes('grey')) {
                     statusSeg1.push("black")
 
                 }
-                if (statusList[i].toLowerCase().includes('amber')) {
-                    statusSeg1.push("yellow")
+                if (StatusNameList[i].toLowerCase().includes('amber')) {
+                    statusSeg1.push("amber")
 
                 }
-                if (statusList[i].toLowerCase().includes('green')) {
+                if (StatusNameList[i].toLowerCase().includes('green')) {
                     statusSeg1.push("green")
 
                 }
-                if (statusList[i].toLowerCase().includes('red')) {
+                if (StatusNameList[i].toLowerCase().includes('red')) {
                     statusSeg1.push("red")
 
                 }
-                for (let i = 0; i < milestoneCategoryList.length; i++) {
-                    if (milestoneCategoryList[i].toLowerCase().includes('energisation') && categoryList[i].includes('1. Infrastructure Transformation')) {
-
-                        elecrificationSeg1.push(weekNoFromList[i])
-
-
-                    }
-                }
-                if (milestoneCategoryList[i].toLowerCase().includes('critical')) {
-
-                    milestoneCategoryListSeg1.push("🚩")
-
-
-                }
-                else {
-                    milestoneCategoryListSeg1.push('')
-
-                }
+            
 
 
                 var obj = {
@@ -368,29 +389,26 @@ export class segmentedBar extends React.Component<any, State>{
             }
             if (categoryList[i].includes(categoryListDisplay[1])) {
 
-                activitySeg2.push(activityList[i])
+                activitySeg2.push(activityIDList[i])
                 commentarySeg2.push(commentaryList[i])
                 weeksSeg2.push(parseInt(weekNoFromList[i]))
 
-                if (flagTrackerList[i].toLowerCase().includes('flag')){
-                    flagTrackerListSeg2.push("🚩")
-
-                }
+            
 
 
-                if (statusList[i].toLowerCase().includes('grey')) {
+                if (StatusNameList[i].toLowerCase().includes('grey')) {
                     statusSeg2.push("black")
 
                 }
-                if (statusList[i].toLowerCase().includes('amber')) {
+                if (StatusNameList[i].toLowerCase().includes('amber')) {
                     statusSeg2.push("yellow")
 
                 }
-                if (statusList[i].toLowerCase().includes('green')) {
+                if (StatusNameList[i].toLowerCase().includes('green')) {
                     statusSeg2.push("green")
 
                 }
-                if (statusList[i].toLowerCase().includes('red')) {
+                if (StatusNameList[i].toLowerCase().includes('red')) {
                     statusSeg2.push("red")
 
                 }
@@ -403,41 +421,32 @@ export class segmentedBar extends React.Component<any, State>{
                     id: 'SEG2' + i,
                 };
                 Seg2Values.push(rectobjects2)
-                if (milestoneCategoryList[i].toLowerCase().includes('critical')) {
-
-                    milestoneCategoryListSeg2.push("🚩")
-
-
-                }
-                else {
-                    milestoneCategoryListSeg2.push('')
-
-                }
-
+         
 
 
 
             }
             if (categoryList[i].includes(categoryListDisplay[2])) {
                 weeksSeg3.push(parseInt(weekNoFromList[i]))
-                activitySeg3.push(activityList[i])
+                activitySeg3.push(activityIDList[i])
                 commentarySeg3.push(commentaryList[i])
 
-                if (flagTrackerList[i].toLowerCase().includes('flag')){
-                    flagTrackerListSeg3.push("🚩")
+          
+                if (StatusNameList[i].toLowerCase().includes('red')) {
+                    statusSeg3.push("red")
 
                 }
 
 
-                if (statusList[i].toLowerCase().includes('grey')) {
+                if (StatusNameList[i].toLowerCase().includes('grey')) {
                     statusSeg3.push("black")
 
                 }
-                if (statusList[i].toLowerCase().includes('amber')) {
+                if (StatusNameList[i].toLowerCase().includes('amber')) {
                     statusSeg3.push("yellow")
 
                 }
-                if (statusList[i].toLowerCase().includes('green')) {
+                if (StatusNameList[i].toLowerCase().includes('green')) {
                     statusSeg3.push("green")
 
                 }
@@ -456,24 +465,20 @@ export class segmentedBar extends React.Component<any, State>{
             }
             if (categoryList[i].includes(categoryListDisplay[3])) {
                 weeksSeg4.push(parseInt(weekNoFromList[i]))
-                activitySeg4.push(activityList[i])
+                activitySeg4.push(activityIDList[i])
                 commentarySeg4.push(commentaryList[i])
 
-                if (flagTrackerList[i].toLowerCase().includes('flag')){
-                    flagTrackerListSeg4.push("🚩")
-
-                }
 
 
-                if (statusList[i].toLowerCase().includes('grey')) {
+                if (StatusNameList[i].toLowerCase().includes('grey')) {
                     statusSeg4.push("black")
 
                 }
-                if (statusList[i].toLowerCase().includes('amber')) {
+                if (StatusNameList[i].toLowerCase().includes('amber')) {
                     statusSeg4.push("yellow")
 
                 }
-                if (statusList[i].toLowerCase().includes('green')) {
+                if (StatusNameList[i].toLowerCase().includes('green')) {
                     statusSeg4.push("green")
 
                 }
@@ -493,27 +498,29 @@ export class segmentedBar extends React.Component<any, State>{
             }
             if (categoryList[i].includes(categoryListDisplay[4])) {
                 weeksSeg5.push(parseInt(weekNoFromList[i]))
-                activitySeg5.push(activityList[i])
+                activitySeg5.push(activityIDList[i])
                 commentarySeg5.push(commentaryList[i])
 
-                if (flagTrackerList[i].toLowerCase().includes('flag')){
-                    flagTrackerListSeg5.push("🚩")
-
-                }
 
 
-                if (statusList[i].toLowerCase().includes('grey')) {
+
+                if (StatusNameList[i].toLowerCase().includes('grey')) {
                     statusSeg5.push("black")
 
                 }
-                if (statusList[i].toLowerCase().includes('amber')) {
+                if (StatusNameList[i].toLowerCase().includes('amber')) {
                     statusSeg5.push("yellow")
 
                 }
-                if (statusList[i].toLowerCase().includes('green')) {
+                if (StatusNameList[i].toLowerCase().includes('green')) {
                     statusSeg5.push("green")
 
                 }
+                if (StatusNameList[i].toLowerCase().includes('red')) {
+                    statusSeg5.push("red")
+
+                }
+
 
                 var rectobjects5 = {
                     x: 48 * Number(weekNoFromList[i]) + 10,
@@ -530,24 +537,25 @@ export class segmentedBar extends React.Component<any, State>{
             }
             if (categoryList[i].includes(categoryListDisplay[5])) {
                 weeksSeg6.push(parseInt(weekNoFromList[i]))
-                activitySeg6.push(activityList[i])
+                activitySeg6.push(activityIDList[i])
                 commentarySeg6.push(commentaryList[i])
-                if (flagTrackerList[i].toLowerCase().includes('flag')){
-                    flagTrackerListSeg6.push("🚩")
-
-                }
 
 
-                if (statusList[i].toLowerCase().includes('grey')) {
+
+                if (StatusNameList[i].toLowerCase().includes('grey')) {
                     statusSeg6.push("black")
 
                 }
-                if (statusList[i].toLowerCase().includes('amber')) {
+                if (StatusNameList[i].toLowerCase().includes('amber')) {
                     statusSeg6.push("yellow")
 
                 }
-                if (statusList[i].toLowerCase().includes('green')) {
+                if (StatusNameList[i].toLowerCase().includes('green')) {
                     statusSeg6.push("green")
+
+                }
+                if (StatusNameList[i].toLowerCase().includes('red')) {
+                    statusSeg6.push("red")
 
                 }
 
@@ -568,331 +576,22 @@ export class segmentedBar extends React.Component<any, State>{
          
         }
 
-        for (let i = 0; i < milestoneCategoryList.length; i++) {
-
-            if (milestoneCategoryList[i].toLowerCase().includes('Critical') && categoryList[i].includes('1. Infrastructure Transformation')) {
-
-                milestoneCategoryListSeg1.push(weekNoFromList[i])
-
-
-            }
-        }
-        for (let i = 0; i < milestoneCategoryList.length; i++) {
-            if (milestoneCategoryList[i].toLowerCase().includes('Critical') && categoryList[i].includes('3. Operational Readiness')) {
-
-                milestoneCategoryListSeg2.push(weekNoFromList[i])
-
-
-            }
-        }
-
-
-
-      var yBarList = [10, 50, 80, 100, 120, 180, 200, 155, 40, 140, 120, 180, 10, 50, 80, 100, 120, 180, 10, 50, 80, 100, 120, 180, 65, 140, 120, 180, 10, 50, 80, 100, 120, 180, 10, 50, 80, 100, 120, 180]
-      var yBarListSeg2 = [40, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280]
-      var yBarListSeg3 = [40, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280, 30, 60, 200, 240, 260, 280] 
-       var yBarListSeg4 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
-       var yBarListSeg5 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
-       var yBarListSeg6 = [430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530, 430, 450, 470, 490, 510, 530,]
-
-     function generateArray(start, end, count, variance) {
-        var step = (end - start) / (count - 1);
-        var array = [];
-      
-        for (var i = 0; i < count; i++) {
-          var fraction = i / (count - 1);
-          var randomOffset = (Math.random() * 2 - 1) * variance;
-          var value = start + (end - start) * fraction + randomOffset;
-          array.push(value);
-        }
-      
-        return array;
-      }
-      
-      
- //   var yBarList = generateArray(50, 100, activityList.length, 50);
- //   var yBarListSeg2 = generateArray(100 + 10, 200 + 10, activityList.length, 30);
- //   var yBarListSeg3 = generateArray(430, 530, activityList.length, 80);
- //    var yBarListSeg4 = generateArray(430, 530,  activityList.length, 50);
-  //  var yBarListSeg5 = generateArray(430, 530, activityList.length, 50);
-  //  var yBarListSeg6 = generateArray(430, 530,  activityList.length, 50);
-
-
-
-        const Segment1Categories = weeksSeg1.map((week, index) =>
-
-            <>
-
-                <Text text={milestoneCategoryListSeg1[index] + String(activitySeg1[index]).substring(0, 30) + flagTrackerListSeg1[index]} x={Seg1Values[index]['x']} y={yBarList[index]} fontSize={12}
-                    fill={textColor}
-                    width={250}
-                    height={5}
-                    draggable={false}
-                    onClick={(e) =>
-
-
-
-                        this.setState({
-                            commentaryPlaceholder: commentarySeg1[index],
-                            activityPlaceholder: activitySeg1[index]
-
-
-
-
-                        })
-                    }
-
-                />
-
-
-
-
-                <Line
-
-                    points={[Seg1Values[index]['x'], yBarList[index], Seg1Values[index]['x'], 304]}
-
-
-                    stroke={statusSeg1[index]}
-
-                />
-
-
-
-
-            </>
-
-
-
-
-        )
-        const Segment2Categories = weeksSeg2.map((week, index) =>
-
-            <>
-
-                <Text text={String(activitySeg2[index]).substring(0, 30) + String(milestoneCategoryListSeg2[index]) + flagTrackerListSeg2[index] }
-                    x={Seg2Values[index]['x'] + 3} y={yBarListSeg2[index]}
-                    fontSize={12}
-                    width={250}
-                    height={5}
-                    fill={textColor}
-                    draggable={false}
-
-                    onClick={(e) =>
-
-
-                        this.setState({
-                            activityPlaceholder: activitySeg2[index],
-                            commentaryPlaceholder: commentarySeg2[index]
-
-
-
-
-                        })}
-
-                />
-
-                <Line
-
-                    points={[Seg2Values[index]['x'], yBarListSeg2[index], Seg2Values[index]['x'], 317]}
-
-
-                    stroke={statusSeg2[index]}
-
-                />
-
-
-
-            </>
-
-
-
-        )
-        const Segment3Categories = weeksSeg3.map((week, index) =>
-            <>
-                <Text text={activitySeg3[index] + + flagTrackerListSeg3[index] }
-                    x={Seg3Values[index]['x'] + 3} y={yBarListSeg3[index]} 
-                    width={250}
-                    height={5}
-                    fontSize={12}
-                    fill={textColor}
-                    draggable={false}
-
-                    onClick={() =>
-
-
-                        this.setState({
-                            activityPlaceholder: activitySeg3[index],
-                            commentaryPlaceholder: commentarySeg3[index]
-
-
-
-                        })}
-
-                />
-                <Line
-
-                    points={[Seg3Values[index]['x'], yBarListSeg3[index], Seg3Values[index]['x'], 330]}
-
-
-                    stroke={statusSeg3[index]}
-
-                />
-
-
-
-
-
-
-
-            </>
-
-        )
-        const Segment4Categories = weeksSeg4.map((week, index) =>
-
-            <>
-
-                <Text text={activitySeg4[index] + + flagTrackerListSeg4[index] } 
-
-                    x={Seg4Values[index]['x'] + 3} y={yBarListSeg4[index]}
-
-                    fontSize={12}
-                    fill={textColor}
-                    width={250}
-                    height={5}
-                    draggable={false}
-                    onClick={() =>
-
-
-                        this.setState({
-                            activityPlaceholder: activitySeg4[index],
-                            commentaryPlaceholder: commentarySeg4[index],
-
-
-                        })}
-
-                />
-                <Line
-
-                    points={[Seg4Values[index]['x'], yBarListSeg4[index], Seg4Values[index]['x'], 343]}
-
-
-                    stroke={statusSeg4[index]}
-
-                />
-
-
-
-
-
-
-            </>
-
-        )
-        const Segment5Categories = weeksSeg5.map((week, index) =>
-
-        <>
-
-            <Text text={activitySeg5[index] + + flagTrackerListSeg5[index] }
-
-                x={Seg5Values[index]['x'] + 3} y={yBarListSeg5[index]}
-
-                fontSize={12}
-                fill={textColor}
-                width={250}
-                height={5}
-                draggable={false}
-                onClick={() =>
-
-
-                    this.setState({
-                        activityPlaceholder: activitySeg4[index],
-                        commentaryPlaceholder: commentarySeg4[index],
-
-
-                    })}
-
-            />
-            <Line
-
-                points={[Seg5Values[index]['x'], yBarListSeg4[index], Seg5Values[index]['x'], 356]}
-
-
-                stroke={statusSeg5[index]}
-
-            />
-
-
-
-
-
-
-        </>
-
-    )
-       const Segment6Categories = weeksSeg6.map((week, index) =>
-
-    <>
-
-        <Text text={activitySeg6[index] +  flagTrackerListSeg6[index] }
-
-            x={Seg6Values[index]['x'] + 3} y={yBarListSeg6[index]}
-
-            fontSize={12}
-            fill={textColor}
-            width={250}
-            height={5}
-            draggable={false}
-            onClick={() =>
-
-
-                this.setState({
-                    activityPlaceholder: activitySeg6[index],
-                    commentaryPlaceholder: commentarySeg6[index],
-
-
-                })}
-
-        />
-        <Line
-
-            points={[Seg6Values[index]['x'], yBarListSeg6[index], Seg6Values[index]['x'], 369]}
-
-
-            stroke={statusSeg6[index]}
-
-        />
-
-
-
-
-
-
-    </>
-
-)
- 
-
-        const ElectricalEvents = elecrificationSeg1.map(electric =>
-            <Text text="⚡" fontSize={27} x={48 * electric - 18} y={304} />
-        )
-
-
         const handleClick = (e) => {
             this.scrollReference.current.scrollLeft = todayDateLocation - 250;
         }
-     
 
-        
+       
 
+        console.log(textColor);
 
 
         return (
             <>
 
-                <div className="block-left" style={{ backgroundColor: backgroundColorVis }}>
-                  <button className="todaybutton" onClick={(e) => handleClick(e)}>Scroll To Today</button>     
-                    <div className="imageplaceholder" style={{ position: "relative" }}>
-                    <svg height="100%" strokeMiterlimit="10" version="1.1" viewBox="0 0 300 700" width="100%" transform="translate(0,27.2)">
+<div style={{ display: 'flex', flexDirection: 'column', height: '80vh' }}>
+  <div style={{ display: 'flex', flexGrow: 1 }}>
+    <div style={{ width: '20%', backgroundColor: 'white' }}>
+    <svg height="100%" strokeMiterlimit="10" version="1.1" viewBox="0 0 300 700" width="100%" transform="translate(0,27.2)">
                         <g clipPath="Sidebar" id="Layer-1" fill="green">
                             <rect x="20" y="200" width="220" height="25"
                                 fill={Segment1Color}></rect>
@@ -906,257 +605,299 @@ export class segmentedBar extends React.Component<any, State>{
                                 fill={Segment5Color}></rect>
                             <rect x="20" y="450" width="220" height="25"
                                 fill={Segment6Color}></rect>
-                            <text x="25" y="215" fontSize="13"
-                                fill={textColor}> {
-                                categoryListDisplay[0]
-                            } </text>
-                            <text x="25" y="265" fontSize="13"
+                            <text x="25" y="215" fontSize="18"
+                                fill="white"> {categoryListDisplay[0]}
+                            </text>
+                            <text x="25" y="265" fontSize="16"
                                 fill={textColor}> {
                                 categoryListDisplay[1]
                             } </text>
-                            <text x="25" y="315" fontSize="13"
+                            <text x="25" y="315" fontSize="16"
                                 fill={textColor}> {
                                 categoryListDisplay[2]
                             } </text>
-                            <text x="25" y="365" fontSize="13"
+                            <text x="25" y="365" fontSize="16"
                                 fill={textColor}> {
                                 categoryListDisplay[3]
                             } </text>
-                            <text x="25" y="415" fontSize="13"
+                            <text x="25" y="415" fontSize="16"
                                 fill={textColor}> {
                                 categoryListDisplay[4]
                             } </text>
-                            <text x="25" y="465" fontSize="13"
+                            <text x="25" y="465" fontSize="16"
                                 fill={textColor}> {
                                 categoryListDisplay[5]
                             } </text>
-                            <rect x="268" y="319" width="50" height="6"
-                                fill={Segment1Color}/>
-                            <rect x="268" y="332" width="50" height="6"
-                                fill={Segment2Color}/>
-                            <rect x="268" y="344" width="50" height="6"
-                                fill={Segment3Color}/>
-                            <rect x="268" y="360" width="50" height="6"
-                                fill={Segment4Color}/>
-                            <rect x="268" y="372.1" width="50" height="6"
-                                fill={Segment5Color}/>
-                            <rect x="268" y="385.1" width="50" height="6"
-                                fill={Segment6Color}/>
-                            <path fill={Segment1Color}
-                                d="M 240.628 225.923 L 268.891 324.375 L 240.527 199.46 C 240.527 199.46 240.886 224.702 240.628 225.923 Z"
-                                transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
-                            <path fill={Segment2Color}
-                                d="M 240.061 273.443 L 268.138 336.505 L 240.493 252.449 L 240.061 273.443 Z"
-                                transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
-                            <path fill={Segment3Color}
-                                d="M 239.431 322.535 L 269.86 348.202 L 238.613 302.512 L 239.431 322.535 Z"
-                                transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
-                            <path fill={Segment4Color}
-                                d="M 238.403 373.957 L 268.217 363.895 C 268.217 363.895 239.845 351.276 239.845 351.115 C 239.845 350.954 239.551 372.041 238.403 373.957 Z"
-                                transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
-                            <path fill={Segment5Color}
-                                d="M 239.434 401.105 L 267.836 373.225 L 240.707 424.684 L 239.434 401.105 Z"
-                                transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
-                            <path fill={Segment6Color}
-                                d="M 240.563 450.845 L 267.238 387.414 L 240.62 478.069 L 240.563 450.845 Z"
-                                transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)"/>
-                        </g>
-                    </svg>
-                    </div>
-                </div>
-                <div className="block" style={{ backgroundColor: backgroundColorVis }} ref={this.scrollReference} >
 
-                    <div className="relative">
+
+                        </g>
+    </svg>
+</div>
+    <div ref={this.scrollReference} style={{ width: '60%', overflowX: 'scroll', backgroundColor: 'white'  }}>
+    <div   ref={this.scrollReference} style={{ width: '900px'}}>
+      <div className="relative" style={{backgroundColor:"red"}}>
                         {monthsArray}
                     </div>
                     <div className="relative">
                         {weeksArray}
-                    </div>
+         </div>
+      <Stage width={9000} height={560}  >
 
-
-
-                    <Stage width={19000} height={560}  >
-
-                    <Layer>
+<Layer>
 <Rect
-                                x={0}
-                                y={303.2}
-                                width={18000}
-                                height={6}
-                                fill={Segment1Color}
-                                draggable={true}
-                          
-                                onDragMove={(e) => {
+            x={0}
+            y={30}
+            width={18000}
+            height={6}
+            fill={Segment1Color}
+            draggable={true}
+      
+            onDragMove={(e) => {
 
-                    this.setState({
-                        activityPlaceholder:  String(e.target.y())
-
-
-                    })}
-                }
-                onClick={(e) => {
-
-                    this.setState({
-                        activityPlaceholder:  String(e.target.y())
+this.setState({
+ //  activityPlaceholder:  String(e.target.y())
 
 
-                    })}
-                }
-                       
+})}
+}
+onClick={(e) => {
 
-                                  
-                            />
-                            <Rect
-                                x={0}
-                                y={316.2}
-                                width={18000}
-                                height={6}
-                                fill={Segment2Color}
-                                draggable={true}
-                                onClick={(e) => {
-
-                                    this.setState({
-                                        activityPlaceholder:  String(e.target.y())
-                
-                
-                                    })}}
+this.setState({
+  //  activityPlaceholder:  String(e.target.y())
 
 
-                            ></Rect>
-                            <Rect
-                                x={0}
-                                y={328.3}
-                                width={18000}
-                                height={6}
-                                fill={Segment3Color}
-                                draggable={true}
-                                onClick={(e) => {
+})}
+}
+   
 
-                                    this.setState({
-                                        activityPlaceholder:  String(e.target.y())
-                
-                
-                                    })}}
+              
+        />
+        <Rect
+            x={0}
+            y={50}
+            width={18000}
+            height={6}
+            fill={Segment2Color}
+            onClick={(e) => {
 
-
-                            ></Rect>
-                            
-                            <Rect
-                                x={0}
-                                y={344.5}
-                                width={18000}
-                                height={6}
-                                fill={Segment4Color}
-                                draggable={true}
-
-                                onClick={(e) => {
-
-                                    this.setState({
-                                        activityPlaceholder:  String(e.target.y())
-                
-                
-                                    })}}
-                           / >
-                             <Rect
-                                x={0}
-                                y={356.6}
-                                width={18000}
-                                height={6}
-                                fill={Segment5Color}
-                                draggable={true}
-                                onClick={(e) => {
-
-                                    this.setState({
-                                        activityPlaceholder:  String(e.target.y())
-                
-                
-                                    })}}
+                this.setState({
+             //       activityPlaceholder:  String(e.target.y())
 
 
-                           / >
-                            <Rect
-                                x={0}
-                                y={369.6}
-                                width={18000}
-                                height={6}
-                                fill={Segment6Color}
-                                draggable={true}
-                                onClick={(e) => {
-
-                                    this.setState({
-                                        activityPlaceholder:  String(e.target.y())
-                
-                
-                                    })}}
+                })}}
 
 
-                           / >
-                        </Layer>
-                        <Layer>
-                           {Segment1Categories}
-                           {Segment2Categories}
-                           {Segment3Categories}
-                           {Segment4Categories}
-                           {Segment5Categories}
-                           {Segment6Categories}
+        ></Rect>
+        <Rect
+            x={0}
+            y={70}
+            width={18000}
+            height={6}
+            fill={Segment3Color}
+            onClick={(e) => {
+
+                this.setState({
+                  //  activityPlaceholder:  String(e.target.y())
 
 
-                            {ElectricalEvents}
-
-                        </Layer>
-                        <Layer>
-                            <Rect
-                                x={todayDateLocation}
-                                y={5}
-                                width={2}
-                                height={800}
-                                fill="green"
-
-                            ></Rect>
-                            <Text x={todayDateLocation} y={35} text="Today" fontSize={15} fill="white"></Text>
+                })}}
 
 
-                        </Layer>
+        ></Rect>
+        
+        <Rect
+            x={0}
+            y={90}
+            width={18000}
+            height={6}
+            fill={Segment4Color}
+
+            onClick={(e) => {
+
+                this.setState({
+            //        activityPlaceholder:  String(e.target.y())
 
 
-                    </Stage>
+                })}}
+       / >
+         <Rect
+            x={0}
+            y={110}
+            width={18000}
+            height={6}
+            fill={Segment5Color}
+            onClick={(e) => {
+
+                this.setState({
+         //           activityPlaceholder:  String(e.target.y())
+
+
+                })}}
+
+
+       / >
+        <Rect
+            x={0}
+            y={130}
+            width={18000}
+            height={6}
+            fill={Segment6Color}
+            onClick={(e) => {
+
+                this.setState({
+            //        activityPlaceholder:  String(e.target.y())
+
+
+                })}}
+
+
+       / >
+    </Layer>
+    <Layer>
+     <Line
+
+                points={[400, 30, 400,200]}
+                stroke={Segment1Color}
+                strokeWidth={7}
+
+
+            />
+    <Circle
+  x={400}
+  y={200 + 40}
+  radius={40}
+  stroke="green"
+  strokeWidth={5}
+    
+    >
+
+    </Circle>
+    <Text
+        x={400-40}
+        y={240-40}
+        width={40 * 2}
+        height={40 * 2}
+        align="center"
+        verticalAlign="middle"
+        text="TfW-CTL-TRANS-T41"
+        fontSize={12}
+        fill={textColor}
+      />
 
 
 
+       
+    </Layer>
+    <Layer>
+        <Rect
+            x={todayDateLocation}
+            y={150}
+            width={2}
+            height={800}
+            fill="green"
+
+        ></Rect>
+        <Text x={todayDateLocation} y={35} text="Today" fontSize={15} fill="white"></Text>
 
 
+    </Layer>
 
 
-
-
-
-
-
-
-
-
-
-
-
-                </div>
-
-
-
-                <div style={{ backgroundColor: backgroundColorVis, color: textColor }}>
-
-                    <Text fill={textColor}> Activity:-{activityPlaceholder} </Text>
-                    <br></br>
-                    <Text fill={textColor}>Commentary:- {commentaryPlaceholder}</Text>
-
-
-
-
-                </div>
-
-
-
-
-            </>
+</Stage>
+      </div>
+    </div>
+    <div style={{ width: '20%', backgroundColor: 'yellow', display: 'flex', justifyContent: 'center' }}>
+    <table style={{ margin: 'auto' }}>
+        <tbody >
+            <tr>
+                <td style={{ fontWeight: 'bold' }}>Title</td>
+                <td>EE4b</td>
+            </tr>
+            <tr>
+                <td style={{ fontWeight: 'bold' }}>Owner</td>
+                <td>Infrastrucutre Transformation</td>
+            </tr>
+            <tr>
+                <td style={{ fontWeight: 'bold' }}>Trend</td>
+                <td>⬆️ ⬇️↔️</td>
+            </tr>
+            <tr>
+                <td style={{ fontWeight: 'bold' }}>BaseLine</td>
+                <td>01/01/2024</td>
+            </tr>
+            <tr>
+                <td style={{ fontWeight: 'bold' }}>End Date</td>
+                <td>01/01/2024</td>
+            </tr>
+            <tr>
+                <td style={{ fontWeight: 'bold' }}>Last Reported End Date</td>
+                <td>01/01/2024</td>
+            </tr>
+            <tr>
+                <td style={{ fontWeight: 'bold' }}>Slip</td>
+                <td>20 Days</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+  </div>
+  <div style={{ height: '4rem', backgroundColor: 'white' }}>
+  <div style={{ width: '100%', overflowY: 'auto', display: 'flex', justifyContent: 'center' }}>
+    <table style={{ width: '100%', tableLayout: 'fixed' ,justifyContent: 'center'   }}>
+      <thead>
+        <tr>
+          <th>Milestone</th>
+          <th>Title</th>
+          <th>Owner</th>
+          <th>Impacted by</th>
+          <th>Plan Date</th>
+          <th>Projected Start</th>
+          <th>Plan Finish</th>
+          <th>Projected Finish</th>
+          <th>Comments</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>EE4b</td>
+          <td>Electrification</td>
+          <td>Infrastructure Transformation</td>
+          <td>N/A</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td> A quick brown fox jumps over the lazy dog</td>
+        </tr>
+        <tr>
+          <td>EE4b</td>
+          <td>Electrification</td>
+          <td>Infrastructure Transformation</td>
+          <td>N/A</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td>Comments</td>
+        </tr>
+        <tr>
+          <td>EE4b</td>
+          <td>Electrification</td>
+          <td>Infrastructure Transformation</td>
+          <td>N/A</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td>01/01/24</td>
+          <td>Comments</td>
+        </tr>
+        {/* Additional rows */}
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</>
 
 
 

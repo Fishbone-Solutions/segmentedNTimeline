@@ -1,10 +1,76 @@
-p {
-  font-size: 20px;
+.row {
+  width: 100%;
+  margin: 0 auto;
+}
+.block {
+  width: 940px;
+  float: left;
+  overflow-x: auto;
+  height: 645px;
+}
+.imageplaceholder {
+  transform: translate(0, 86);
+}
+.block-left {
+  width: 300px;
+  float: left;
+  height: 600px;
+  border-color: red;
+}
+.block-left .todaybutton {
+  position: absolute;
+  z-index: 1;
+  font-size: calc(1.2em + 7px);
+}
+.relative {
+  position: relative;
+  height: 21.5px;
+  width: 12480px;
+  background-color: "white";
+}
+.monthitem {
+  display: inline-block;
+  width: 240px;
+  height: 21.5px;
+  text-align: center;
+  border: gray;
+  background-color: #E8562A;
+  color: #fff;
+  cursor: pointer;
   font-weight: bold;
 }
-p em {
-  background: yellow;
-  padding: 5px;
+.parent {
+  position: relative;
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.box {
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid red;
+}
+.box1 {
+  background-color: green;
+  width: 200px;
+  height: 150px;
+}
+.box2 {
+  background-color: blue;
+  width: 300px;
+  height: 200px;
+}
+.box3 {
+  background-color: yellow;
+  width: 250px;
+  height: 175px;
+}
+.box4 {
+  background-color: red;
+  width: 175px;
+  height: 225px;
 }
 
 

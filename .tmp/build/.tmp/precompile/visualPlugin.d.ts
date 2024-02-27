@@ -1,4 +1,4 @@
 import powerbiVisualsApi from "powerbi-visuals-api";
 import IVisualPlugin = powerbiVisualsApi.visuals.plugins.IVisualPlugin;
-declare var segmentedNtimeline6841085FFCE149249A025B2BB08E3721_DEBUG: IVisualPlugin;
-export default segmentedNtimeline6841085FFCE149249A025B2BB08E3721_DEBUG;
+declare var segmentedNNewBuild182Jan_DEBUG: IVisualPlugin;
+export default segmentedNNewBuild182Jan_DEBUG;

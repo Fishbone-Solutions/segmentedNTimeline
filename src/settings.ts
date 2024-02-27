@@ -11,7 +11,7 @@ export class CircleSettings {
     public Segment4Color: string = "#71BBFD";
     public Segment5Color: string = "#8EAADC";
     public Segment6Color: string = "#A0D1FE";
-    public textColor: string = "white";
+    public textColor: string = "red";
 
 }
 
