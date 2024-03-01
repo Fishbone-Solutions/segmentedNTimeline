@@ -6,12 +6,7 @@
             "kind": "Grouping"
         },
         {
-            "displayName": "Category List",
-            "name": "c18",
-            "kind": "Grouping"
-        },
-        {
-            "displayName": "Activity Level",
+            "displayName": "Category",
             "name": "c2",
             "kind": "Grouping"
         },
@@ -26,42 +21,42 @@
             "kind": "Grouping"
         },
         {
-            "displayName": "Start Date",
+            "displayName": "Milestone Level",
             "name": "c5",
             "kind": "Grouping"
         },
         {
-            "displayName": "Finish Date",
+            "displayName": "Start Date",
             "name": "c6",
             "kind": "Grouping"
         },
         {
-            "displayName": "Projected Start Date",
+            "displayName": "Finish Date",
             "name": "c7",
             "kind": "Grouping"
         },
         {
-            "displayName": "Projected Finish Date",
+            "displayName": "Projected Start Date",
             "name": "c8",
             "kind": "Grouping"
         },
         {
-            "displayName": "Owner",
+            "displayName": "Projected Finish Date",
             "name": "c9",
             "kind": "Grouping"
         },
         {
-            "displayName": "Predecessors",
+            "displayName": "Owner",
             "name": "c10",
             "kind": "Grouping"
         },
         {
-            "displayName": "Successors",
+            "displayName": "Predecessors",
             "name": "c11",
             "kind": "Grouping"
         },
         {
-            "displayName": "Milestone",
+            "displayName": "Successors",
             "name": "c12",
             "kind": "Grouping"
         },
@@ -81,16 +76,10 @@
             "kind": "Grouping"
         },
         {
-            "displayName": "Impacted By",
+            "displayName": "Last Reported End Date",
             "name": "c16",
             "kind": "Grouping"
-        },
-        {
-            "displayName": "Last Reported End Date",
-            "name": "c17",
-            "kind": "Grouping"
         }
-       
     ],
     "objects": {
         "circle": {
@@ -226,18 +215,64 @@
                   "for": {
                     "in": "c7"
                   }
+                },
+                {
+                  "for": {
+                    "in": "c8"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c9"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c10"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c11"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c12"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c13"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c14"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c15"
+                  }
+                },
+                {
+                  "for": {
+                    "in": "c16"
+                  }
                 }
               ]
             }
           }
         }
-      ]
-,
+      ],
     "privileges": [
         {
             "name": "WebAccess",
             "essential": true,
-            "parameters": [ "https://*.virtualearth.net" ]
+            "parameters": [
+                "https://*.virtualearth.net"
+            ]
         },
         {
             "name": "ExportContent",

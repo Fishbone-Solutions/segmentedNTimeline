@@ -34595,6 +34595,31 @@ if (true) {
 
 /***/ }),
 
+/***/ 224:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   l: () => (/* binding */ monthNames)
+/* harmony export */ });
+const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+];
+
+
+/***/ }),
+
 /***/ 2110:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -34607,8 +34632,10 @@ if (true) {
 /* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1529);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(381);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5559);
-/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2889);
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5559);
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2889);
+/* harmony import */ var _CONS_TABLE__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(224);
+
 
 
 
@@ -34616,7 +34643,23 @@ if (true) {
 const initialState = {
     backgroundColorVis: "white",
     activityIDList: [],
-    textColor: "white"
+    textColor: "white",
+    finishDateList: [],
+    categoryList: [],
+    activityLevelList: [],
+    activityNameList: [],
+    statusNameList: [],
+    milestoneLevelList: [],
+    startDateList: [],
+    projectedStartDateList: [],
+    projectedFinishDateList: [],
+    ownerList: [],
+    predecessorsList: [],
+    successorsList: [],
+    commentaryList: [],
+    totalFloatList: [],
+    trendLists: [],
+    lastReportedEndDateList: []
 };
 class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     static updateCallback = null;
@@ -34633,7 +34676,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         this.scrollReference = react__WEBPACK_IMPORTED_MODULE_0__.createRef();
         // Scroll to the middle position in the constructor
         const container = this.scrollReference.current;
-        console.log(container);
         if (container) {
             const containerWidth = container.offsetWidth;
             const scrollPosition = containerWidth / 2;
@@ -34647,101 +34689,47 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         segmentedBar.updateCallback = null;
     }
     render() {
-        const monthNames = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
-        ];
-        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, commentaryList, } = this.state;
-        var weeksSeg1 = [];
-        var activitySeg1 = [];
-        var commentarySeg1 = [];
-        var statusSeg1 = [];
-        var elecrificationSeg1 = [];
-        var milestoneCategoryListSeg1 = [];
-        var weeksSeg2 = [];
-        var activitySeg2 = [];
-        var commentarySeg2 = [];
-        var statusSeg2 = [];
-        var milestoneCategoryListSeg2 = [];
-        var weeksSeg3 = [];
-        var activitySeg3 = [];
-        var commentarySeg3 = [];
-        var statusSeg3 = [];
-        var weeksSeg4 = [];
-        var weeksSeg5 = [];
-        var weeksSeg6 = [];
-        var activitySeg4 = [];
-        var commentarySeg4 = [];
-        var statusSeg4 = [];
-        var activitySeg5 = [];
-        var commentarySeg5 = [];
-        var statusSeg5 = [];
-        var activitySeg6 = [];
-        var commentarySeg6 = [];
-        var statusSeg6 = [];
-        var categoryList = [];
+        const { commentaryPlaceholder, backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, milestoneLevelList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, } = this.state;
         var weeknoList = [];
-        var Seg1Values = [];
-        var Seg2Values = [];
-        var Seg3Values = [];
-        var Seg4Values = [];
-        var Seg5Values = [];
-        var Seg6Values = [];
         var weekDates = [];
         var months = [];
         var years = [];
         var weekNoFromList = [];
-        var flagTrackerListSeg1 = [];
-        var flagTrackerListSeg2 = [];
-        var flagTrackerListSeg3 = [];
-        var flagTrackerListSeg4 = [];
-        var flagTrackerListSeg5 = [];
-        var flagTrackerListSeg6 = [];
-        var activityIDList = [];
-        var StatusNameList = [];
-        var categoryListDisplay = [...new Set(categoryList)];
-        console.log(categoryList);
-        categoryListDisplay.sort((a, b) => a.localeCompare(b));
-        for (let i = 0; i < weeknoList.length; i++) {
-            weekDates.push(new Date(Date.parse(weeknoList[i])));
+        var finsldates = [];
+        console.log("finish", finishDateList);
+        for (let i = 0; i < finishDateList.length; i++) {
+            finsldates.push(new Date(Date.parse(finishDateList[i])));
         }
-        const result = weekDates.reduce((acc, date) => {
+        console.log("fin datea", finsldates);
+        var categoryListDisplay = [...new Set(categoryList)];
+        categoryListDisplay.sort((a, b) => a.localeCompare(b));
+        const result = finsldates.reduce((acc, date) => {
             const min = acc.min ? (date < acc.min ? date : acc.min) : date;
             const max = acc.max ? (date > acc.max ? date : acc.max) : date || new Date("2026-01-01");
             return { min, max };
         }, { min: undefined, max: undefined });
-        //    let startDate4 = moment(new Date(Date.parse(result.min))).startOf('month');
-        let startDate4 = moment__WEBPACK_IMPORTED_MODULE_2__().startOf('year').set({ month: 0, date: 1, year: 2024 });
+        let startDate4 = moment__WEBPACK_IMPORTED_MODULE_2__(new Date(Date.parse(result.min))).startOf('month');
+        // let startDate4 = moment().startOf('year').set({ month: 0, date: 1, year: 2024 });
         const startDate = startDate4.subtract(1, 'months');
-        //    let endDate4 = moment(result.max).startOf('months');
-        let endDate4 = moment__WEBPACK_IMPORTED_MODULE_2__().startOf('year').set({ month: 0, date: 1, year: 2025 });
+        let endDate4 = moment__WEBPACK_IMPORTED_MODULE_2__(result.max).startOf('months');
+        //  let endDate4 = moment().startOf('year').set({ month: 0, date: 1, year: 2025});
         const endDate = endDate4.add(1, 'months');
         // Define a variable to hold the current date
         let currentDate = startDate;
         while (currentDate.isSameOrBefore(endDate)) {
             const month = currentDate.month();
             const year = currentDate.year();
-            months.push(monthNames[month]);
+            months.push(_CONS_TABLE__WEBPACK_IMPORTED_MODULE_3__/* .monthNames */ .l[month]);
             years.push(year);
             // Advance the current date by one week
             currentDate = currentDate.add(1, 'months');
         }
-        const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_3__/* .subMonths */ .W)(result.min, 1);
+        const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_4__/* .subMonths */ .W)(result.min, 1);
         const todayDate = new Date();
         const todaysLine = todayDate.getDate() + todayDate.getDay();
         const prefix = [0, 1, 2, 3, 4, 5];
         const currentWeek = prefix[0 | todaysLine / 7] + 1;
-        const todayDateLocation = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_4__/* .differenceInCalendarMonths */ .T)(start, Date.now())) * 5 * 48 + currentWeek * 48 - 24;
+        const todayDateLocation = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, Date.now())) * 5 * 48 + currentWeek * 48 - 24;
         const weeksArray = months.map((week, index) => react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 1),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 2),
@@ -34751,264 +34739,481 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const monthsArray = months.map((month, index) => react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "monthitem", style: { backgroundColor: backgroundColorVis } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, month),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, years[index])));
-        for (let i = 0; i < weeknoList.length; i++) {
-            const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_3__/* .subMonths */ .W)(result.min, 1);
-            let week = new Date(Date.parse(weeknoList[i]));
-            let weekNos = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_4__/* .differenceInCalendarMonths */ .T)(start, week)) * 5 + (week.getDate() / 7);
-            weekNoFromList.push(weekNos);
-        }
-        categoryListDisplay = ['CVL Phasing Strategy', ' Infrastructure Management', 'Infrastructure Transformation ', 'Operational Readiness', 'Rolling Stock', 'TT Readiness'];
-        for (let i = 0; i < activityIDList.length; i++) {
-            if (categoryList[i].includes(categoryListDisplay[0])) {
-                var currentWeekDate = moment__WEBPACK_IMPORTED_MODULE_2__(new Date(Date.parse(weeknoList[i])));
-                var valueLayer = Math.abs(startDate.diff(currentWeekDate, 'week'));
-                weeksSeg1.push(valueLayer);
-                activitySeg1.push([i]);
-                if (commentaryList[i] === '') {
-                    commentarySeg1.push("No Commentary Found");
-                }
-                else {
-                    commentarySeg1.push(commentaryList[i]);
-                }
-                if (StatusNameList[i].toLowerCase().includes('grey')) {
-                    statusSeg1.push("black");
-                }
-                if (StatusNameList[i].toLowerCase().includes('amber')) {
-                    statusSeg1.push("amber");
-                }
-                if (StatusNameList[i].toLowerCase().includes('green')) {
-                    statusSeg1.push("green");
-                }
-                if (StatusNameList[i].toLowerCase().includes('red')) {
-                    statusSeg1.push("red");
-                }
-                var obj = {
-                    x: 48 * Number(weekNoFromList[i]) + 3,
-                    y: 58,
-                    width: 3.1,
-                    fill: statusSeg1[i],
-                    id: 'SEG1' + i,
-                };
-                Seg1Values.push(obj);
-            }
-            if (categoryList[i].includes(categoryListDisplay[1])) {
-                activitySeg2.push(activityIDList[i]);
-                commentarySeg2.push(commentaryList[i]);
-                weeksSeg2.push(parseInt(weekNoFromList[i]));
-                if (StatusNameList[i].toLowerCase().includes('grey')) {
-                    statusSeg2.push("black");
-                }
-                if (StatusNameList[i].toLowerCase().includes('amber')) {
-                    statusSeg2.push("yellow");
-                }
-                if (StatusNameList[i].toLowerCase().includes('green')) {
-                    statusSeg2.push("green");
-                }
-                if (StatusNameList[i].toLowerCase().includes('red')) {
-                    statusSeg2.push("red");
-                }
-                var rectobjects2 = {
-                    x: 48 * Number(weekNoFromList[i]) + 10,
-                    y: 180,
-                    width: 3.1,
-                    height: 103,
-                    fill: statusSeg2[i],
-                    id: 'SEG2' + i,
-                };
-                Seg2Values.push(rectobjects2);
-            }
-            if (categoryList[i].includes(categoryListDisplay[2])) {
-                weeksSeg3.push(parseInt(weekNoFromList[i]));
-                activitySeg3.push(activityIDList[i]);
-                commentarySeg3.push(commentaryList[i]);
-                if (StatusNameList[i].toLowerCase().includes('red')) {
-                    statusSeg3.push("red");
-                }
-                if (StatusNameList[i].toLowerCase().includes('grey')) {
-                    statusSeg3.push("black");
-                }
-                if (StatusNameList[i].toLowerCase().includes('amber')) {
-                    statusSeg3.push("yellow");
-                }
-                if (StatusNameList[i].toLowerCase().includes('green')) {
-                    statusSeg3.push("green");
-                }
-                var rectobjects3 = {
-                    x: 48 * Number(weekNoFromList[i]) + 2,
-                    y: 200,
-                    width: 3.1,
-                    height: 120,
-                    fill: statusSeg3[i],
-                    id: 'SEG3' + i,
-                };
-                Seg3Values.push(rectobjects3);
-            }
-            if (categoryList[i].includes(categoryListDisplay[3])) {
-                weeksSeg4.push(parseInt(weekNoFromList[i]));
-                activitySeg4.push(activityIDList[i]);
-                commentarySeg4.push(commentaryList[i]);
-                if (StatusNameList[i].toLowerCase().includes('grey')) {
-                    statusSeg4.push("black");
-                }
-                if (StatusNameList[i].toLowerCase().includes('amber')) {
-                    statusSeg4.push("yellow");
-                }
-                if (StatusNameList[i].toLowerCase().includes('green')) {
-                    statusSeg4.push("green");
-                }
-                var rectobjects4 = {
-                    x: 48 * Number(weekNoFromList[i]) + 10,
-                    y: 490,
-                    y_bar: 375,
-                    width: 3.1,
-                    height: 150,
-                    fill: statusSeg4[i],
-                    id: 'SEG4' + i,
-                };
-                Seg4Values.push(rectobjects4);
-            }
-            if (categoryList[i].includes(categoryListDisplay[4])) {
-                weeksSeg5.push(parseInt(weekNoFromList[i]));
-                activitySeg5.push(activityIDList[i]);
-                commentarySeg5.push(commentaryList[i]);
-                if (StatusNameList[i].toLowerCase().includes('grey')) {
-                    statusSeg5.push("black");
-                }
-                if (StatusNameList[i].toLowerCase().includes('amber')) {
-                    statusSeg5.push("yellow");
-                }
-                if (StatusNameList[i].toLowerCase().includes('green')) {
-                    statusSeg5.push("green");
-                }
-                if (StatusNameList[i].toLowerCase().includes('red')) {
-                    statusSeg5.push("red");
-                }
-                var rectobjects5 = {
-                    x: 48 * Number(weekNoFromList[i]) + 10,
-                    y: 356,
-                    y_bar: 375,
-                    width: 3.1,
-                    height: 150,
-                    fill: statusSeg5[i],
-                    id: 'SEG5' + i,
-                };
-                Seg5Values.push(rectobjects5);
-            }
-            if (categoryList[i].includes(categoryListDisplay[5])) {
-                weeksSeg6.push(parseInt(weekNoFromList[i]));
-                activitySeg6.push(activityIDList[i]);
-                commentarySeg6.push(commentaryList[i]);
-                if (StatusNameList[i].toLowerCase().includes('grey')) {
-                    statusSeg6.push("black");
-                }
-                if (StatusNameList[i].toLowerCase().includes('amber')) {
-                    statusSeg6.push("yellow");
-                }
-                if (StatusNameList[i].toLowerCase().includes('green')) {
-                    statusSeg6.push("green");
-                }
-                if (StatusNameList[i].toLowerCase().includes('red')) {
-                    statusSeg6.push("red");
-                }
-                var rectobjects6 = {
-                    x: 48 * Number(weekNoFromList[i]) + 10,
-                    y: 356,
-                    y_bar: 375,
-                    width: 3.1,
-                    height: 150,
-                    fill: statusSeg6[i],
-                    id: 'SEG6' + i,
-                };
-                Seg6Values.push(rectobjects6);
-            }
-        }
+        // Segment 1 Values
+        var shortCodeSeg1 = [];
+        var statusSeg1 = [];
+        var trendSeg1 = [];
+        var titleSeg1 = [];
+        var ownerSeg1 = [];
+        var beginSeg1 = [];
+        var endSeg1 = [];
+        var lastReportedEndDateSeg1 = [];
+        var slipSeg1 = [];
+        var commentarySeg1 = [];
+        var Seg1Values = [];
+        // Segment 2 Values
+        var shortCodeSeg2 = [];
+        var statusSeg2 = [];
+        var trendSeg2 = [];
+        var titleSeg2 = [];
+        var ownerSeg2 = [];
+        var beginSeg2 = [];
+        var endSeg2 = [];
+        var lastReportedEndDateSeg2 = [];
+        var slipSeg2 = [];
+        var commentarySeg2 = [];
+        var Seg2Values = [];
+        // Segment 3 Values
+        var shortCodeSeg3 = [];
+        var statusSeg3 = [];
+        var trendSeg3 = [];
+        var titleSeg3 = [];
+        var ownerSeg3 = [];
+        var beginSeg3 = [];
+        var endSeg3 = [];
+        var lastReportedEndDateSeg3 = [];
+        var slipSeg3 = [];
+        var commentarySeg3 = [];
+        var Seg3Values = [];
+        // Segment 4 Values
+        var shortCodeSeg4 = [];
+        var statusSeg4 = [];
+        var trendSeg4 = [];
+        var titleSeg4 = [];
+        var ownerSeg4 = [];
+        var beginSeg4 = [];
+        var endSeg4 = [];
+        var lastReportedEndDateSeg4 = [];
+        var slipSeg4 = [];
+        var commentarySeg4 = [];
+        var Seg4Values = [];
+        // Segment 5 Values
+        var shortCodeSeg5 = [];
+        var statusSeg5 = [];
+        var trendSeg5 = [];
+        var titleSeg5 = [];
+        var ownerSeg5 = [];
+        var beginSeg5 = [];
+        var endSeg5 = [];
+        var lastReportedEndDateSeg5 = [];
+        var slipSeg5 = [];
+        var commentarySeg5 = [];
+        var Seg5Values = [];
+        // Segment 6 Values
+        var shortCodeSeg6 = [];
+        var statusSeg6 = [];
+        var trendSeg6 = [];
+        var titleSeg6 = [];
+        var ownerSeg6 = [];
+        var beginSeg6 = [];
+        var endSeg6 = [];
+        var lastReportedEndDateSeg6 = [];
+        var slipSeg6 = [];
+        var commentarySeg6 = [];
+        var Seg6Values = [];
+        var yBarSeg1 = [300, 350, 380, 450, 300, 350, 380, 450, 300, 350, 380, 450, 300, 350, 380, 450, 300, 350, 380, 450,];
         const handleClick = (e) => {
             this.scrollReference.current.scrollLeft = todayDateLocation - 250;
         };
-        console.log(textColor);
+        for (let i = 0; i < finishDateList.length; i++) {
+            const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_4__/* .subMonths */ .W)(result.min, 1);
+            let week = new Date(Date.parse(finishDateList[i]));
+            let weekNos = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, week)) * 5 + (week.getDate() / 7);
+            weekNoFromList.push(weekNos);
+        }
+        categoryListDisplay = ['CVL Phasing Strategy', ' Infrastructure Transformation', 'Operational Readiness', 'Rolling Stock', 'TT Readiness'];
+        for (let i = 0; i < activityIDList.length; i++) {
+            if (categoryList[i].includes(categoryListDisplay[0])) {
+                shortCodeSeg1.push(activityIDList[i]);
+                titleSeg1.push(activityNameList[i]);
+                ownerSeg1.push(ownerList[i]);
+                beginSeg1.push(startDateList[i]);
+                endSeg1.push(finishDateList[i]);
+                lastReportedEndDateSeg1.push(lastReportedEndDateList[i]);
+                slipSeg1.push(totalFloatList[i]);
+                commentarySeg1.push(commentaryList[i]);
+                if (trendLists[i].toLowerCase().includes("no change")) {
+                    trendSeg1.push("↔️");
+                }
+                if (trendLists[i].toLowerCase().includes("deteriorated")) {
+                    trendSeg1.push("⬇️");
+                }
+                if (trendLists[i].toLowerCase().includes("improved")) {
+                    trendSeg1.push("⬆️");
+                }
+                if (statusNameList[i].toLowerCase().includes("Not Started")) {
+                    statusSeg1.push("grey");
+                }
+                if (statusNameList[i].toLowerCase().includes("late")) {
+                    statusSeg1.push("red");
+                }
+                if (statusNameList[i].toLowerCase().includes("at risk")) {
+                    statusSeg1.push("yellow");
+                }
+                if (statusNameList[i].toLowerCase().includes("on plan")) {
+                    statusSeg1.push("green");
+                }
+                if (statusNameList[i].toLowerCase().includes("completed")) {
+                    statusSeg1.push("blue");
+                }
+                let obj = {
+                    x: 48 * Number(weekNoFromList[i]) + 3,
+                    y: 200 + 40,
+                    y1: 300,
+                    y2: 350,
+                    y3: 450,
+                    fill: statusSeg1[i],
+                    id: "SEG1" + i
+                };
+                Seg1Values.push(obj);
+            }
+            if (categoryList[i].includes('Infrastructure Transformation')) {
+                // Segment 2
+                shortCodeSeg2.push(activityIDList[i]);
+                titleSeg2.push(activityNameList[i]);
+                ownerSeg2.push(ownerList[i]);
+                beginSeg2.push(startDateList[i]);
+                endSeg2.push(finishDateList[i]);
+                lastReportedEndDateSeg2.push(lastReportedEndDateList[i]);
+                slipSeg2.push(totalFloatList[i]);
+                commentarySeg2.push(commentaryList[i]);
+                if (trendLists[i].toLowerCase().includes("no change")) {
+                    trendSeg2.push("↔️");
+                }
+                if (trendLists[i].toLowerCase().includes("deteriorated")) {
+                    trendSeg2.push("⬇️");
+                }
+                if (trendLists[i].toLowerCase().includes("improved")) {
+                    trendSeg2.push("⬆️");
+                }
+                if (statusNameList[i].toLowerCase().includes("not started")) {
+                    statusSeg2.push("grey");
+                }
+                if (statusNameList[i].toLowerCase().includes("late")) {
+                    statusSeg2.push("red");
+                }
+                if (statusNameList[i].toLowerCase().includes("at risk")) {
+                    statusSeg2.push("yellow");
+                }
+                if (statusNameList[i].toLowerCase().includes("on plan")) {
+                    statusSeg2.push("green");
+                }
+                if (statusNameList[i].toLowerCase().includes("completed")) {
+                    statusSeg2.push("blue");
+                }
+                let obj = {
+                    x: 48 * Number(weekNoFromList[i]) + 3,
+                    y: 200 + 40,
+                    y1: 300,
+                    y2: 350,
+                    y3: 450,
+                    fill: statusSeg2[i],
+                    id: "SEG2" + i,
+                };
+                Seg2Values.push(obj);
+            }
+            console.log();
+            if (categoryList[i].includes('Operational Readiness')) {
+                // Segment 3
+                shortCodeSeg3.push(activityIDList[i]);
+                titleSeg3.push(activityNameList[i]);
+                ownerSeg3.push(ownerList[i]);
+                beginSeg3.push(startDateList[i]);
+                endSeg3.push(finishDateList[i]);
+                lastReportedEndDateSeg3.push(lastReportedEndDateList[i]);
+                slipSeg3.push(totalFloatList[i]);
+                commentarySeg3.push(commentaryList[i]);
+                if (trendLists[i].toLowerCase().includes("no change")) {
+                    trendSeg3.push("↔️");
+                }
+                if (trendLists[i].toLowerCase().includes("deteriorated")) {
+                    trendSeg3.push("⬇️");
+                }
+                if (trendLists[i].toLowerCase().includes("improved")) {
+                    trendSeg3.push("⬆️");
+                }
+                if (statusNameList[i].toLowerCase().includes("not started")) {
+                    statusSeg3.push("grey");
+                }
+                if (statusNameList[i].toLowerCase().includes("late")) {
+                    statusSeg3.push("red");
+                }
+                if (statusNameList[i].toLowerCase().includes("at risk")) {
+                    statusSeg3.push("yellow");
+                }
+                if (statusNameList[i].toLowerCase().includes("on plan")) {
+                    statusSeg3.push("green");
+                }
+                if (statusNameList[i].toLowerCase().includes("completed")) {
+                    statusSeg3.push("blue");
+                }
+                let obj = {
+                    x: 48 * Number(weekNoFromList[i]) + 3,
+                    y: 200 + 40,
+                    y1: 300,
+                    y2: 350,
+                    y3: 450,
+                    fill: statusSeg3[i],
+                    id: "SEG3" + i,
+                };
+                Seg3Values.push(obj);
+            }
+            if (categoryList[i].includes('Rolling Stock')) {
+                // Segment 4
+                shortCodeSeg4.push(activityIDList[i]);
+                titleSeg4.push(activityNameList[i]);
+                ownerSeg4.push(ownerList[i]);
+                beginSeg4.push(startDateList[i]);
+                endSeg4.push(finishDateList[i]);
+                lastReportedEndDateSeg4.push(lastReportedEndDateList[i]);
+                slipSeg4.push(totalFloatList[i]);
+                commentarySeg4.push(commentaryList[i]);
+                if (trendLists[i].toLowerCase().includes("no change")) {
+                    trendSeg4.push("↔️");
+                }
+                if (trendLists[i].toLowerCase().includes("deteriorated")) {
+                    trendSeg4.push("⬇️");
+                }
+                if (trendLists[i].toLowerCase().includes("improved")) {
+                    trendSeg4.push("⬆️");
+                }
+                if (statusNameList[i].toLowerCase().includes("not started")) {
+                    statusSeg4.push("grey");
+                }
+                if (statusNameList[i].toLowerCase().includes("late")) {
+                    statusSeg4.push("red");
+                }
+                if (statusNameList[i].toLowerCase().includes("at risk")) {
+                    statusSeg4.push("yellow");
+                }
+                if (statusNameList[i].toLowerCase().includes("on plan")) {
+                    statusSeg4.push("green");
+                }
+                if (statusNameList[i].toLowerCase().includes("completed")) {
+                    statusSeg4.push("blue");
+                }
+                let obj = {
+                    x: 48 * Number(weekNoFromList[i]) + 3,
+                    y: 200 + 40,
+                    y1: 300,
+                    y2: 350,
+                    y3: 450,
+                    fill: statusSeg4[i],
+                    id: "SEG4" + i,
+                };
+                Seg4Values.push(obj);
+            }
+            // Segment 4
+            if (categoryList[i].includes('TT Readiness')) {
+                // Segment 4
+                shortCodeSeg4.push(activityIDList[i]);
+                titleSeg4.push(activityNameList[i]);
+                ownerSeg4.push(ownerList[i]);
+                beginSeg4.push(startDateList[i]);
+                endSeg4.push(finishDateList[i]);
+                lastReportedEndDateSeg4.push(lastReportedEndDateList[i]);
+                slipSeg4.push(totalFloatList[i]);
+                commentarySeg4.push(commentaryList[i]);
+                if (trendLists[i].toLowerCase().includes("no change")) {
+                    trendSeg4.push("↔️");
+                }
+                if (trendLists[i].toLowerCase().includes("deteriorated")) {
+                    trendSeg4.push("⬇️");
+                }
+                if (trendLists[i].toLowerCase().includes("improved")) {
+                    trendSeg4.push("⬆️");
+                }
+                if (statusNameList[i].toLowerCase().includes("not started")) {
+                    statusSeg4.push("grey");
+                }
+                if (statusNameList[i].toLowerCase().includes("late")) {
+                    statusSeg4.push("red");
+                }
+                if (statusNameList[i].toLowerCase().includes("at risk")) {
+                    statusSeg4.push("yellow");
+                }
+                if (statusNameList[i].toLowerCase().includes("on plan")) {
+                    statusSeg4.push("green");
+                }
+                if (statusNameList[i].toLowerCase().includes("completed")) {
+                    statusSeg4.push("blue");
+                }
+                let obj = {
+                    x: 48 * Number(weekNoFromList[i]) + 3,
+                    y: 200 + 40,
+                    y1: 300,
+                    y2: 350,
+                    y3: 450,
+                    fill: statusSeg4[i],
+                    id: "SEG4" + i,
+                };
+                Seg4Values.push(obj);
+            }
+            if (categoryList[i].includes(categoryListDisplay[4])) {
+                // Segment 5
+                shortCodeSeg5.push(activityIDList[i]);
+                titleSeg5.push(activityNameList[i]);
+                ownerSeg5.push(ownerList[i]);
+                beginSeg5.push(startDateList[i]);
+                endSeg5.push(finishDateList[i]);
+                lastReportedEndDateSeg5.push(lastReportedEndDateList[i]);
+                slipSeg5.push(totalFloatList[i]);
+                commentarySeg5.push(commentaryList[i]);
+                if (trendLists[i].toLowerCase().includes("no change")) {
+                    trendSeg5.push("↔️");
+                }
+                if (trendLists[i].toLowerCase().includes("deteriorated")) {
+                    trendSeg5.push("⬇️");
+                }
+                if (trendLists[i].toLowerCase().includes("improved")) {
+                    trendSeg5.push("⬆️");
+                }
+                if (statusNameList[i].toLowerCase().includes("not started")) {
+                    statusSeg5.push("grey");
+                }
+                if (statusNameList[i].toLowerCase().includes("late")) {
+                    statusSeg5.push("red");
+                }
+                if (statusNameList[i].toLowerCase().includes("at risk")) {
+                    statusSeg5.push("yellow");
+                }
+                if (statusNameList[i].toLowerCase().includes("on plan")) {
+                    statusSeg5.push("green");
+                }
+                if (statusNameList[i].toLowerCase().includes("completed")) {
+                    statusSeg5.push("blue");
+                }
+                let obj = {
+                    x: 48 * Number(weekNoFromList[i]) + 3,
+                    y: 200 + 40,
+                    y1: 300,
+                    y2: 350,
+                    y3: 450,
+                    fill: statusSeg5[i],
+                    id: "SEG5" + i,
+                };
+                Seg5Values.push(obj);
+            }
+            if (categoryList[i].includes(categoryListDisplay[5])) {
+                // Segment 6
+                shortCodeSeg6.push(activityIDList[i]);
+                titleSeg6.push(activityNameList[i]);
+                ownerSeg6.push(ownerList[i]);
+                beginSeg6.push(startDateList[i]);
+                endSeg6.push(finishDateList[i]);
+                lastReportedEndDateSeg6.push(lastReportedEndDateList[i]);
+                slipSeg6.push(totalFloatList[i]);
+                commentarySeg6.push(commentaryList[i]);
+                if (trendLists[i].toLowerCase().includes("no change")) {
+                    trendSeg6.push("↔️");
+                }
+                if (trendLists[i].toLowerCase().includes("deteriorated")) {
+                    trendSeg6.push("⬇️");
+                }
+                if (trendLists[i].toLowerCase().includes("improved")) {
+                    trendSeg6.push("⬆️");
+                }
+                if (statusNameList[i].toLowerCase().includes("not started")) {
+                    statusSeg6.push("grey");
+                }
+                if (statusNameList[i].toLowerCase().includes("late")) {
+                    statusSeg6.push("red");
+                }
+                if (statusNameList[i].toLowerCase().includes("at risk")) {
+                    statusSeg6.push("yellow");
+                }
+                if (statusNameList[i].toLowerCase().includes("on plan")) {
+                    statusSeg6.push("green");
+                }
+                if (statusNameList[i].toLowerCase().includes("completed")) {
+                    statusSeg6.push("blue");
+                }
+                let obj = {
+                    x: 48 * Number(weekNoFromList[i]) + 3,
+                    y: 200 + 40,
+                    y1: 300,
+                    y2: 350,
+                    y3: 450,
+                    fill: statusSeg6[i],
+                    id: "SEG6" + i,
+                };
+                Seg6Values.push(obj);
+            }
+        }
+        console.log("shortCodeSeg2:", shortCodeSeg2);
+        console.log("statusSeg2:", statusSeg2);
+        console.log("trendSeg2:", trendSeg2);
+        console.log("titleSeg2:", titleSeg2);
+        console.log("ownerSeg2:", ownerSeg2);
+        console.log("beginSeg2:", beginSeg2);
+        console.log("endSeg2:", endSeg2);
+        console.log("lastReportedEndDateSeg2:", lastReportedEndDateSeg2);
+        console.log("slipSeg2:", slipSeg2);
+        console.log("commentarySeg2:", commentarySeg2);
+        console.log("Seg2Values:", Seg2Values);
+        console.log("trend", trendLists);
+        const Segment1Categories = endSeg1.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], 30, Seg1Values[index]["x"], 200], stroke: Segment1Color, strokeWidth: 7 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: 200 + 40, radius: 40, stroke: statusSeg1[index], strokeWidth: 5 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: 240 - 40, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg1[index], fontSize: 12, fill: textColor }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: 240 - 20, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "⬆️", fontSize: 20, fill: textColor }))));
+        const Segment2Categories = endSeg2.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg2Values[index]["x"], 50, Seg2Values[index]["x"], 270], stroke: Segment2Color, strokeWidth: 7 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg2Values[index]["x"], y: 270 + 40, radius: 40, stroke: statusSeg2[index], strokeWidth: 5 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg2Values[index]["x"] - 40, y: 270, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg2[index], fontSize: 12, fill: textColor }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg2Values[index]["x"] - 40, y: 270 + 30, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "⬆️", fontSize: 20, fill: textColor }))));
+        console.log("Segment2", shortCodeSeg2);
+        const Segment3Categories = endSeg3.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg3Values[index]["x"], 50, Seg3Values[index]["x"], 300], stroke: Segment3Color, strokeWidth: 7 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg3Values[index]["x"], y: 300 + 40, radius: 40, stroke: statusSeg3[index], strokeWidth: 5 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg3Values[index]["x"] - 40, y: 340 - 40, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg3[index], fontSize: 12, fill: textColor }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg3Values[index]["x"] - 40, y: 340 - 20, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "⬆️", fontSize: 12, fill: textColor }))));
+        const Segment4Categories = endSeg4.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg4Values[index]["x"], 70, Seg4Values[index]["x"], 400], stroke: Segment4Color, strokeWidth: 7 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg4Values[index]["x"], y: 400 + 40, radius: 40, stroke: statusSeg4[index], strokeWidth: 5 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg4Values[index]["x"] - 40, y: 440 - 40, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg4[index], fontSize: 12, fill: textColor }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg4Values[index]["x"] - 40, y: 440 - 20, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "⬆️", fontSize: 12, fill: textColor }))));
+        const segments = [
+            { y: 30, fill: Segment1Color },
+            { y: 50, fill: Segment2Color },
+            { y: 70, fill: Segment3Color },
+            { y: 90, fill: Segment4Color },
+            { y: 110, fill: Segment5Color },
+            { y: 130, fill: Segment6Color }
+        ];
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: 'flex', flexDirection: 'column', height: '80vh' } },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: 'flex', flexGrow: 1 } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '20%', backgroundColor: 'white' } },
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", { height: "100%", strokeMiterlimit: "10", version: "1.1", viewBox: "0 0 300 700", width: "100%", transform: "translate(0,27.2)" },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("g", { clipPath: "Sidebar", id: "Layer-1", fill: "green" },
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "200", width: "220", height: "25", fill: Segment1Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "250", width: "220", height: "25", fill: Segment2Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "300", width: "220", height: "25", fill: Segment3Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "350", width: "220", height: "25", fill: Segment4Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "400", width: "220", height: "25", fill: Segment5Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "450", width: "220", height: "25", fill: Segment6Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: "25", y: "215", fontSize: "18", fill: "white" },
-                                    " ",
-                                    categoryListDisplay[0]),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: "25", y: "265", fontSize: "16", fill: textColor },
-                                    " ",
-                                    categoryListDisplay[1],
-                                    " "),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: "25", y: "315", fontSize: "16", fill: textColor },
-                                    " ",
-                                    categoryListDisplay[2],
-                                    " "),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: "25", y: "365", fontSize: "16", fill: textColor },
-                                    " ",
-                                    categoryListDisplay[3],
-                                    " "),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: "25", y: "415", fontSize: "16", fill: textColor },
-                                    " ",
-                                    categoryListDisplay[4],
-                                    " "),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: "25", y: "465", fontSize: "16", fill: textColor },
-                                    " ",
-                                    categoryListDisplay[5],
-                                    " ")))),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "200", width: "235", height: "35", fill: Segment1Color }),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "250", width: "235", height: "35", fill: Segment2Color }),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "300", width: "235", height: "35", fill: Segment3Color }),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "350", width: "235", height: "35", fill: Segment4Color }),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "400", width: "235", height: "35", fill: Segment5Color }),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "450", width: "235", height: "35", fill: Segment6Color }),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 220, fontSize: 18, fill: textColor }, categoryListDisplay[0]),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 275, fontSize: 18, fill: textColor }, categoryListDisplay[1]),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 320, fontSize: 18, fill: textColor }, categoryListDisplay[2]),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 370, fontSize: 18, fill: textColor }, categoryListDisplay[3]),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 420, fontSize: 18, fill: textColor }, categoryListDisplay[4]),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 480, fontSize: 18, fill: textColor }, categoryListDisplay[5])))),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { ref: this.scrollReference, style: { width: '60%', overflowX: 'scroll', backgroundColor: 'white' } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { ref: this.scrollReference, style: { width: '900px' } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '20000px' } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: "red" } }, monthsArray),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 9000, height: 560 },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 20000, height: 560, style: { backgroundColor: backgroundColorVis } },
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, segments.map((segment, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { key: index, x: 0, y: segment.y, width: 18000, height: 6, fill: segment.fill })))),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 0, y: 30, width: 18000, height: 6, fill: Segment1Color, draggable: true, onDragMove: (e) => {
-                                            this.setState({
-                                            //  activityPlaceholder:  String(e.target.y())
-                                            });
-                                        }, onClick: (e) => {
-                                            this.setState({
-                                            //  activityPlaceholder:  String(e.target.y())
-                                            });
-                                        } }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 0, y: 50, width: 18000, height: 6, fill: Segment2Color, onClick: (e) => {
-                                            this.setState({
-                                            //       activityPlaceholder:  String(e.target.y())
-                                            });
-                                        } }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 0, y: 70, width: 18000, height: 6, fill: Segment3Color, onClick: (e) => {
-                                            this.setState({
-                                            //  activityPlaceholder:  String(e.target.y())
-                                            });
-                                        } }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 0, y: 90, width: 18000, height: 6, fill: Segment4Color, onClick: (e) => {
-                                            this.setState({
-                                            //        activityPlaceholder:  String(e.target.y())
-                                            });
-                                        } }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 0, y: 110, width: 18000, height: 6, fill: Segment5Color, onClick: (e) => {
-                                            this.setState({
-                                            //           activityPlaceholder:  String(e.target.y())
-                                            });
-                                        } }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 0, y: 130, width: 18000, height: 6, fill: Segment6Color, onClick: (e) => {
-                                            this.setState({
-                                            //        activityPlaceholder:  String(e.target.y())
-                                            });
-                                        } })),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [400, 30, 400, 200], stroke: Segment1Color, strokeWidth: 7 }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: 400, y: 200 + 40, radius: 40, stroke: "green", strokeWidth: 5 }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 400 - 40, y: 240 - 40, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "TfW-CTL-TRANS-T41", fontSize: 12, fill: textColor })),
+                                    Segment1Categories,
+                                    Segment2Categories,
+                                    Segment3Categories,
+                                    Segment4Categories),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 150, width: 2, height: 800, fill: "green" }),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation, y: 35, text: "Today", fontSize: 15, fill: "white" }))))),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '20%', backgroundColor: 'yellow', display: 'flex', justifyContent: 'center' } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '20%', backgroundColor: 'grey', display: 'flex', justifyContent: 'center' } },
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { margin: 'auto' } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
@@ -35032,51 +35237,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: 'bold' } }, "Slip"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "20 Days")))))),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: '4rem', backgroundColor: 'white' } },
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '100%', overflowY: 'auto', display: 'flex', justifyContent: 'center' } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: '100%', tableLayout: 'fixed', justifyContent: 'center' } },
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Milestone"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Title"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Owner"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Impacted by"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Plan Date"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Projected Start"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Plan Finish"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Projected Finish"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Comments"))),
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "EE4b"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Electrification"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Infrastructure Transformation"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "N/A"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, " A quick brown fox jumps over the lazy dog")),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "EE4b"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Electrification"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Infrastructure Transformation"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "N/A"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Comments")),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "EE4b"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Electrification"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Infrastructure Transformation"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "N/A"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Comments")))))))));
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: '4rem', backgroundColor: 'grey' } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", { style: { textAlign: "center", fontSize: "30px", color: "white" } }, "\uD83D\uDEA7 WORK IN PROGRESS (  Dynamic table ) ")))));
     }
 }
 /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (segmentedBar)));
@@ -35142,7 +35304,7 @@ class Visual {
         this.reactRoot = react__WEBPACK_IMPORTED_MODULE_0__.createElement(_SegmentedBar__WEBPACK_IMPORTED_MODULE_3__/* .segmentedBar */ .Yp, {});
         react_dom__WEBPACK_IMPORTED_MODULE_1__.render(this.reactRoot, this.target);
         this.columnIndices = [];
-        for (let i = 1; i < 18; i++) {
+        for (let i = 1; i < 17; i++) {
             let name = "c" + i;
             this.columnIndices[name] = 0;
         }
@@ -35157,48 +35319,55 @@ class Visual {
             const object = this.settings.circle;
             this.findColumns(options.dataViews[0].metadata.columns);
             let rows = options.dataViews[0].table.rows;
-            let activityList = [];
-            let weeksList = [];
-            let statusList = [];
-            let flagtrackerList = [];
             let activityIDList = [];
             let categoryList = [];
-            let activityLevelList = [];
-            let ActivityNameList = [];
-            let StatusNameList = [];
-            let StartDateList = [];
-            let FinishDateList = [];
-            let ProjectedStartDate = [];
-            let ProjectedFinishDate = [];
-            let OwnerList = [];
-            let PredecessorsList = [];
-            let SuccessorsList = [];
-            let milestoneList = [];
+            let activityNameList = [];
+            let statusNameList = [];
+            let milestoneLevelList = [];
+            let startDateList = [];
+            let finishDateList = [];
+            let projectedStartDateList = [];
+            let projectedFinishDateList = [];
+            let ownerList = [];
+            let predecessorsList = [];
+            let successorsList = [];
             let commentaryList = [];
             let totalFloatList = [];
             let trendLists = [];
-            let ImpactedByList = [];
-            let LastReportedEnddate = [];
+            let lastReportedEndDateList = [];
             for (let i = 0; i < rows.length; i++) {
                 let row = rows[i];
                 activityIDList[i] = `${(row[this.columnIndices['c1']])}`;
-                activityLevelList[i] = `${(row[this.columnIndices['c2']])}`;
-                ActivityNameList[i] = `${(row[this.columnIndices['c3']])}`;
-                StatusNameList[i] = `${(row[this.columnIndices['c4']])}`;
-                StartDateList[i] = `${(row[this.columnIndices['c5']])}`;
-                FinishDateList[i] = `${(row[this.columnIndices['c6']])}`;
-                ProjectedStartDate[i] = `${(row[this.columnIndices['c7']])}`;
-                ProjectedFinishDate[i] = `${(row[this.columnIndices['c8']])}`;
-                OwnerList[i] = `${(row[this.columnIndices['c9']])}`;
-                PredecessorsList[i] = `${(row[this.columnIndices['c10']])}`;
-                SuccessorsList[i] = `${(row[this.columnIndices['c11']])}`;
-                milestoneList[i] = `${(row[this.columnIndices['c12']])}`;
-                commentaryList[i] = `${(row[this.columnIndices['c13']])}`;
-                totalFloatList[i] = `${(row[this.columnIndices['c14']])}`;
-                trendLists[i] = `${(row[this.columnIndices['c15']])}`;
-                ImpactedByList[i] = `${(row[this.columnIndices['c16']])}`;
-                LastReportedEnddate[i] = `${(row[this.columnIndices['c17']])}`;
-                categoryList[i] = `${(row[this.columnIndices['c18']])}`;
+                // Populate categoryList
+                categoryList[i] = `${row[this.columnIndices['c2']]}`;
+                // Populate activityNameList
+                activityNameList[i] = `${row[this.columnIndices['c3']]}`;
+                // Populate statusNameList
+                statusNameList[i] = `${row[this.columnIndices['c4']]}`;
+                // Populate milestoneLevelList
+                milestoneLevelList[i] = `${row[this.columnIndices['c5']]}`;
+                // Populate startDateList
+                startDateList[i] = `${row[this.columnIndices['c6']]}`;
+                // Populate finishDateList
+                finishDateList[i] = `${row[this.columnIndices['c7']]}`;
+                // Populate projectedStartDateList
+                projectedStartDateList[i] = `${row[this.columnIndices['c8']]}`;
+                // Populate projectedFinishDateList
+                projectedFinishDateList[i] = `${row[this.columnIndices['c9']]}`;
+                // Populate ownerList
+                ownerList[i] = `${row[this.columnIndices['c10']]}`;
+                // Populate predecessorsList
+                predecessorsList[i] = `${row[this.columnIndices['c11']]}`;
+                // Populate successorsList
+                successorsList[i] = `${row[this.columnIndices['c12']]}`;
+                // Populate commentaryList
+                commentaryList[i] = `${row[this.columnIndices['c13']]}`;
+                // Populate totalFloatList
+                totalFloatList[i] = `${row[this.columnIndices['c14']]}`;
+                // Populate trendLists
+                trendLists[i] = `${row[this.columnIndices['c15']]}`;
+                // Populate lastReportedEndDateList
+                lastReportedEndDateList[i] = `${row[this.columnIndices['c16']]}`;
             }
             _SegmentedBar__WEBPACK_IMPORTED_MODULE_3__/* .segmentedBar */ .Yp.update({
                 Segment1Color: object && object.Segment1Color ? object.Segment1Color : undefined,
@@ -35209,23 +35378,21 @@ class Visual {
                 Segment6Color: object && object.Segment6Color ? object.Segment6Color : undefined,
                 textColor: object && object.textColor ? object.textColor : undefined,
                 activityIDList: activityIDList,
-                activityLevelList: activityLevelList,
-                ActivityNameList: ActivityNameList,
-                StatusNameList: StatusNameList,
-                StartDateList: StartDateList,
-                FinishDateList: FinishDateList,
-                ProjectedStartDate: ProjectedStartDate,
-                ProjectedFinishDate: ProjectedFinishDate,
-                OwnerList: OwnerList,
-                PredecessorsList: PredecessorsList,
-                SuccessorsList: SuccessorsList,
-                milestoneList: milestoneList,
+                categoryList: categoryList,
+                activityNameList: activityNameList,
+                statusNameList: statusNameList,
+                milestoneLevelList: milestoneLevelList,
+                startDateList: startDateList,
+                finishDateList: finishDateList,
+                projectedStartDateList: projectedStartDateList,
+                projectedFinishDateList: projectedFinishDateList,
+                ownerList: ownerList,
+                predecessorsList: predecessorsList,
+                successorsList: successorsList,
                 commentaryList: commentaryList,
                 totalFloatList: totalFloatList,
                 trendLists: trendLists,
-                ImpactedByList: ImpactedByList,
-                LastReportedEnddate: LastReportedEnddate,
-                categoryList: categoryList,
+                lastReportedEndDateList: lastReportedEndDateList,
                 backgroundColorVis: object && object.circleColor ? object.circleColor : undefined,
             });
         }

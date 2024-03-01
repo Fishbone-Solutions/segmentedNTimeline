@@ -14,7 +14,6 @@ import VisualObjectInstanceEnumerationObject = powerbi.VisualObjectInstanceEnume
 import "./../style/visual.less";
 import { segmentedBar, initialState } from "./SegmentedBar"
 
-
 // standart imports
 export class Visual implements IVisual {
     private target: HTMLElement;
@@ -22,19 +21,16 @@ export class Visual implements IVisual {
     private settings: VisualSettings;
     private columnIndices: {};
 
-
     constructor(options: VisualConstructorOptions) {
         // constructor body
         this.target = options.element;
         this.reactRoot = React.createElement(segmentedBar, {});
         ReactDOM.render(this.reactRoot, this.target);
         this.columnIndices = [];
-        for (let i = 1; i < 18; i++) {
+        for (let i = 1; i < 17; i++) {
             let name = "c" + i;
             this.columnIndices[name] = 0;
         }
-
-
     }
     private clear() {
         segmentedBar.update(initialState);
@@ -49,62 +45,71 @@ export class Visual implements IVisual {
             this.findColumns(options.dataViews[0].metadata.columns);
             let rows = options.dataViews[0].table.rows;
 
-            let activityList: string[] = []
-            let weeksList: string[] = []
-            let statusList: string[] = []
-            let flagtrackerList: string[] = [] 
-
-            let activityIDList: string[] = []
-            let categoryList: string[] = []
-            let activityLevelList: string[] = []
-            let ActivityNameList: string[] = []
-            let StatusNameList: string[] = []
-            let StartDateList: string[] = []
-            let FinishDateList: string[] = []
-            let ProjectedStartDate: string[] = []
-            let ProjectedFinishDate: string[] = []
-             let OwnerList: string[] = []
-            let PredecessorsList: string[] = []
-            let SuccessorsList: string[] = []
-            let milestoneList: string[] = []
-            let commentaryList: string[] = []
-            let totalFloatList: string[] = []
-            let trendLists: string[] = []
-            let ImpactedByList: string[] = []
-            let LastReportedEnddate: string[] = []
-
-
-        
-
-
-
-
-
-
-
-
-
-
+            let activityIDList: string[] = [];
+            let categoryList: string[] = [];
+            let activityNameList: string[] = [];
+            let statusNameList: string[] = [];
+            let milestoneLevelList: string[] = [];
+            let startDateList: string[] = [];
+            let finishDateList: string[] = [];
+            let projectedStartDateList: string[] = [];
+            let projectedFinishDateList: string[] = [];
+            let ownerList: string[] = [];
+            let predecessorsList: string[] = [];
+            let successorsList: string[] = [];
+            let commentaryList: string[] = [];
+            let totalFloatList: string[] = [];
+            let trendLists: string[] = [];
+            let lastReportedEndDateList: string[] = [];
             for (let i = 0; i < rows.length; i++) {
                 let row = rows[i];
                 activityIDList[i] = `${(row[this.columnIndices['c1']])}`;
-                activityLevelList[i] = `${(row[this.columnIndices['c2']])}`;
-                ActivityNameList[i] = `${(row[this.columnIndices['c3']])}`;
-                StatusNameList[i] = `${(row[this.columnIndices['c4']])}`;
-                StartDateList[i] = `${(row[this.columnIndices['c5']])}`;
-                FinishDateList[i] = `${(row[this.columnIndices['c6']])}`;
-                ProjectedStartDate[i] = `${(row[this.columnIndices['c7']])}`;
-                ProjectedFinishDate[i] = `${(row[this.columnIndices['c8']])}`;
-                OwnerList[i] = `${(row[this.columnIndices['c9']])}`;
-                PredecessorsList[i] = `${(row[this.columnIndices['c10']])}`;
-                SuccessorsList[i] = `${(row[this.columnIndices['c11']])}`;
-                milestoneList[i] = `${(row[this.columnIndices['c12']])}`;
-                commentaryList[i] = `${(row[this.columnIndices['c13']])}`;
-                totalFloatList[i] = `${(row[this.columnIndices['c14']])}`;
-                trendLists[i] = `${(row[this.columnIndices['c15']])}`;
-                ImpactedByList[i] = `${(row[this.columnIndices['c16']])}`;
-                LastReportedEnddate[i] = `${(row[this.columnIndices['c17']])}`;
-                categoryList[i] = `${(row[this.columnIndices['c18']])}`;
+
+                // Populate categoryList
+                categoryList[i] = `${row[this.columnIndices['c2']]}`;
+
+                // Populate activityNameList
+                activityNameList[i] = `${row[this.columnIndices['c3']]}`;
+
+                // Populate statusNameList
+                statusNameList[i] = `${row[this.columnIndices['c4']]}`;
+
+                // Populate milestoneLevelList
+                milestoneLevelList[i] = `${row[this.columnIndices['c5']]}`;
+
+                // Populate startDateList
+                startDateList[i] = `${row[this.columnIndices['c6']]}`;
+
+                // Populate finishDateList
+                finishDateList[i] = `${row[this.columnIndices['c7']]}`;
+
+                // Populate projectedStartDateList
+                projectedStartDateList[i] = `${row[this.columnIndices['c8']]}`;
+
+                // Populate projectedFinishDateList
+                projectedFinishDateList[i] = `${row[this.columnIndices['c9']]}`;
+
+                // Populate ownerList
+                ownerList[i] = `${row[this.columnIndices['c10']]}`;
+
+                // Populate predecessorsList
+                predecessorsList[i] = `${row[this.columnIndices['c11']]}`;
+
+                // Populate successorsList
+                successorsList[i] = `${row[this.columnIndices['c12']]}`;
+
+                // Populate commentaryList
+                commentaryList[i] = `${row[this.columnIndices['c13']]}`;
+
+                // Populate totalFloatList
+                totalFloatList[i] = `${row[this.columnIndices['c14']]}`;
+
+                // Populate trendLists
+                trendLists[i] = `${row[this.columnIndices['c15']]}`;
+
+                // Populate lastReportedEndDateList
+                lastReportedEndDateList[i] = `${row[this.columnIndices['c16']]}`;
+
             }
             segmentedBar.update({
                 Segment1Color: object && object.Segment1Color ? object.Segment1Color : undefined,
@@ -115,23 +120,21 @@ export class Visual implements IVisual {
                 Segment6Color: object && object.Segment6Color ? object.Segment6Color : undefined,
                 textColor: object && object.textColor ? object.textColor : undefined,
                 activityIDList: activityIDList,
-                activityLevelList: activityLevelList,
-                ActivityNameList: ActivityNameList,
-                StatusNameList: StatusNameList,
-                StartDateList: StartDateList,
-                FinishDateList: FinishDateList,
-                ProjectedStartDate: ProjectedStartDate,
-                ProjectedFinishDate: ProjectedFinishDate,
-                OwnerList: OwnerList,
-                PredecessorsList: PredecessorsList,
-                SuccessorsList: SuccessorsList,
-                milestoneList: milestoneList,
+                categoryList: categoryList,
+                activityNameList: activityNameList,
+                statusNameList: statusNameList,
+                milestoneLevelList: milestoneLevelList,
+                startDateList: startDateList,
+                finishDateList: finishDateList,
+                projectedStartDateList: projectedStartDateList,
+                projectedFinishDateList: projectedFinishDateList,
+                ownerList: ownerList,
+                predecessorsList: predecessorsList,
+                successorsList: successorsList,
                 commentaryList: commentaryList,
                 totalFloatList: totalFloatList,
                 trendLists: trendLists,
-                ImpactedByList: ImpactedByList,
-                LastReportedEnddate: LastReportedEnddate,
-                categoryList: categoryList,
+                lastReportedEndDateList: lastReportedEndDateList,
                 backgroundColorVis: object && object.circleColor ? object.circleColor : undefined,
             });
 
@@ -161,7 +164,6 @@ export class Visual implements IVisual {
     public enumerateObjectInstances(
         options: EnumerateVisualObjectInstancesOptions
     ): VisualObjectInstance[] | VisualObjectInstanceEnumerationObject {
-
         return VisualSettings.enumerateObjectInstances(this.settings || VisualSettings.getDefault(), options);
     }
 }
