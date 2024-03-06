@@ -34659,13 +34659,20 @@ const initialState = {
     commentaryList: [],
     totalFloatList: [],
     trendLists: [],
-    lastReportedEndDateList: []
+    lastReportedEndDateList: [],
+    titlePlaceholder: "",
+    ownerPlaceholder: "",
+    trendPlaceholder: "",
+    baseLineDatePlaceholder: "",
+    endDatePlaceholder: "",
+    lastReportedDatePlaceholder: "",
+    slipPlaceholder: "",
 };
 class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     static updateCallback = null;
     scrollReference;
     static update(newState) {
-        if (typeof segmentedBar.updateCallback === 'function') {
+        if (typeof segmentedBar.updateCallback === "function") {
             segmentedBar.updateCallback(newState);
         }
     }
@@ -34674,7 +34681,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         super(props);
         this.state = initialState;
         this.scrollReference = react__WEBPACK_IMPORTED_MODULE_0__.createRef();
-        // Scroll to the middle position in the constructor
         const container = this.scrollReference.current;
         if (container) {
             const containerWidth = container.offsetWidth;
@@ -34683,37 +34689,38 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         }
     }
     componentWillMount() {
-        segmentedBar.updateCallback = (newState) => { this.setState(newState); };
+        segmentedBar.updateCallback = (newState) => {
+            this.setState(newState);
+        };
     }
     componentWillUnmount() {
         segmentedBar.updateCallback = null;
     }
     render() {
-        const { commentaryPlaceholder, backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, milestoneLevelList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, } = this.state;
+        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, milestoneLevelList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, } = this.state;
         var weeknoList = [];
         var weekDates = [];
         var months = [];
         var years = [];
-        var weekNoFromList = [];
         var finsldates = [];
-        console.log("finish", finishDateList);
         for (let i = 0; i < finishDateList.length; i++) {
             finsldates.push(new Date(Date.parse(finishDateList[i])));
         }
-        console.log("fin datea", finsldates);
         var categoryListDisplay = [...new Set(categoryList)];
         categoryListDisplay.sort((a, b) => a.localeCompare(b));
         const result = finsldates.reduce((acc, date) => {
             const min = acc.min ? (date < acc.min ? date : acc.min) : date;
-            const max = acc.max ? (date > acc.max ? date : acc.max) : date || new Date("2026-01-01");
+            const max = acc.max
+                ? date > acc.max
+                    ? date
+                    : acc.max
+                : date || new Date("2026-01-01");
             return { min, max };
         }, { min: undefined, max: undefined });
-        let startDate4 = moment__WEBPACK_IMPORTED_MODULE_2__(new Date(Date.parse(result.min))).startOf('month');
-        // let startDate4 = moment().startOf('year').set({ month: 0, date: 1, year: 2024 });
-        const startDate = startDate4.subtract(1, 'months');
-        let endDate4 = moment__WEBPACK_IMPORTED_MODULE_2__(result.max).startOf('months');
-        //  let endDate4 = moment().startOf('year').set({ month: 0, date: 1, year: 2025});
-        const endDate = endDate4.add(1, 'months');
+        let startDate4 = moment__WEBPACK_IMPORTED_MODULE_2__(new Date(Date.parse(result.min))).startOf("month");
+        const startDate = startDate4.subtract(1, "months");
+        let endDate4 = moment__WEBPACK_IMPORTED_MODULE_2__(result.max).startOf("months");
+        const endDate = endDate4.add(1, "months");
         // Define a variable to hold the current date
         let currentDate = startDate;
         while (currentDate.isSameOrBefore(endDate)) {
@@ -34722,23 +34729,48 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             months.push(_CONS_TABLE__WEBPACK_IMPORTED_MODULE_3__/* .monthNames */ .l[month]);
             years.push(year);
             // Advance the current date by one week
-            currentDate = currentDate.add(1, 'months');
+            currentDate = currentDate.add(1, "months");
         }
         const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_4__/* .subMonths */ .W)(result.min, 1);
         const todayDate = new Date();
         const todaysLine = todayDate.getDate() + todayDate.getDay();
         const prefix = [0, 1, 2, 3, 4, 5];
-        const currentWeek = prefix[0 | todaysLine / 7] + 1;
-        const todayDateLocation = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, Date.now())) * 5 * 48 + currentWeek * 48 - 24;
-        const weeksArray = months.map((week, index) => react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
+        const currentWeek = prefix[0 | (todaysLine / 7)] + 1;
+        const todayDateLocation = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, Date.now())) * 5 * 48 +
+            currentWeek * 48 -
+            24;
+        const weeksArray = months.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 1),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 2),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 3),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 4),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 5)));
-        const monthsArray = months.map((month, index) => react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "monthitem", style: { backgroundColor: backgroundColorVis } },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 5))));
+        const monthsArray = months.map((month, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "monthitem", style: { backgroundColor: backgroundColorVis } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, month),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, years[index])));
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, years[index]))));
+        // console.log('activityIDList:', activityIDList);
+        // console.log('categoryList:', categoryList);
+        // console.log('milestoneLevelList:', milestoneLevelList);
+        // console.log('activityNameList:', activityNameList);
+        // console.log('statusNameList:', statusNameList);
+        // console.log('startDateList:', startDateList);
+        // console.log('finishDateList:', finishDateList);
+        // console.log('projectedStartDateList:', projectedStartDateList);
+        // console.log('projectedFinishDateList:', projectedFinishDateList);
+        // console.log('ownerList:', ownerList);
+        // console.log('predecessorsList:', predecessorsList);
+        // console.log('successorsList:', successorsList);
+        // console.log('commentaryList:', commentaryList);
+        // console.log('totalFloatList:', totalFloatList);
+        // console.log('trendLists:', trendLists);
+        // console.log('lastReportedEndDateList:', lastReportedEndDateList);
+        // console.log('titlePlaceholder:', titlePlaceholder);
+        // console.log('ownerPlaceholder:', ownerPlaceholder);
+        // console.log('trendPlaceholder:', trendPlaceholder);
+        // console.log('baseLineDatePlaceholder:', baseLineDatePlaceholder);
+        // console.log('endDatePlaceholder:', endDatePlaceholder);
+        // console.log('lastReportedDatePlaceholder:', lastReportedDatePlaceholder);
+        // console.log('slipPlaceholder:', slipPlaceholder);
         // Segment 1 Values
         var shortCodeSeg1 = [];
         var statusSeg1 = [];
@@ -34751,79 +34783,35 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var slipSeg1 = [];
         var commentarySeg1 = [];
         var Seg1Values = [];
-        // Segment 2 Values
-        var shortCodeSeg2 = [];
-        var statusSeg2 = [];
-        var trendSeg2 = [];
-        var titleSeg2 = [];
-        var ownerSeg2 = [];
-        var beginSeg2 = [];
-        var endSeg2 = [];
-        var lastReportedEndDateSeg2 = [];
-        var slipSeg2 = [];
-        var commentarySeg2 = [];
-        var Seg2Values = [];
-        // Segment 3 Values
-        var shortCodeSeg3 = [];
-        var statusSeg3 = [];
-        var trendSeg3 = [];
-        var titleSeg3 = [];
-        var ownerSeg3 = [];
-        var beginSeg3 = [];
-        var endSeg3 = [];
-        var lastReportedEndDateSeg3 = [];
-        var slipSeg3 = [];
-        var commentarySeg3 = [];
-        var Seg3Values = [];
-        // Segment 4 Values
-        var shortCodeSeg4 = [];
-        var statusSeg4 = [];
-        var trendSeg4 = [];
-        var titleSeg4 = [];
-        var ownerSeg4 = [];
-        var beginSeg4 = [];
-        var endSeg4 = [];
-        var lastReportedEndDateSeg4 = [];
-        var slipSeg4 = [];
-        var commentarySeg4 = [];
-        var Seg4Values = [];
-        // Segment 5 Values
-        var shortCodeSeg5 = [];
-        var statusSeg5 = [];
-        var trendSeg5 = [];
-        var titleSeg5 = [];
-        var ownerSeg5 = [];
-        var beginSeg5 = [];
-        var endSeg5 = [];
-        var lastReportedEndDateSeg5 = [];
-        var slipSeg5 = [];
-        var commentarySeg5 = [];
-        var Seg5Values = [];
-        // Segment 6 Values
-        var shortCodeSeg6 = [];
-        var statusSeg6 = [];
-        var trendSeg6 = [];
-        var titleSeg6 = [];
-        var ownerSeg6 = [];
-        var beginSeg6 = [];
-        var endSeg6 = [];
-        var lastReportedEndDateSeg6 = [];
-        var slipSeg6 = [];
-        var commentarySeg6 = [];
-        var Seg6Values = [];
-        var yBarSeg1 = [300, 350, 380, 450, 300, 350, 380, 450, 300, 350, 380, 450, 300, 350, 380, 450, 300, 350, 380, 450,];
+        var yBarSeg1 = [];
+        var categoryListDisplaySeg1 = [];
+        var categoryListDisplayYSeg1 = [];
+        var segmentColor = [];
+        const segments = [
+            { y: 30, fill: Segment1Color, y1: 200 },
+            { y: 50, fill: Segment2Color, y1: 270 },
+            { y: 70, fill: Segment3Color, y1: 300 },
+            { y: 90, fill: Segment4Color, y1: 330 },
+            { y: 110, fill: Segment5Color, y1: 350 },
+            { y: 130, fill: Segment6Color, y1: 380 },
+        ];
         const handleClick = (e) => {
             this.scrollReference.current.scrollLeft = todayDateLocation - 250;
         };
-        for (let i = 0; i < finishDateList.length; i++) {
+        const weekNoFromList = finishDateList.map((element) => {
             const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_4__/* .subMonths */ .W)(result.min, 1);
-            let week = new Date(Date.parse(finishDateList[i]));
-            let weekNos = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, week)) * 5 + (week.getDate() / 7);
-            weekNoFromList.push(weekNos);
-        }
-        categoryListDisplay = ['CVL Phasing Strategy', ' Infrastructure Transformation', 'Operational Readiness', 'Rolling Stock', 'TT Readiness'];
+            const week = new Date(Date.parse(element));
+            const weekNos = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, week)) * 5 +
+                week.getDate() / 7;
+            return weekNos;
+        });
         for (let i = 0; i < activityIDList.length; i++) {
-            if (categoryList[i].includes(categoryListDisplay[0])) {
+            if (categoryList[i].includes(categoryListDisplay[0]) ||
+                categoryList[i].includes(categoryListDisplay[1]) ||
+                categoryList[i].includes(categoryListDisplay[2]) ||
+                categoryList[i].includes(categoryListDisplay[3]) ||
+                categoryList[i].includes(categoryListDisplay[4]) ||
+                categoryList[i].includes(categoryListDisplay[5])) {
                 shortCodeSeg1.push(activityIDList[i]);
                 titleSeg1.push(activityNameList[i]);
                 ownerSeg1.push(ownerList[i]);
@@ -34832,6 +34820,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 lastReportedEndDateSeg1.push(lastReportedEndDateList[i]);
                 slipSeg1.push(totalFloatList[i]);
                 commentarySeg1.push(commentaryList[i]);
+                categoryListDisplaySeg1.push(categoryList[i]);
                 if (trendLists[i].toLowerCase().includes("no change")) {
                     trendSeg1.push("↔️");
                 }
@@ -34841,7 +34830,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 if (trendLists[i].toLowerCase().includes("improved")) {
                     trendSeg1.push("⬆️");
                 }
-                if (statusNameList[i].toLowerCase().includes("Not Started")) {
+                if (statusNameList[i].toLowerCase().includes("not started")) {
                     statusSeg1.push("grey");
                 }
                 if (statusNameList[i].toLowerCase().includes("late")) {
@@ -34856,335 +34845,95 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 if (statusNameList[i].toLowerCase().includes("completed")) {
                     statusSeg1.push("blue");
                 }
+                else {
+                    statusSeg1.push("brown");
+                }
+                for (let j = 0; j < categoryListDisplay.length; j++) {
+                    if (categoryList[i].includes(categoryListDisplay[j])) {
+                        yBarSeg1.push(segments[j]['y']);
+                        categoryListDisplayYSeg1.push(segments[j]['y1']);
+                        segmentColor.push(segments[j]['fill']);
+                    }
+                }
                 let obj = {
                     x: 48 * Number(weekNoFromList[i]) + 3,
                     y: 200 + 40,
-                    y1: 300,
-                    y2: 350,
-                    y3: 450,
                     fill: statusSeg1[i],
-                    id: "SEG1" + i
+                    id: "SEG1" + i,
                 };
                 Seg1Values.push(obj);
             }
-            if (categoryList[i].includes('Infrastructure Transformation')) {
-                // Segment 2
-                shortCodeSeg2.push(activityIDList[i]);
-                titleSeg2.push(activityNameList[i]);
-                ownerSeg2.push(ownerList[i]);
-                beginSeg2.push(startDateList[i]);
-                endSeg2.push(finishDateList[i]);
-                lastReportedEndDateSeg2.push(lastReportedEndDateList[i]);
-                slipSeg2.push(totalFloatList[i]);
-                commentarySeg2.push(commentaryList[i]);
-                if (trendLists[i].toLowerCase().includes("no change")) {
-                    trendSeg2.push("↔️");
-                }
-                if (trendLists[i].toLowerCase().includes("deteriorated")) {
-                    trendSeg2.push("⬇️");
-                }
-                if (trendLists[i].toLowerCase().includes("improved")) {
-                    trendSeg2.push("⬆️");
-                }
-                if (statusNameList[i].toLowerCase().includes("not started")) {
-                    statusSeg2.push("grey");
-                }
-                if (statusNameList[i].toLowerCase().includes("late")) {
-                    statusSeg2.push("red");
-                }
-                if (statusNameList[i].toLowerCase().includes("at risk")) {
-                    statusSeg2.push("yellow");
-                }
-                if (statusNameList[i].toLowerCase().includes("on plan")) {
-                    statusSeg2.push("green");
-                }
-                if (statusNameList[i].toLowerCase().includes("completed")) {
-                    statusSeg2.push("blue");
-                }
-                let obj = {
-                    x: 48 * Number(weekNoFromList[i]) + 3,
-                    y: 200 + 40,
-                    y1: 300,
-                    y2: 350,
-                    y3: 450,
-                    fill: statusSeg2[i],
-                    id: "SEG2" + i,
-                };
-                Seg2Values.push(obj);
-            }
-            console.log();
-            if (categoryList[i].includes('Operational Readiness')) {
-                // Segment 3
-                shortCodeSeg3.push(activityIDList[i]);
-                titleSeg3.push(activityNameList[i]);
-                ownerSeg3.push(ownerList[i]);
-                beginSeg3.push(startDateList[i]);
-                endSeg3.push(finishDateList[i]);
-                lastReportedEndDateSeg3.push(lastReportedEndDateList[i]);
-                slipSeg3.push(totalFloatList[i]);
-                commentarySeg3.push(commentaryList[i]);
-                if (trendLists[i].toLowerCase().includes("no change")) {
-                    trendSeg3.push("↔️");
-                }
-                if (trendLists[i].toLowerCase().includes("deteriorated")) {
-                    trendSeg3.push("⬇️");
-                }
-                if (trendLists[i].toLowerCase().includes("improved")) {
-                    trendSeg3.push("⬆️");
-                }
-                if (statusNameList[i].toLowerCase().includes("not started")) {
-                    statusSeg3.push("grey");
-                }
-                if (statusNameList[i].toLowerCase().includes("late")) {
-                    statusSeg3.push("red");
-                }
-                if (statusNameList[i].toLowerCase().includes("at risk")) {
-                    statusSeg3.push("yellow");
-                }
-                if (statusNameList[i].toLowerCase().includes("on plan")) {
-                    statusSeg3.push("green");
-                }
-                if (statusNameList[i].toLowerCase().includes("completed")) {
-                    statusSeg3.push("blue");
-                }
-                let obj = {
-                    x: 48 * Number(weekNoFromList[i]) + 3,
-                    y: 200 + 40,
-                    y1: 300,
-                    y2: 350,
-                    y3: 450,
-                    fill: statusSeg3[i],
-                    id: "SEG3" + i,
-                };
-                Seg3Values.push(obj);
-            }
-            if (categoryList[i].includes('Rolling Stock')) {
-                // Segment 4
-                shortCodeSeg4.push(activityIDList[i]);
-                titleSeg4.push(activityNameList[i]);
-                ownerSeg4.push(ownerList[i]);
-                beginSeg4.push(startDateList[i]);
-                endSeg4.push(finishDateList[i]);
-                lastReportedEndDateSeg4.push(lastReportedEndDateList[i]);
-                slipSeg4.push(totalFloatList[i]);
-                commentarySeg4.push(commentaryList[i]);
-                if (trendLists[i].toLowerCase().includes("no change")) {
-                    trendSeg4.push("↔️");
-                }
-                if (trendLists[i].toLowerCase().includes("deteriorated")) {
-                    trendSeg4.push("⬇️");
-                }
-                if (trendLists[i].toLowerCase().includes("improved")) {
-                    trendSeg4.push("⬆️");
-                }
-                if (statusNameList[i].toLowerCase().includes("not started")) {
-                    statusSeg4.push("grey");
-                }
-                if (statusNameList[i].toLowerCase().includes("late")) {
-                    statusSeg4.push("red");
-                }
-                if (statusNameList[i].toLowerCase().includes("at risk")) {
-                    statusSeg4.push("yellow");
-                }
-                if (statusNameList[i].toLowerCase().includes("on plan")) {
-                    statusSeg4.push("green");
-                }
-                if (statusNameList[i].toLowerCase().includes("completed")) {
-                    statusSeg4.push("blue");
-                }
-                let obj = {
-                    x: 48 * Number(weekNoFromList[i]) + 3,
-                    y: 200 + 40,
-                    y1: 300,
-                    y2: 350,
-                    y3: 450,
-                    fill: statusSeg4[i],
-                    id: "SEG4" + i,
-                };
-                Seg4Values.push(obj);
-            }
-            // Segment 4
-            if (categoryList[i].includes('TT Readiness')) {
-                // Segment 4
-                shortCodeSeg4.push(activityIDList[i]);
-                titleSeg4.push(activityNameList[i]);
-                ownerSeg4.push(ownerList[i]);
-                beginSeg4.push(startDateList[i]);
-                endSeg4.push(finishDateList[i]);
-                lastReportedEndDateSeg4.push(lastReportedEndDateList[i]);
-                slipSeg4.push(totalFloatList[i]);
-                commentarySeg4.push(commentaryList[i]);
-                if (trendLists[i].toLowerCase().includes("no change")) {
-                    trendSeg4.push("↔️");
-                }
-                if (trendLists[i].toLowerCase().includes("deteriorated")) {
-                    trendSeg4.push("⬇️");
-                }
-                if (trendLists[i].toLowerCase().includes("improved")) {
-                    trendSeg4.push("⬆️");
-                }
-                if (statusNameList[i].toLowerCase().includes("not started")) {
-                    statusSeg4.push("grey");
-                }
-                if (statusNameList[i].toLowerCase().includes("late")) {
-                    statusSeg4.push("red");
-                }
-                if (statusNameList[i].toLowerCase().includes("at risk")) {
-                    statusSeg4.push("yellow");
-                }
-                if (statusNameList[i].toLowerCase().includes("on plan")) {
-                    statusSeg4.push("green");
-                }
-                if (statusNameList[i].toLowerCase().includes("completed")) {
-                    statusSeg4.push("blue");
-                }
-                let obj = {
-                    x: 48 * Number(weekNoFromList[i]) + 3,
-                    y: 200 + 40,
-                    y1: 300,
-                    y2: 350,
-                    y3: 450,
-                    fill: statusSeg4[i],
-                    id: "SEG4" + i,
-                };
-                Seg4Values.push(obj);
-            }
-            if (categoryList[i].includes(categoryListDisplay[4])) {
-                // Segment 5
-                shortCodeSeg5.push(activityIDList[i]);
-                titleSeg5.push(activityNameList[i]);
-                ownerSeg5.push(ownerList[i]);
-                beginSeg5.push(startDateList[i]);
-                endSeg5.push(finishDateList[i]);
-                lastReportedEndDateSeg5.push(lastReportedEndDateList[i]);
-                slipSeg5.push(totalFloatList[i]);
-                commentarySeg5.push(commentaryList[i]);
-                if (trendLists[i].toLowerCase().includes("no change")) {
-                    trendSeg5.push("↔️");
-                }
-                if (trendLists[i].toLowerCase().includes("deteriorated")) {
-                    trendSeg5.push("⬇️");
-                }
-                if (trendLists[i].toLowerCase().includes("improved")) {
-                    trendSeg5.push("⬆️");
-                }
-                if (statusNameList[i].toLowerCase().includes("not started")) {
-                    statusSeg5.push("grey");
-                }
-                if (statusNameList[i].toLowerCase().includes("late")) {
-                    statusSeg5.push("red");
-                }
-                if (statusNameList[i].toLowerCase().includes("at risk")) {
-                    statusSeg5.push("yellow");
-                }
-                if (statusNameList[i].toLowerCase().includes("on plan")) {
-                    statusSeg5.push("green");
-                }
-                if (statusNameList[i].toLowerCase().includes("completed")) {
-                    statusSeg5.push("blue");
-                }
-                let obj = {
-                    x: 48 * Number(weekNoFromList[i]) + 3,
-                    y: 200 + 40,
-                    y1: 300,
-                    y2: 350,
-                    y3: 450,
-                    fill: statusSeg5[i],
-                    id: "SEG5" + i,
-                };
-                Seg5Values.push(obj);
-            }
-            if (categoryList[i].includes(categoryListDisplay[5])) {
-                // Segment 6
-                shortCodeSeg6.push(activityIDList[i]);
-                titleSeg6.push(activityNameList[i]);
-                ownerSeg6.push(ownerList[i]);
-                beginSeg6.push(startDateList[i]);
-                endSeg6.push(finishDateList[i]);
-                lastReportedEndDateSeg6.push(lastReportedEndDateList[i]);
-                slipSeg6.push(totalFloatList[i]);
-                commentarySeg6.push(commentaryList[i]);
-                if (trendLists[i].toLowerCase().includes("no change")) {
-                    trendSeg6.push("↔️");
-                }
-                if (trendLists[i].toLowerCase().includes("deteriorated")) {
-                    trendSeg6.push("⬇️");
-                }
-                if (trendLists[i].toLowerCase().includes("improved")) {
-                    trendSeg6.push("⬆️");
-                }
-                if (statusNameList[i].toLowerCase().includes("not started")) {
-                    statusSeg6.push("grey");
-                }
-                if (statusNameList[i].toLowerCase().includes("late")) {
-                    statusSeg6.push("red");
-                }
-                if (statusNameList[i].toLowerCase().includes("at risk")) {
-                    statusSeg6.push("yellow");
-                }
-                if (statusNameList[i].toLowerCase().includes("on plan")) {
-                    statusSeg6.push("green");
-                }
-                if (statusNameList[i].toLowerCase().includes("completed")) {
-                    statusSeg6.push("blue");
-                }
-                let obj = {
-                    x: 48 * Number(weekNoFromList[i]) + 3,
-                    y: 200 + 40,
-                    y1: 300,
-                    y2: 350,
-                    y3: 450,
-                    fill: statusSeg6[i],
-                    id: "SEG6" + i,
-                };
-                Seg6Values.push(obj);
-            }
         }
-        console.log("shortCodeSeg2:", shortCodeSeg2);
-        console.log("statusSeg2:", statusSeg2);
-        console.log("trendSeg2:", trendSeg2);
-        console.log("titleSeg2:", titleSeg2);
-        console.log("ownerSeg2:", ownerSeg2);
-        console.log("beginSeg2:", beginSeg2);
-        console.log("endSeg2:", endSeg2);
-        console.log("lastReportedEndDateSeg2:", lastReportedEndDateSeg2);
-        console.log("slipSeg2:", slipSeg2);
-        console.log("commentarySeg2:", commentarySeg2);
-        console.log("Seg2Values:", Seg2Values);
-        console.log("trend", trendLists);
-        const Segment1Categories = endSeg1.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], 30, Seg1Values[index]["x"], 200], stroke: Segment1Color, strokeWidth: 7 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: 200 + 40, radius: 40, stroke: statusSeg1[index], strokeWidth: 5 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: 240 - 40, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg1[index], fontSize: 12, fill: textColor }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: 240 - 20, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "⬆️", fontSize: 20, fill: textColor }))));
-        const Segment2Categories = endSeg2.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg2Values[index]["x"], 50, Seg2Values[index]["x"], 270], stroke: Segment2Color, strokeWidth: 7 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg2Values[index]["x"], y: 270 + 40, radius: 40, stroke: statusSeg2[index], strokeWidth: 5 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg2Values[index]["x"] - 40, y: 270, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg2[index], fontSize: 12, fill: textColor }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg2Values[index]["x"] - 40, y: 270 + 30, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "⬆️", fontSize: 20, fill: textColor }))));
-        console.log("Segment2", shortCodeSeg2);
-        const Segment3Categories = endSeg3.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg3Values[index]["x"], 50, Seg3Values[index]["x"], 300], stroke: Segment3Color, strokeWidth: 7 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg3Values[index]["x"], y: 300 + 40, radius: 40, stroke: statusSeg3[index], strokeWidth: 5 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg3Values[index]["x"] - 40, y: 340 - 40, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg3[index], fontSize: 12, fill: textColor }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg3Values[index]["x"] - 40, y: 340 - 20, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "⬆️", fontSize: 12, fill: textColor }))));
-        const Segment4Categories = endSeg4.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg4Values[index]["x"], 70, Seg4Values[index]["x"], 400], stroke: Segment4Color, strokeWidth: 7 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg4Values[index]["x"], y: 400 + 40, radius: 40, stroke: statusSeg4[index], strokeWidth: 5 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg4Values[index]["x"] - 40, y: 440 - 40, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg4[index], fontSize: 12, fill: textColor }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg4Values[index]["x"] - 40, y: 440 - 20, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: "⬆️", fontSize: 12, fill: textColor }))));
-        const segments = [
-            { y: 30, fill: Segment1Color },
-            { y: 50, fill: Segment2Color },
-            { y: 70, fill: Segment3Color },
-            { y: 90, fill: Segment4Color },
-            { y: 110, fill: Segment5Color },
-            { y: 130, fill: Segment6Color }
-        ];
+        const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]], stroke: segmentColor[index], strokeWidth: 7 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: categoryListDisplayYSeg1[index] + 25.8, radius: 30, stroke: statusSeg1[index], strokeWidth: 3, onMouseEnter: () => {
+                    this.setState({
+                        titlePlaceholder: titleSeg1[index],
+                        ownerPlaceholder: ownerSeg1[index],
+                        trendPlaceholder: trendSeg1[index],
+                        baseLineDatePlaceholder: beginSeg1[index],
+                        endDatePlaceholder: String(endSeg1[index]),
+                        lastReportedDatePlaceholder: String(lastReportedEndDateSeg1[index]),
+                        slipPlaceholder: String(lastReportedEndDateSeg1),
+                    });
+                }, onMouseLeave: () => {
+                    this.setState({
+                        titlePlaceholder: titleSeg1[index],
+                        ownerPlaceholder: ownerSeg1[index],
+                        trendPlaceholder: trendSeg1[index],
+                        baseLineDatePlaceholder: beginSeg1[index],
+                        endDatePlaceholder: String(endSeg1[index]),
+                        lastReportedDatePlaceholder: String(lastReportedEndDateSeg1[index]),
+                        slipPlaceholder: String(lastReportedEndDateSeg1),
+                    });
+                } }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 5, y: 10, width: 40 * 2, height: 40 * 2, text: statusSeg1[index] === "red" ? "🚩" : "", fontSize: 30, fill: textColor }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: categoryListDisplayYSeg1[index], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg1[index], fontSize: 12, fill: textColor, onMouseEnter: () => {
+                    this.setState({
+                        titlePlaceholder: titleSeg1[index],
+                        ownerPlaceholder: ownerSeg1[index],
+                        trendPlaceholder: trendSeg1[index],
+                        baseLineDatePlaceholder: beginSeg1[index],
+                        endDatePlaceholder: String(endSeg1[index]),
+                        lastReportedDatePlaceholder: String(lastReportedEndDateSeg1[index]),
+                        slipPlaceholder: String(lastReportedEndDateSeg1),
+                    });
+                }, onMouseLeave: () => {
+                    this.setState({
+                        titlePlaceholder: titleSeg1[index],
+                        ownerPlaceholder: ownerSeg1[index],
+                        trendPlaceholder: trendSeg1[index],
+                        baseLineDatePlaceholder: beginSeg1[index],
+                        endDatePlaceholder: String(endSeg1[index]),
+                        lastReportedDatePlaceholder: String(lastReportedEndDateSeg1[index]),
+                        slipPlaceholder: String(lastReportedEndDateSeg1),
+                    });
+                } }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: categoryListDisplayYSeg1[index] - 20, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: trendSeg1[index], fontSize: 20, fill: textColor, onMouseEnter: () => {
+                    this.setState({
+                        titlePlaceholder: titleSeg1[index],
+                        ownerPlaceholder: ownerSeg1[index],
+                        trendPlaceholder: trendSeg1[index],
+                        baseLineDatePlaceholder: beginSeg1[index],
+                        endDatePlaceholder: String(endSeg1[index]),
+                        lastReportedDatePlaceholder: String(lastReportedEndDateSeg1[index]),
+                        slipPlaceholder: String(lastReportedEndDateSeg1),
+                    });
+                }, onMouseLeave: () => {
+                    this.setState({
+                        titlePlaceholder: titleSeg1[index],
+                        ownerPlaceholder: ownerSeg1[index],
+                        trendPlaceholder: trendSeg1[index],
+                        baseLineDatePlaceholder: beginSeg1[index],
+                        endDatePlaceholder: String(endSeg1[index]),
+                        lastReportedDatePlaceholder: String(lastReportedEndDateSeg1[index]),
+                        slipPlaceholder: String(lastReportedEndDateSeg1),
+                    });
+                } }))));
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: 'flex', flexDirection: 'column', height: '80vh' } },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: 'flex', flexGrow: 1 } },
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '20%', backgroundColor: 'white' } },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", height: "80vh" } },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexGrow: 3 } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: "20%", backgroundColor: backgroundColorVis } },
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", { height: "100%", strokeMiterlimit: "10", version: "1.1", viewBox: "0 0 300 700", width: "100%", transform: "translate(0,27.2)" },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("g", { clipPath: "Sidebar", id: "Layer-1", fill: "green" },
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", { x: "20", y: "200", width: "235", height: "35", fill: Segment1Color }),
@@ -35199,46 +34948,53 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 370, fontSize: 18, fill: textColor }, categoryListDisplay[3]),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 420, fontSize: 18, fill: textColor }, categoryListDisplay[4]),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("text", { x: 25, y: 480, fontSize: 18, fill: textColor }, categoryListDisplay[5])))),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { ref: this.scrollReference, style: { width: '60%', overflowX: 'scroll', backgroundColor: 'white' } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '20000px' } },
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: "red" } }, monthsArray),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { ref: this.scrollReference, style: {
+                            width: "60%",
+                            overflowX: "scroll",
+                            backgroundColor: "white",
+                        } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: "20000px" } },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis } }, monthsArray),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 20000, height: 560, style: { backgroundColor: backgroundColorVis } },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: months.length * 5 * 48, height: 500, style: { backgroundColor: backgroundColorVis } },
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, segments.map((segment, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { key: index, x: 0, y: segment.y, width: 18000, height: 6, fill: segment.fill })))),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
-                                    Segment1Categories,
-                                    Segment2Categories,
-                                    Segment3Categories,
-                                    Segment4Categories),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, Segment1Categories),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 150, width: 2, height: 800, fill: "green" }),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation, y: 35, text: "Today", fontSize: 15, fill: "white" }))))),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '20%', backgroundColor: 'grey', display: 'flex', justifyContent: 'center' } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { margin: 'auto' } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
+                            width: "20%",
+                            backgroundColor: "grey",
+                            display: "flex",
+                            justifyContent: "center",
+                        } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { margin: "auto" } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: 'bold' } }, "Title"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "EE4b")),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Title"),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, titlePlaceholder)),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: 'bold' } }, "Owner"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Infrastrucutre Transformation")),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Owner"),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, ownerPlaceholder)),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: 'bold' } }, "Trend"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "\u2B06\uFE0F \u2B07\uFE0F\u2194\uFE0F")),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Trend"),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, trendPlaceholder)),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: 'bold' } }, "BaseLine"),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "BaseLine"),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, baseLineDatePlaceholder)),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "End Date"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/2024")),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: 'bold' } }, "End Date"),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Last Reported End Date"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/2024")),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: 'bold' } }, "Last Reported End Date"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/2024")),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: 'bold' } }, "Slip"),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Slip"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "20 Days")))))),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: '4rem', backgroundColor: 'grey' } },
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", { style: { textAlign: "center", fontSize: "30px", color: "white" } }, "\uD83D\uDEA7 WORK IN PROGRESS (  Dynamic table ) ")))));
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "4rem", backgroundColor: "grey" } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", { style: { textAlign: "center", fontSize: "30px", color: "white" } },
+                        "\uD83D\uDEA7 WORK IN PROGRESS ( Dynamic table )",
+                        " ")))));
     }
 }
 /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (segmentedBar)));
