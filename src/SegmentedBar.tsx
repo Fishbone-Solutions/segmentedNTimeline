@@ -196,17 +196,17 @@ export class segmentedBar extends React.Component<any, State> {
     const currentWeek = prefix[0 | (todaysLine / 7)] + 1;
 
     const todayDateLocation =
-      Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 48 +
-      currentWeek * 48 -
+      Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 55 +
+      currentWeek * 55 -
       24;
 
     const weeksArray = months.map((week, index) => (
       <>
-        <button style={{ width: 48, padding: 0, border: 0 }}>{1}</button>
-        <button style={{ width: 48, padding: 0, border: 0 }}>{2}</button>
-        <button style={{ width: 48, padding: 0, border: 0 }}>{3}</button>
-        <button style={{ width: 48, padding: 0, border: 0 }}>{4}</button>
-        <button style={{ width: 48, padding: 0, border: 0 }}>{5}</button>
+        <button style={{ width: 55, padding: 0, border: 0 }}>{1}</button>
+        <button style={{ width: 55, padding: 0, border: 0 }}>{2}</button>
+        <button style={{ width: 55, padding: 0, border: 0 }}>{3}</button>
+        <button style={{ width: 55, padding: 0, border: 0 }}>{4}</button>
+        <button style={{ width: 55, padding: 0, border: 0 }}>{5}</button>
       </>
     ));
 
@@ -342,23 +342,35 @@ export class segmentedBar extends React.Component<any, State> {
 
 
 
-        let obj = {
-          x: 48 * Number(weekNoFromList[i]) + 3,
-          y: 200 + 40,
+        let circle = {
+          x: 55 * Number(weekNoFromList[i]) + 3,
+          y: categoryListDisplayYSeg1[i],
           fill: statusSeg1[i],
           id: "SEG1" + i,
+          shortCodeSeg: shortCodeSeg1[i],
+          titleSeg: titleSeg1[i],
+          ownerSeg1: ownerSeg1[i],
+          beginSeg1: beginSeg1[i],
+          endSeg1: endSeg1[i],
+          lastReportedEndDateSeg1: lastReportedEndDateSeg1[i],
+          slipSeg1: slipSeg1[i],
+          commentarySeg1: commentarySeg1[i],
+          categoryListDisplaySeg1: categoryListDisplaySeg1[i]
         };
-        Seg1Values.push(obj);
+        Seg1Values.push(circle);
       }
     }
+  console.log(Seg1Values);
 
 
+
+console.log(Seg1Values);
     const Segment1Categories = finishDateList.map((week, index) => (
       <>
         <Line
           points={[Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]]}
           stroke={segmentColor[index]}
-          strokeWidth={7}
+          strokeWidth={5}
         />
         <Circle
           x={Seg1Values[index]["x"]}
@@ -575,7 +587,7 @@ export class segmentedBar extends React.Component<any, State> {
                 </div>
                 <div className="relative">{weeksArray}</div>
                 <Stage
-                  width={months.length * 5 * 48}
+                  width={months.length * 5 * 55}
                   height={500}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
@@ -593,14 +605,13 @@ export class segmentedBar extends React.Component<any, State> {
                   </Layer>
                   <Layer>
                     {Segment1Categories}
-                    {/*{Segment2Categories} */}
                   </Layer>
 
                   <Layer>
                     <Rect
                       x={todayDateLocation}
-                      y={150}
-                      width={2}
+                      y={5}
+                      width={5}
                       height={800}
                       fill="green"
                     ></Rect>

@@ -34736,15 +34736,15 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const todaysLine = todayDate.getDate() + todayDate.getDay();
         const prefix = [0, 1, 2, 3, 4, 5];
         const currentWeek = prefix[0 | (todaysLine / 7)] + 1;
-        const todayDateLocation = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, Date.now())) * 5 * 48 +
-            currentWeek * 48 -
+        const todayDateLocation = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, Date.now())) * 5 * 55 +
+            currentWeek * 55 -
             24;
         const weeksArray = months.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 1),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 2),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 3),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 4),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 48, padding: 0, border: 0 } }, 5))));
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 55, padding: 0, border: 0 } }, 1),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 55, padding: 0, border: 0 } }, 2),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 55, padding: 0, border: 0 } }, 3),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 55, padding: 0, border: 0 } }, 4),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 55, padding: 0, border: 0 } }, 5))));
         const monthsArray = months.map((month, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "monthitem", style: { backgroundColor: backgroundColorVis } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, month),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, years[index]))));
@@ -34855,17 +34855,28 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         segmentColor.push(segments[j]['fill']);
                     }
                 }
-                let obj = {
-                    x: 48 * Number(weekNoFromList[i]) + 3,
-                    y: 200 + 40,
+                let circle = {
+                    x: 55 * Number(weekNoFromList[i]) + 3,
+                    y: categoryListDisplayYSeg1[i],
                     fill: statusSeg1[i],
                     id: "SEG1" + i,
+                    shortCodeSeg: shortCodeSeg1[i],
+                    titleSeg: titleSeg1[i],
+                    ownerSeg1: ownerSeg1[i],
+                    beginSeg1: beginSeg1[i],
+                    endSeg1: endSeg1[i],
+                    lastReportedEndDateSeg1: lastReportedEndDateSeg1[i],
+                    slipSeg1: slipSeg1[i],
+                    commentarySeg1: commentarySeg1[i],
+                    categoryListDisplaySeg1: categoryListDisplaySeg1[i]
                 };
-                Seg1Values.push(obj);
+                Seg1Values.push(circle);
             }
         }
+        console.log(Seg1Values);
+        console.log(Seg1Values);
         const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]], stroke: segmentColor[index], strokeWidth: 7 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]], stroke: segmentColor[index], strokeWidth: 5 }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: categoryListDisplayYSeg1[index] + 25.8, radius: 30, stroke: statusSeg1[index], strokeWidth: 3, onMouseEnter: () => {
                     this.setState({
                         titlePlaceholder: titleSeg1[index],
@@ -34956,11 +34967,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: "20000px" } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis } }, monthsArray),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: months.length * 5 * 48, height: 500, style: { backgroundColor: backgroundColorVis } },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: months.length * 5 * 55, height: 500, style: { backgroundColor: backgroundColorVis } },
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, segments.map((segment, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { key: index, x: 0, y: segment.y, width: 18000, height: 6, fill: segment.fill })))),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, Segment1Categories),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 150, width: 2, height: 800, fill: "green" }),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 5, height: 800, fill: "green" }),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation, y: 35, text: "Today", fontSize: 15, fill: "white" }))))),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
                             width: "20%",
