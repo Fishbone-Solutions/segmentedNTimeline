@@ -34670,7 +34670,9 @@ const initialState = {
     lastReportedDatePlaceholder: "",
     slipPlaceholder: "",
 };
+;
 class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
+    dataArrayList = [];
     static updateCallback = null;
     scrollReference;
     static update(newState) {
@@ -34683,6 +34685,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         super(props);
         this.state = initialState;
         this.scrollReference = react__WEBPACK_IMPORTED_MODULE_0__.createRef();
+        this.dataArrayList = this.dataArrayList;
         const container = this.scrollReference.current;
         if (container) {
             const containerWidth = container.offsetWidth;
@@ -34698,6 +34701,71 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     componentWillUnmount() {
         segmentedBar.updateCallback = null;
     }
+    handleDynamic = (indexList) => {
+        for (let i = 0; i < 2; i++) {
+            const index = indexList[i];
+            const data = {
+                milestone: "1",
+                title: "title",
+                owner: "ownerSeg1[index]",
+                impactedBy: "successorsListSeg1[index]",
+                planDate: "beginSeg1[index]",
+                projectedStart: "plannedStartSeg1[index]",
+                planFinish: "endSeg1[index]",
+                projectedFinish: "plannedFinishSeg1[index]",
+                comments: "commentarySeg1[index]"
+            };
+            this.dataArrayList.push(data);
+            const data7 = {
+                milestone: "32",
+                title: "title",
+                owner: "ownerSeg1[index]",
+                impactedBy: "successorsListSeg1[index]",
+                planDate: "beginSeg1[index]",
+                projectedStart: "plannedStartSeg1[index]",
+                planFinish: "endSeg1[index]",
+                projectedFinish: "plannedFinishSeg1[index]",
+                comments: "commentarySeg1[index]"
+            };
+            this.dataArrayList.push(data7);
+            const data4 = {
+                milestone: "9",
+                title: "title",
+                owner: "ownerSeg1[index]",
+                impactedBy: "successorsListSeg1[index]",
+                planDate: "beginSeg1[index]",
+                projectedStart: "plannedStartSeg1[index]",
+                planFinish: "endSeg1[index]",
+                projectedFinish: "plannedFinishSeg1[index]",
+                comments: "commentarySeg1[index]"
+            };
+            this.dataArrayList.push(data4);
+            const data3 = {
+                milestone: "6",
+                title: "title",
+                owner: "ownerSeg1[index]",
+                impactedBy: "successorsListSeg1[index]",
+                planDate: "beginSeg1[index]",
+                projectedStart: "plannedStartSeg1[index]",
+                planFinish: "endSeg1[index]",
+                projectedFinish: "plannedFinishSeg1[index]",
+                comments: "commentarySeg1[index]"
+            };
+            this.dataArrayList.push(data3);
+            const data2 = {
+                milestone: "3",
+                title: "title",
+                owner: "ownerSeg1[index]",
+                impactedBy: "successorsListSeg1[index]",
+                planDate: "beginSeg1[index]",
+                projectedStart: "plannedStartSeg1[index]",
+                planFinish: "endSeg1[index]",
+                projectedFinish: "plannedFinishSeg1[index]",
+                comments: "commentarySeg1[index]"
+            };
+            this.dataArrayList.push(data2);
+        }
+    };
     render() {
         const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, milestoneLevelList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, } = this.state;
         var weeknoList = [];
@@ -34788,6 +34856,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var yBarSeg1 = [];
         var categoryListDisplaySeg1 = [];
         var categoryListDisplayYSeg1 = [];
+        var successorsListSeg1 = [];
+        var plannedStartSeg1 = [];
+        var plannedFinishSeg1 = [];
         var segmentColor = [];
         const N = 123; // Number of terms to repeat
         const categoryListDisplayYSeg1Target = [380, 360, 340, 320, 300, 280, 260, 240, 220, 200];
@@ -34795,7 +34866,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         for (let i = 0; i < N; i++) {
             array = array.concat(categoryListDisplayYSeg1Target);
         }
-        console.log("Array:", array);
+        //console.log("Array:", array);
         const segments = [
             { y: 30, fill: Segment1Color, y1: 380 },
             { y: 50, fill: Segment2Color, y1: 320 },
@@ -34823,7 +34894,10 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             lastReportedEndDateSeg1.push(lastReportedEndDateList[i]);
             slipSeg1.push(totalFloatList[i]);
             commentarySeg1.push(commentaryList[i]);
+            successorsListSeg1.push(successorsList[i]);
             categoryListDisplaySeg1.push(categoryList[i]);
+            plannedStartSeg1.push(projectedStartDateList[i]);
+            plannedFinishSeg1.push(projectedFinishDateList[i]);
             if (trendLists[i].toLowerCase().includes("no change")) {
                 trendSeg1.push("↔️");
             }
@@ -34859,7 +34933,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 }
             }
             let circle = {
-                x: 55 * Number(weekNoFromList[i]),
+                x: Math.floor(55 * Number(weekNoFromList[i])),
                 y: categoryListDisplayYSeg1[i],
                 fill: statusSeg1[i],
                 id: "SEG1" + i,
@@ -34875,45 +34949,50 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             };
             Seg1Values.push(circle);
         }
-        const dataArray = [
-            {
-                milestone: "EE4b",
-                title: "Electrification",
-                owner: "Infrastructure Transformation",
-                impactedBy: "N/A",
-                planDate: "01/01/24",
-                projectedStart: "01/01/24",
-                planFinish: "01/01/24",
-                projectedFinish: "01/01/24",
-                comments: "A quick brown fox jumps over the lazy dog",
-            },
-            {
-                milestone: "EE4b",
-                title: "Electrification",
-                owner: "Infrastructure Transformation",
-                impactedBy: "N/A",
-                planDate: "01/01/24",
-                projectedStart: "01/01/24",
-                planFinish: "01/01/24",
-                projectedFinish: "01/01/24",
-                comments: "A quick brown fox jumps over the lazy dog",
-            },
-            {
-                milestone: "EE4b",
-                title: "Electrification",
-                owner: "Infrastructure Transformation",
-                impactedBy: "N/A",
-                planDate: "01/01/24",
-                projectedStart: "01/01/24",
-                planFinish: "01/01/24",
-                projectedFinish: "01/01/24",
-                comments: "A quick brown fox jumps over the lazy dog",
-            },
-            // Add more data objects as needed
-        ];
+        const Seg1List = Seg1Values.sort((a, b) => a.x - b.x);
+        if (Seg1List && Seg1List[2]) {
+            /*  Seg1List[2].y = 140;
+             Seg1List[8].y = 390;
+             Seg1List[18].y = 250;
+       
+             Seg1List[17].y = 170;
+       
+             Seg1List[16].y = 170;
+             Seg1List[15].y = 250;
+             Seg1List[14].y = 390;
+             Seg1List[21].y = 390;
+       
+             Seg1List[23].y = 390;
+       
+             Seg1List[44].y = 390;
+             
+             Seg1List[49].y = 390;
+             Seg1List[57].y = 450;
+            
+             Seg1List[70].y = 170;
+             Seg1List[69].y = 250;
+       
+       
+             Seg1List[112].y = 200;
+       
+             Seg1List[118].y = 200; */
+        }
+        for (let i = 0; i < Seg1List.length - 1; i++) {
+            if (Seg1List[i].x == Seg1List[i + 1].x) {
+                console.log(Seg1List[i].x, Seg1List[i + 1].x);
+            }
+        }
+        for (let i = 0; i < Seg1List.length; i++) {
+            const listItem = Seg1List[i];
+            const correspondingItem = Seg1Values.find(item => item.id === listItem.id);
+            if (correspondingItem) {
+                correspondingItem.y = listItem.y;
+            }
+        }
+        console.log(Seg1Values);
         const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]], stroke: segmentColor[index], strokeWidth: 5 }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: categoryListDisplayYSeg1[index] + 25.8, radius: 30, stroke: statusSeg1[index], strokeWidth: 3, onMouseEnter: () => {
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], Seg1Values[index]["y"]], stroke: segmentColor[index], strokeWidth: 5 }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: Seg1Values[index]["y"] + 25.8, radius: 30, stroke: statusSeg1[index], strokeWidth: 3, fill: "white", onClick: () => this.handleDynamic(indexList), onMouseEnter: () => {
                     this.setState({
                         titlePlaceholder: titleSeg1[index],
                         ownerPlaceholder: ownerSeg1[index],
@@ -34934,8 +35013,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         slipPlaceholder: slipSeg1[index],
                     });
                 } }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 5, y: 10, width: 40 * 2, height: 40 * 2, text: statusSeg1[index] === "red" ? "🚩" : "", fontSize: 30, fill: textColor }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: categoryListDisplayYSeg1[index], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg1[index], fontSize: 12, fill: textColor, onMouseEnter: () => {
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", 
+                //   text={shortCodeSeg1[index].substring(0, 7)}
+                text: String(index), fontSize: 12, fill: textColor, onClick: (evt) => this.handleDynamic([0, 1, 2, 3]), onMouseEnter: () => {
                     this.setState({
                         titlePlaceholder: titleSeg1[index],
                         ownerPlaceholder: ownerSeg1[index],
@@ -34955,8 +35035,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         lastReportedDatePlaceholder: String(lastReportedEndDateSeg1[index]),
                         slipPlaceholder: slipSeg1[index],
                     });
-                } }))));
-        console.log(Segment1Categories);
+                } }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 5, y: 10, width: 40 * 2, height: 40 * 2, text: statusSeg1[index] === "red" ? "🚩" : "", fontSize: 30, fill: textColor }))));
+        // console.log(Segment1Categories)
         const legendStyle = {
             fontSize: '18px',
             marginBottom: '10px',
@@ -34968,6 +35049,35 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             marginRight: '10px',
             display: 'inline-block',
         };
+        for (let i = 0; i <= successorsListSeg1.length; i++) {
+            if (successorsListSeg1 && successorsListSeg1.length > 0) {
+                const indexList = successorsList.map(element => shortCodeSeg1.indexOf(element));
+                //  console.log(indexList);
+            }
+            else {
+                console.log("successorsListSeg1 is undefined or empty");
+            }
+        }
+        const dataArrayList = [];
+        const indexList = [0, 1, 2, 3, 4, 5];
+        /* for (let i = 0; i < indexList.length; i++) {
+          const index = indexList[i];
+          const data = {
+            milestone: shortCodeSeg1[index],
+            title: titleSeg1[index],
+            owner: ownerSeg1[index],
+            impactedBy: successorsListSeg1[index],
+            planDate: beginSeg1[index],
+            projectedStart: plannedStartSeg1[index],
+            planFinish: endSeg1[index],
+            projectedFinish: plannedFinishSeg1[index],
+            comments: commentarySeg1[index]
+          };
+        
+          dataArrayList.push(data);
+        }
+         */
+        //console.log(dataArrayList);
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", height: "80vh" } },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", height: " 500px", flexGrow: 3 } },
@@ -34993,11 +35103,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                             overflowY: "scroll",
                             backgroundColor: "white",
                         } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: "20000px" } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis } }, monthsArray),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: months.length * 5 * 55, height: 1000, style: { backgroundColor: backgroundColorVis } },
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, segments.map((segment, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { key: index, x: 0, y: segment.y, width: 18000, height: 6, fill: segment.fill })))),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: Number(months.length) * 275, height: 1000, style: { backgroundColor: backgroundColorVis } },
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, segments.map((segment, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { key: index, x: 0, y: segment.y, width: months.length * 5 * 55, height: 6, fill: segment.fill })))),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, Segment1Categories),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 5, height: 800, fill: "green" }),
@@ -35046,37 +35156,37 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, endDatePlaceholder.split("T")[0])),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Last Reported  End Date"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null)),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, lastReportedDatePlaceholder.split("T")[0])),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Slip"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
                                         slipPlaceholder,
                                         " Days")))))),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "50vh" } },
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", fontSize: "15px", tableLayout: "fixed" } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", fontSize: "15px", tableLayout: "fixed", borderCollapse: "collapse", backgroundColor: "grey" } },
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null,
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Milestone"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Title"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Owner"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Impacted by"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Plan Date"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Projected Start"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Plan Finish"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Projected Finish"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Comments")))),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Milestone"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Title"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Owner"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Impacted by"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Plan Date"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Projected Start"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Plan Finish"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Projected Finish"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left", border: "1px solid #ccc", padding: "8px" } }, "Comments")))),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "100px", overflowY: "auto", display: "flex" } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", fontSize: "15px", tableLayout: "fixed" } },
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, dataArray.map((data, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { key: index },
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.milestone),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.title),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.owner),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.impactedBy),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.planDate),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.projectedStart),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.planFinish),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.projectedFinish),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.comments)))))))))));
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", fontSize: "15px", tableLayout: "fixed", borderCollapse: "collapse" } },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, [...new Set(this.dataArrayList.map((data) => data.milestone))].map((milestone, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { key: index },
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).milestone),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).title),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).owner),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).impactedBy),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).planDate),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).projectedStart),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).planFinish),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).projectedFinish),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).comments)))))))))));
     }
 }
 /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (segmentedBar)));

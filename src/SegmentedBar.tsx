@@ -9,7 +9,6 @@ import {
   getWeek,
 } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
-import Legend from "./Legend";
 export interface State {
   commentaryPlaceholder?: string;
   backgroundColorVis?: string;
@@ -44,7 +43,10 @@ export interface State {
   endDatePlaceholder?: string;
   lastReportedDatePlaceholder?: string;
   slipPlaceholder?: string;
+
 }
+
+
 
 export const initialState: State = {
   backgroundColorVis: "white",
@@ -75,7 +77,20 @@ export const initialState: State = {
   slipPlaceholder: "",
 };
 
+interface DataItem {
+  milestone: string;
+  title: string;
+  owner: string;
+  impactedBy: string;
+  planDate: string;
+  projectedStart: string;
+  planFinish: string;
+  projectedFinish: string;
+  comments: string;
+};
 export class segmentedBar extends React.Component<any, State> {
+  public dataArrayList: DataItem[] = [];
+  
   private static updateCallback: (data: object) => void = null;
   scrollReference: React.RefObject<HTMLDivElement>;
 
@@ -91,6 +106,8 @@ export class segmentedBar extends React.Component<any, State> {
     super(props);
     this.state = initialState;
     this.scrollReference = React.createRef();
+    this.dataArrayList = this.dataArrayList;
+
     const container = this.scrollReference.current;
     if (container) {
       const containerWidth = container.offsetWidth;
@@ -107,7 +124,84 @@ export class segmentedBar extends React.Component<any, State> {
   public componentWillUnmount() {
     segmentedBar.updateCallback = null;
   }
+  handleDynamic = (indexList: Number[]) => {
 
+
+    for (let i = 0; i < 2; i++) {
+      const index = indexList[i];
+      const data: DataItem = {
+        milestone: "1",
+         title: "title",
+        owner: "ownerSeg1[index]",
+        impactedBy: "successorsListSeg1[index]",
+        planDate: "beginSeg1[index]",
+        projectedStart: "plannedStartSeg1[index]",
+        planFinish: "endSeg1[index]",
+        projectedFinish: "plannedFinishSeg1[index]",
+        comments: "commentarySeg1[index]"
+      };
+
+      this.dataArrayList.push(data);
+
+    
+    const data7: DataItem = {
+      milestone: "32",
+      title: "title",
+      owner: "ownerSeg1[index]",
+      impactedBy: "successorsListSeg1[index]",
+      planDate: "beginSeg1[index]",
+      projectedStart: "plannedStartSeg1[index]",
+      planFinish: "endSeg1[index]",
+      projectedFinish: "plannedFinishSeg1[index]",
+      comments: "commentarySeg1[index]"
+    };
+
+    this.dataArrayList.push(data7);
+    const data4: DataItem = {
+      milestone: "9",
+      title: "title",
+      owner: "ownerSeg1[index]",
+      impactedBy: "successorsListSeg1[index]",
+      planDate: "beginSeg1[index]",
+      projectedStart: "plannedStartSeg1[index]",
+      planFinish: "endSeg1[index]",
+      projectedFinish: "plannedFinishSeg1[index]",
+      comments: "commentarySeg1[index]"
+    };
+
+    this.dataArrayList.push(data4);
+    const data3: DataItem = {
+      milestone: "6",
+      title: "title",
+      owner: "ownerSeg1[index]",
+      impactedBy: "successorsListSeg1[index]",
+      planDate: "beginSeg1[index]",
+      projectedStart: "plannedStartSeg1[index]",
+      planFinish: "endSeg1[index]",
+      projectedFinish: "plannedFinishSeg1[index]",
+      comments: "commentarySeg1[index]"
+    };
+
+    this.dataArrayList.push(data3);
+    const data2: DataItem = {
+      milestone: "3",
+      title: "title",
+      owner: "ownerSeg1[index]",
+      impactedBy: "successorsListSeg1[index]",
+      planDate: "beginSeg1[index]",
+      projectedStart: "plannedStartSeg1[index]",
+      planFinish: "endSeg1[index]",
+      projectedFinish: "plannedFinishSeg1[index]",
+      comments: "commentarySeg1[index]"
+    };
+
+    this.dataArrayList.push(data2);
+  
+  
+
+  }
+
+}
   render() {
     const {
       backgroundColorVis,
@@ -141,6 +235,7 @@ export class segmentedBar extends React.Component<any, State> {
       endDatePlaceholder,
       lastReportedDatePlaceholder,
       slipPlaceholder,
+      
     } = this.state;
 
     var weeknoList = [];
@@ -260,6 +355,9 @@ export class segmentedBar extends React.Component<any, State> {
     var yBarSeg1 = [];
     var categoryListDisplaySeg1 = []
     var categoryListDisplayYSeg1 = []
+    var successorsListSeg1 = []
+    var plannedStartSeg1 = []
+    var plannedFinishSeg1 = []
     var segmentColor: Array<string | CanvasGradient> = [];
 
 
@@ -270,7 +368,7 @@ export class segmentedBar extends React.Component<any, State> {
       array = array.concat(categoryListDisplayYSeg1Target);
     }
     
-    console.log("Array:", array);
+    //console.log("Array:", array);
     const segments = [
       { y: 30, fill: Segment1Color ,y1:380},
       { y: 50, fill: Segment2Color ,y1:320},
@@ -305,7 +403,10 @@ export class segmentedBar extends React.Component<any, State> {
         lastReportedEndDateSeg1.push(lastReportedEndDateList[i]);
         slipSeg1.push(totalFloatList[i]);
         commentarySeg1.push(commentaryList[i]);
+        successorsListSeg1.push(successorsList[i]);
         categoryListDisplaySeg1.push(categoryList[i]);
+        plannedStartSeg1.push(projectedStartDateList[i])
+        plannedFinishSeg1.push(projectedFinishDateList[i])
 
         if (trendLists[i].toLowerCase().includes("no change")) {
           trendSeg1.push("↔️");
@@ -348,7 +449,7 @@ export class segmentedBar extends React.Component<any, State> {
 
 
         let circle = {
-          x: 55 * Number(weekNoFromList[i]),
+          x: Math.floor(55 * Number(weekNoFromList[i])),
           y: categoryListDisplayYSeg1[i],
           fill: statusSeg1[i],
           id: "SEG1" + i,
@@ -363,63 +464,82 @@ export class segmentedBar extends React.Component<any, State> {
           categoryListDisplaySeg1: categoryListDisplaySeg1[i]
         };
         Seg1Values.push(circle);
+       
+  
       
     }
+     const Seg1List = Seg1Values.sort((a, b) => a.x - b.x);
+    
+     if (Seg1List && Seg1List[2]) {
 
-    const dataArray = [
-      {
-        milestone: "EE4b",
-        title: "Electrification",
-        owner: "Infrastructure Transformation",
-        impactedBy: "N/A",
-        planDate: "01/01/24",
-        projectedStart: "01/01/24",
-        planFinish: "01/01/24",
-        projectedFinish: "01/01/24",
-        comments: "A quick brown fox jumps over the lazy dog",
-      },
-      {
-        milestone: "EE4b",
-        title: "Electrification",
-        owner: "Infrastructure Transformation",
-        impactedBy: "N/A",
-        planDate: "01/01/24",
-        projectedStart: "01/01/24",
-        planFinish: "01/01/24",
-        projectedFinish: "01/01/24",
-        comments: "A quick brown fox jumps over the lazy dog",
-      },
-      {
-        milestone: "EE4b",
-        title: "Electrification",
-        owner: "Infrastructure Transformation",
-        impactedBy: "N/A",
-        planDate: "01/01/24",
-        projectedStart: "01/01/24",
-        planFinish: "01/01/24",
-        projectedFinish: "01/01/24",
-        comments: "A quick brown fox jumps over the lazy dog",
-      },
+     /*  Seg1List[2].y = 140;
+      Seg1List[8].y = 390;
+      Seg1List[18].y = 250;
+
+      Seg1List[17].y = 170;
+
+      Seg1List[16].y = 170;
+      Seg1List[15].y = 250;
+      Seg1List[14].y = 390;
+      Seg1List[21].y = 390;
+
+      Seg1List[23].y = 390;
+
+      Seg1List[44].y = 390;
       
-      // Add more data objects as needed
-    ];
+      Seg1List[49].y = 390;
+      Seg1List[57].y = 450;
+     
+      Seg1List[70].y = 170;
+      Seg1List[69].y = 250;
+
+
+      Seg1List[112].y = 200;
+
+      Seg1List[118].y = 200; */
 
 
 
-    const Segment1Categories = finishDateList.map((week, index) => (
+
+
+
+    }
+
+     for (let i = 0; i < Seg1List.length-1; i++) {
+        if (Seg1List[i].x == Seg1List[i+1].x){
+          console.log(Seg1List[i].x ,Seg1List[i+1].x )
+        }
+
+    }
+    for (let i = 0; i < Seg1List.length; i++) {
+      const listItem = Seg1List[i];
+      const correspondingItem = Seg1Values.find(item => item.id === listItem.id);
+      
+      if (correspondingItem) {
+        correspondingItem.y = listItem.y;
+      }
+    }
+
+    console.log(Seg1Values)
+
+   
+     const Segment1Categories = finishDateList.map((week, index) => (
       <>
-        <Line
-          points={[Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]]}
+      <Line
+          points={[Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"],Seg1Values[index]["y"]]}
           stroke={segmentColor[index]}
           strokeWidth={5}
         />
-        <Circle
+                 <Circle
           x={Seg1Values[index]["x"]}
-          y={ categoryListDisplayYSeg1[index]+ 25.8}
+          y={ Seg1Values[index]["y"]+ 25.8}
           radius={30}
           stroke={statusSeg1[index]}
           strokeWidth={3}
-          
+          fill={"white"}
+
+          onClick={() => this.handleDynamic(indexList)}
+
           onMouseEnter={() => {
             this.setState({
               titlePlaceholder: titleSeg1[index],
@@ -447,25 +567,19 @@ export class segmentedBar extends React.Component<any, State> {
             });
           }}
         ></Circle>
-        <Text
-          x={Seg1Values[index]["x"] - 5}
-          y={10}
-          width={40 * 2}
-          height={40 * 2}
-          text={ statusSeg1[index] === "red" ? "🚩" : ""}
-          fontSize={30}
-          fill={textColor}
-        />
-         <Text
+          <Text
           x={Seg1Values[index]["x"] - 40}
-          y={categoryListDisplayYSeg1[index]}
+          y={Seg1Values[index]["y"]}
           width={40 * 2}
           height={40 * 2}
           align="center"
           verticalAlign="middle"
-          text={shortCodeSeg1[index] }
-          fontSize={12}
+       //   text={shortCodeSeg1[index].substring(0, 7)}
+       text={String(index)}  
+       fontSize={12}
           fill={textColor}
+          onClick={(evt) => this.handleDynamic([0,1,2,3])}
+
           onMouseEnter={() => {
             this.setState({
               titlePlaceholder: titleSeg1[index],
@@ -492,7 +606,20 @@ export class segmentedBar extends React.Component<any, State> {
               slipPlaceholder: slipSeg1[index],
             });
           }}
-        />      
+        /> 
+
+        
+     
+        <Text
+          x={Seg1Values[index]["x"] - 5}
+          y={10}
+          width={40 * 2}
+          height={40 * 2}
+          text={ statusSeg1[index] === "red" ? "🚩" : ""}
+          fontSize={30}
+          fill={textColor}
+        />
+       
 
     {/*   <Text
           x={Seg1Values[index]["x"] - 40}
@@ -533,7 +660,7 @@ export class segmentedBar extends React.Component<any, State> {
      
       </>
     )); 
-    console.log(Segment1Categories)
+   // console.log(Segment1Categories)
     const legendStyle: React.CSSProperties = {
         fontSize: '18px',
         marginBottom: '10px',
@@ -546,8 +673,37 @@ export class segmentedBar extends React.Component<any, State> {
         marginRight: '10px',
         display: 'inline-block',
       };
+for (let i =0;  i <=successorsListSeg1.length; i++ ){
+if (successorsListSeg1 && successorsListSeg1.length > 0) {
+  const indexList = successorsList.map(element => shortCodeSeg1.indexOf(element));
+//  console.log(indexList);
+} else {
+  console.log("successorsListSeg1 is undefined or empty");
+}
+}
 
-    return (
+const dataArrayList = [];
+const indexList = [0,1,2,3,4,5]
+/* for (let i = 0; i < indexList.length; i++) {
+  const index = indexList[i];
+  const data = {
+    milestone: shortCodeSeg1[index],
+    title: titleSeg1[index],
+    owner: ownerSeg1[index],
+    impactedBy: successorsListSeg1[index],
+    planDate: beginSeg1[index],
+    projectedStart: plannedStartSeg1[index],
+    planFinish: endSeg1[index],
+    projectedFinish: plannedFinishSeg1[index],
+    comments: commentarySeg1[index]
+  };
+
+  dataArrayList.push(data);
+}
+ */
+//console.log(dataArrayList);
+
+return (
       <>
         <div
           style={{ display: "flex", flexDirection: "column", height: "80vh" }}
@@ -689,7 +845,7 @@ export class segmentedBar extends React.Component<any, State> {
                 backgroundColor: "white",
               }}
             >
-              <div style={{ width: "20000px" }}>
+              <div >
                 <div
                   className="relative"
                   style={{ backgroundColor: backgroundColorVis }}
@@ -698,7 +854,7 @@ export class segmentedBar extends React.Component<any, State> {
                 </div>
                 <div className="relative">{weeksArray}</div>
                 <Stage
-                  width={months.length * 5 * 55}
+                  width={Number(months.length) * 275}
                   height={1000}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
@@ -708,7 +864,7 @@ export class segmentedBar extends React.Component<any, State> {
                         key={index}
                         x={0}
                         y={segment.y}
-                        width={18000}
+                        width={ months.length * 5 * 55 }
                         height={6}
                         fill={segment.fill}
                       />
@@ -788,7 +944,7 @@ export class segmentedBar extends React.Component<any, State> {
           <td style={{ fontWeight: "bold" }}>
             Last Reported  End Date
           </td>
-          <td></td>
+          <td>{lastReportedDatePlaceholder.split("T")[0]}</td>
         </tr>
         <tr>
           <td style={{ fontWeight: "bold" }}>Slip</td>
@@ -799,43 +955,43 @@ export class segmentedBar extends React.Component<any, State> {
     </table>
             </div>
           </div>
-          <div style={{ height: "50vh"}}>
-  <table style={{ width: "100%", fontSize: "15px", tableLayout: "fixed" }}>
+          <div style={{ height: "50vh" }}>
+  <table style={{ width: "100%", fontSize: "15px", tableLayout: "fixed", borderCollapse: "collapse", backgroundColor:"grey" }}>
     <thead>
       <tr>
-        <th style={{ textAlign: "left" }}>Milestone</th>
-        <th style={{ textAlign: "left" }}>Title</th>
-        <th style={{ textAlign: "left" }}>Owner</th>
-        <th style={{ textAlign: "left" }}>Impacted by</th>
-        <th style={{ textAlign: "left" }}>Plan Date</th>
-        <th style={{ textAlign: "left" }}>Projected Start</th>
-        <th style={{ textAlign: "left" }}>Plan Finish</th>
-        <th style={{ textAlign: "left" }}>Projected Finish</th>
-        <th style={{ textAlign: "left" }}>Comments</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Milestone</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Title</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Owner</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Impacted by</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Plan Date</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Projected Start</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Plan Finish</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Projected Finish</th>
+        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Comments</th>
       </tr>
     </thead>
   </table>
   <div style={{ height: "100px", overflowY: "auto", display: "flex" }}>
-    <table style={{ width: "100%", fontSize: "15px", tableLayout: "fixed" }}>
-    <tbody>
-    {dataArray.map((data, index) => (
-        <tr key={index}>
-          <td>{data.milestone}</td>
-          <td>{data.title}</td>
-          <td>{data.owner}</td>
-          <td>{data.impactedBy}</td>
-          <td>{data.planDate}</td>
-          <td>{data.projectedStart}</td>
-          <td>{data.planFinish}</td>
-          <td>{data.projectedFinish}</td>
-          <td>{data.comments}</td>
-        </tr>
-      ))}
-    </tbody>
+    <table style={{ width: "100%", fontSize: "15px", tableLayout: "fixed", borderCollapse: "collapse" }}>
+      <tbody>
+        {[...new Set(this.dataArrayList.map((data) => data.milestone))].map((milestone, index) => (
+          <tr key={index}>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).milestone}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).title}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).owner}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).impactedBy}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).planDate}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).projectedStart}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).planFinish}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).projectedFinish}</td>
+            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).comments}</td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   </div>
+</div>
            </div> 
-          </div>
       </>
     );
   }
