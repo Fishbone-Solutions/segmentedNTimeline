@@ -366,7 +366,43 @@ export class segmentedBar extends React.Component<any, State> {
       
     }
 
-
+    const dataArray = [
+      {
+        milestone: "EE4b",
+        title: "Electrification",
+        owner: "Infrastructure Transformation",
+        impactedBy: "N/A",
+        planDate: "01/01/24",
+        projectedStart: "01/01/24",
+        planFinish: "01/01/24",
+        projectedFinish: "01/01/24",
+        comments: "A quick brown fox jumps over the lazy dog",
+      },
+      {
+        milestone: "EE4b",
+        title: "Electrification",
+        owner: "Infrastructure Transformation",
+        impactedBy: "N/A",
+        planDate: "01/01/24",
+        projectedStart: "01/01/24",
+        planFinish: "01/01/24",
+        projectedFinish: "01/01/24",
+        comments: "A quick brown fox jumps over the lazy dog",
+      },
+      {
+        milestone: "EE4b",
+        title: "Electrification",
+        owner: "Infrastructure Transformation",
+        impactedBy: "N/A",
+        planDate: "01/01/24",
+        projectedStart: "01/01/24",
+        planFinish: "01/01/24",
+        projectedFinish: "01/01/24",
+        comments: "A quick brown fox jumps over the lazy dog",
+      },
+      
+      // Add more data objects as needed
+    ];
 
 
 
@@ -498,134 +534,7 @@ export class segmentedBar extends React.Component<any, State> {
       </>
     )); 
     console.log(Segment1Categories)
-/*     const Segment1Categories = finishDateList.map((week, index) => (
-      <>
-        <Line
-          points={[Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]]}
-          stroke={segmentColor[index]}
-          strokeWidth={5}
-        />
-        <Circle
-          x={Seg1Values[index]["x"]}
-          y={ categoryListDisplayYSeg1[index]+ 25.8}
-          radius={30}
-          stroke={statusSeg1[index]}
-          strokeWidth={3}
-          
-          onMouseEnter={() => {
-            this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
-              lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
-              ),
-              slipPlaceholder: slipSeg1[index],
-            });
-          }}
-          onMouseLeave={() => {
-            this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
-              lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
-              ),
-              slipPlaceholder: slipSeg1[index],
-            });
-          }}
-        ></Circle>
-        <Text
-          x={Seg1Values[index]["x"] - 5}
-          y={10}
-          width={40 * 2}
-          height={40 * 2}
-          text={ statusSeg1[index] === "red" ? "🚩" : ""}
-          fontSize={30}
-          fill={textColor}
-        />
-         <Text
-          x={Seg1Values[index]["x"] - 40}
-          y={categoryListDisplayYSeg1[index]}
-          width={40 * 2}
-          height={40 * 2}
-          align="center"
-          verticalAlign="middle"
-          text={shortCodeSeg1[index] }
-          fontSize={12}
-          fill={textColor}
-          onMouseEnter={() => {
-            this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
-              lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
-              ),
-              slipPlaceholder: slipSeg1[index],
-            });
-          }}
-          onMouseLeave={() => {
-            this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
-              lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
-              ),
-              slipPlaceholder: slipSeg1[index],
-            });
-          }}
-        />
-      <Text
-          x={Seg1Values[index]["x"] - 40}
-          y={categoryListDisplayYSeg1[index] - 20}
-          width={40 * 2}
-          height={40 * 2}
-          align="center"
-          verticalAlign="middle"
-          text={trendSeg1[index]}
-          fontSize={20}
-          fill={textColor}
-          onMouseEnter={() => {
-            this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
-              lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
-              ),
-              slipPlaceholder: slipSeg1[index],
-            });
-          }}
-          onMouseLeave={() => {
-            this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
-              lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
-              ),
-              slipPlaceholder: slipSeg1[index],
-            });
-          }}
-        />
-      </>
-    )); */
-
-      const legendStyle: React.CSSProperties = {
+    const legendStyle: React.CSSProperties = {
         fontSize: '18px',
         marginBottom: '10px',
         marginTop:'-10px'
@@ -643,7 +552,7 @@ export class segmentedBar extends React.Component<any, State> {
         <div
           style={{ display: "flex", flexDirection: "column", height: "80vh" }}
         >
-          <div style={{ display: "flex", flexGrow: 3 }}>
+          <div style={{ display: "flex", height:" 500px", flexGrow: 3 }}>
 
             <div style={{ width: "20%", backgroundColor: "white" }}>
               <svg
@@ -828,8 +737,7 @@ export class segmentedBar extends React.Component<any, State> {
                 </Stage>
               </div>
             </div>
-            
-            <div
+              <div
               style={{
                 width: "20%",
                 backgroundColor: backgroundColorVis,
@@ -891,60 +799,42 @@ export class segmentedBar extends React.Component<any, State> {
     </table>
             </div>
           </div>
-          <div style={{ height: "4rem", backgroundColor: "grey" }}>
-  <div style={{ width: '100%', overflowY: 'auto', display: 'flex'}}>
-  <table style={{ width: '100%', fontSize: "10px"   }}>
-      <thead>
-        <tr>
-          <th>Milestone</th>
-          <th>Title</th>
-          <th>Owner</th>
-          <th>Impacted by</th>
-          <th>Plan Date</th>
-          <th>Projected Start</th>
-          <th>Plan Finish</th>
-          <th>Projected Finish</th>
-          <th>Comments</th>
+          <div style={{ height: "50vh"}}>
+  <table style={{ width: "100%", fontSize: "15px", tableLayout: "fixed" }}>
+    <thead>
+      <tr>
+        <th style={{ textAlign: "left" }}>Milestone</th>
+        <th style={{ textAlign: "left" }}>Title</th>
+        <th style={{ textAlign: "left" }}>Owner</th>
+        <th style={{ textAlign: "left" }}>Impacted by</th>
+        <th style={{ textAlign: "left" }}>Plan Date</th>
+        <th style={{ textAlign: "left" }}>Projected Start</th>
+        <th style={{ textAlign: "left" }}>Plan Finish</th>
+        <th style={{ textAlign: "left" }}>Projected Finish</th>
+        <th style={{ textAlign: "left" }}>Comments</th>
+      </tr>
+    </thead>
+  </table>
+  <div style={{ height: "100px", overflowY: "auto", display: "flex" }}>
+    <table style={{ width: "100%", fontSize: "15px", tableLayout: "fixed" }}>
+    <tbody>
+    {dataArray.map((data, index) => (
+        <tr key={index}>
+          <td>{data.milestone}</td>
+          <td>{data.title}</td>
+          <td>{data.owner}</td>
+          <td>{data.impactedBy}</td>
+          <td>{data.planDate}</td>
+          <td>{data.projectedStart}</td>
+          <td>{data.planFinish}</td>
+          <td>{data.projectedFinish}</td>
+          <td>{data.comments}</td>
         </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>EE4b</td>
-          <td>Electrification</td>
-          <td>Infrastructure Transformation</td>
-          <td>N/A</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td> A quick brown fox jumps over the lazy dog</td>
-        </tr>
-        <tr>
-          <td>EE4b</td>
-          <td>Electrification</td>
-          <td>Infrastructure Transformation</td>
-          <td>N/A</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td>Comments</td>
-        </tr>
-        <tr>
-          <td>EE4b</td>
-          <td>Electrification</td>
-          <td>Infrastructure Transformation</td>
-          <td>N/A</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td>01/01/24</td>
-          <td>Comments</td>
-        </tr>
-      </tbody>
+      ))}
+    </tbody>
     </table>
   </div>
-</div> 
+           </div> 
           </div>
       </>
     );

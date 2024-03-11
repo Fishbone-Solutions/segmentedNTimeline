@@ -34875,6 +34875,42 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             };
             Seg1Values.push(circle);
         }
+        const dataArray = [
+            {
+                milestone: "EE4b",
+                title: "Electrification",
+                owner: "Infrastructure Transformation",
+                impactedBy: "N/A",
+                planDate: "01/01/24",
+                projectedStart: "01/01/24",
+                planFinish: "01/01/24",
+                projectedFinish: "01/01/24",
+                comments: "A quick brown fox jumps over the lazy dog",
+            },
+            {
+                milestone: "EE4b",
+                title: "Electrification",
+                owner: "Infrastructure Transformation",
+                impactedBy: "N/A",
+                planDate: "01/01/24",
+                projectedStart: "01/01/24",
+                planFinish: "01/01/24",
+                projectedFinish: "01/01/24",
+                comments: "A quick brown fox jumps over the lazy dog",
+            },
+            {
+                milestone: "EE4b",
+                title: "Electrification",
+                owner: "Infrastructure Transformation",
+                impactedBy: "N/A",
+                planDate: "01/01/24",
+                projectedStart: "01/01/24",
+                planFinish: "01/01/24",
+                projectedFinish: "01/01/24",
+                comments: "A quick brown fox jumps over the lazy dog",
+            },
+            // Add more data objects as needed
+        ];
         const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]], stroke: segmentColor[index], strokeWidth: 5 }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: categoryListDisplayYSeg1[index] + 25.8, radius: 30, stroke: statusSeg1[index], strokeWidth: 3, onMouseEnter: () => {
@@ -34921,132 +34957,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     });
                 } }))));
         console.log(Segment1Categories);
-        /*     const Segment1Categories = finishDateList.map((week, index) => (
-              <>
-                <Line
-                  points={[Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], categoryListDisplayYSeg1[index]]}
-                  stroke={segmentColor[index]}
-                  strokeWidth={5}
-                />
-                <Circle
-                  x={Seg1Values[index]["x"]}
-                  y={ categoryListDisplayYSeg1[index]+ 25.8}
-                  radius={30}
-                  stroke={statusSeg1[index]}
-                  strokeWidth={3}
-                  
-                  onMouseEnter={() => {
-                    this.setState({
-                      titlePlaceholder: titleSeg1[index],
-                      ownerPlaceholder: ownerSeg1[index],
-                      trendPlaceholder: trendSeg1[index],
-                      baseLineDatePlaceholder: beginSeg1[index],
-                      endDatePlaceholder: String(endSeg1[index]),
-                      lastReportedDatePlaceholder: String(
-                        lastReportedEndDateSeg1[index]
-                      ),
-                      slipPlaceholder: slipSeg1[index],
-                    });
-                  }}
-                  onMouseLeave={() => {
-                    this.setState({
-                      titlePlaceholder: titleSeg1[index],
-                      ownerPlaceholder: ownerSeg1[index],
-                      trendPlaceholder: trendSeg1[index],
-                      baseLineDatePlaceholder: beginSeg1[index],
-                      endDatePlaceholder: String(endSeg1[index]),
-                      lastReportedDatePlaceholder: String(
-                        lastReportedEndDateSeg1[index]
-                      ),
-                      slipPlaceholder: slipSeg1[index],
-                    });
-                  }}
-                ></Circle>
-                <Text
-                  x={Seg1Values[index]["x"] - 5}
-                  y={10}
-                  width={40 * 2}
-                  height={40 * 2}
-                  text={ statusSeg1[index] === "red" ? "🚩" : ""}
-                  fontSize={30}
-                  fill={textColor}
-                />
-                 <Text
-                  x={Seg1Values[index]["x"] - 40}
-                  y={categoryListDisplayYSeg1[index]}
-                  width={40 * 2}
-                  height={40 * 2}
-                  align="center"
-                  verticalAlign="middle"
-                  text={shortCodeSeg1[index] }
-                  fontSize={12}
-                  fill={textColor}
-                  onMouseEnter={() => {
-                    this.setState({
-                      titlePlaceholder: titleSeg1[index],
-                      ownerPlaceholder: ownerSeg1[index],
-                      trendPlaceholder: trendSeg1[index],
-                      baseLineDatePlaceholder: beginSeg1[index],
-                      endDatePlaceholder: String(endSeg1[index]),
-                      lastReportedDatePlaceholder: String(
-                        lastReportedEndDateSeg1[index]
-                      ),
-                      slipPlaceholder: slipSeg1[index],
-                    });
-                  }}
-                  onMouseLeave={() => {
-                    this.setState({
-                      titlePlaceholder: titleSeg1[index],
-                      ownerPlaceholder: ownerSeg1[index],
-                      trendPlaceholder: trendSeg1[index],
-                      baseLineDatePlaceholder: beginSeg1[index],
-                      endDatePlaceholder: String(endSeg1[index]),
-                      lastReportedDatePlaceholder: String(
-                        lastReportedEndDateSeg1[index]
-                      ),
-                      slipPlaceholder: slipSeg1[index],
-                    });
-                  }}
-                />
-              <Text
-                  x={Seg1Values[index]["x"] - 40}
-                  y={categoryListDisplayYSeg1[index] - 20}
-                  width={40 * 2}
-                  height={40 * 2}
-                  align="center"
-                  verticalAlign="middle"
-                  text={trendSeg1[index]}
-                  fontSize={20}
-                  fill={textColor}
-                  onMouseEnter={() => {
-                    this.setState({
-                      titlePlaceholder: titleSeg1[index],
-                      ownerPlaceholder: ownerSeg1[index],
-                      trendPlaceholder: trendSeg1[index],
-                      baseLineDatePlaceholder: beginSeg1[index],
-                      endDatePlaceholder: String(endSeg1[index]),
-                      lastReportedDatePlaceholder: String(
-                        lastReportedEndDateSeg1[index]
-                      ),
-                      slipPlaceholder: slipSeg1[index],
-                    });
-                  }}
-                  onMouseLeave={() => {
-                    this.setState({
-                      titlePlaceholder: titleSeg1[index],
-                      ownerPlaceholder: ownerSeg1[index],
-                      trendPlaceholder: trendSeg1[index],
-                      baseLineDatePlaceholder: beginSeg1[index],
-                      endDatePlaceholder: String(endSeg1[index]),
-                      lastReportedDatePlaceholder: String(
-                        lastReportedEndDateSeg1[index]
-                      ),
-                      slipPlaceholder: slipSeg1[index],
-                    });
-                  }}
-                />
-              </>
-            )); */
         const legendStyle = {
             fontSize: '18px',
             marginBottom: '10px',
@@ -35060,7 +34970,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         };
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", height: "80vh" } },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexGrow: 3 } },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", height: " 500px", flexGrow: 3 } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: "20%", backgroundColor: "white" } },
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", { height: "100%", strokeMiterlimit: "10", version: "1.1", viewBox: "0 0 300 700", width: "100%", transform: "translate(0,27.2)" },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("g", { clipPath: "Sidebar", id: "Layer-1", fill: "green" },
@@ -35142,51 +35052,31 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
                                         slipPlaceholder,
                                         " Days")))))),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "4rem", backgroundColor: "grey" } },
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: '100%', overflowY: 'auto', display: 'flex' } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: '100%', fontSize: "10px" } },
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Milestone"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Title"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Owner"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Impacted by"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Plan Date"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Projected Start"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Plan Finish"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Projected Finish"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Comments"))),
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "EE4b"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Electrification"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Infrastructure Transformation"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "N/A"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, " A quick brown fox jumps over the lazy dog")),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "EE4b"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Electrification"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Infrastructure Transformation"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "N/A"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Comments")),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "EE4b"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Electrification"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Infrastructure Transformation"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "N/A"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "01/01/24"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "Comments")))))))));
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "50vh" } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", fontSize: "15px", tableLayout: "fixed" } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null,
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Milestone"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Title"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Owner"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Impacted by"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Plan Date"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Projected Start"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Plan Finish"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Projected Finish"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: { textAlign: "left" } }, "Comments")))),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "100px", overflowY: "auto", display: "flex" } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", fontSize: "15px", tableLayout: "fixed" } },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, dataArray.map((data, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { key: index },
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.milestone),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.title),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.owner),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.impactedBy),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.planDate),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.projectedStart),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.planFinish),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.projectedFinish),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, data.comments)))))))))));
     }
 }
 /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (segmentedBar)));
