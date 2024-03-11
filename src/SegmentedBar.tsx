@@ -716,7 +716,7 @@ export class segmentedBar extends React.Component<any, State> {
                     {categoryListDisplay[5]}
                   </text>
                 </g>
-                <text x={25} y={520} fontSize={18} fill={textColor}>
+{/*                 <text x={25} y={520} fontSize={18} fill={textColor}>
                     {"Legend"}
                   </text>
                   <rect
@@ -767,7 +767,7 @@ export class segmentedBar extends React.Component<any, State> {
                     {" - > On Plan"}
                   </text><text x={80} y={655} fontSize={18} fill="black">
                     {" - > Complete"}
-                  </text>
+                  </text> */}
               </svg>
             </div>
             <div
@@ -834,7 +834,7 @@ export class segmentedBar extends React.Component<any, State> {
                 width: "20%",
                 backgroundColor: backgroundColorVis,
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "flex-start"
               }}
             >
                <table style={{ margin: "auto" }}>
@@ -891,10 +891,9 @@ export class segmentedBar extends React.Component<any, State> {
     </table>
             </div>
           </div>
-            <div style={{ height: '4rem', backgroundColor: 'white' }}>
+          <div style={{ height: "4rem", backgroundColor: "grey" }}>
   <div style={{ width: '100%', overflowY: 'auto', display: 'flex'}}>
-
-    <table style={{ width: '100%', fontSize: "10px"   }}>
+  <table style={{ width: '100%', fontSize: "10px"   }}>
       <thead>
         <tr>
           <th>Milestone</th>
