@@ -34768,8 +34768,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     };
     render() {
         const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, milestoneLevelList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, } = this.state;
-        var weeknoList = [];
-        var weekDates = [];
         var months = [];
         var years = [];
         var finsldates = [];
@@ -34860,6 +34858,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var plannedStartSeg1 = [];
         var plannedFinishSeg1 = [];
         var segmentColor = [];
+        var visitedWeeks = [];
+        var countMap = [];
         const N = 123; // Number of terms to repeat
         const categoryListDisplayYSeg1Target = [380, 360, 340, 320, 300, 280, 260, 240, 220, 200];
         let array = [];
@@ -34881,10 +34881,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const weekNoFromList = finishDateList.map((element) => {
             const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_4__/* .subMonths */ .W)(result.min, 1);
             const week = new Date(Date.parse(element));
-            const weekNos = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, week)) * 5 +
-                week.getDate() / 7;
+            const weekNos = Math.floor(Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .differenceInCalendarMonths */ .T)(start, week)) * 5 +
+                week.getDate() / 7);
             return weekNos;
         });
+        console.log(weekNoFromList);
         for (let i = 0; i < activityIDList.length; i++) {
             shortCodeSeg1.push(activityIDList[i]);
             titleSeg1.push(activityNameList[i]);
@@ -34932,9 +34933,15 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     segmentColor.push(segments[j]['fill']);
                 }
             }
+            // even numbered weeks
+            //  odd numbered weeks
+            visitedWeeks.push(weekNoFromList[i]);
+            visitedWeeks.forEach((num) => {
+                countMap[num] = (countMap[num] || 0) + 1;
+            });
             let circle = {
-                x: Math.floor(55 * Number(weekNoFromList[i])),
-                y: categoryListDisplayYSeg1[i],
+                x: 55 * Number(weekNoFromList[i]),
+                y: 100 + Number(countMap[weekNoFromList[i]]) * 30,
                 fill: statusSeg1[i],
                 id: "SEG1" + i,
                 shortCodeSeg: shortCodeSeg1[i],
@@ -34949,52 +34956,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             };
             Seg1Values.push(circle);
         }
-        const Seg1List = Seg1Values.sort((a, b) => a.x - b.x);
-        if (Seg1List && Seg1List[2]) {
-            /*  Seg1List[2].y = 140;
-             Seg1List[8].y = 390;
-             Seg1List[18].y = 250;
-       
-             Seg1List[17].y = 170;
-       
-             Seg1List[16].y = 170;
-             Seg1List[15].y = 250;
-             Seg1List[14].y = 390;
-             Seg1List[21].y = 390;
-       
-             Seg1List[23].y = 390;
-       
-             Seg1List[44].y = 390;
-             
-             Seg1List[49].y = 390;
-             Seg1List[57].y = 450;
-            
-             Seg1List[70].y = 170;
-             Seg1List[69].y = 250;
-       
-       
-             Seg1List[112].y = 200;
-       
-             Seg1List[118].y = 200; */
-        }
-        for (let i = 0; i < Seg1List.length - 1; i++) {
-            if (Seg1List[i].x == Seg1List[i + 1].x) {
-                console.log(Seg1List[i].x, Seg1List[i + 1].x);
-            }
-        }
-        for (let i = 0; i < Seg1List.length; i++) {
-            const listItem = Seg1List[i];
-            const correspondingItem = Seg1Values.find(item => item.id === listItem.id);
-            if (correspondingItem) {
-                correspondingItem.y = listItem.y;
-            }
-        }
-        console.log(Seg1Values);
         const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"], Seg1Values[index]["y"]], stroke: segmentColor[index], strokeWidth: 5 }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: Seg1Values[index]["y"] + 25.8, radius: 30, stroke: statusSeg1[index], strokeWidth: 3, fill: "white", onClick: () => this.handleDynamic(indexList), onMouseEnter: () => {
                     this.setState({
-                        titlePlaceholder: titleSeg1[index],
+                        titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: ownerSeg1[index],
                         trendPlaceholder: trendSeg1[index],
                         baseLineDatePlaceholder: beginSeg1[index],
@@ -35004,7 +34970,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     });
                 }, onMouseLeave: () => {
                     this.setState({
-                        titlePlaceholder: titleSeg1[index],
+                        titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: ownerSeg1[index],
                         trendPlaceholder: trendSeg1[index],
                         baseLineDatePlaceholder: beginSeg1[index],
@@ -35013,11 +34979,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         slipPlaceholder: slipSeg1[index],
                     });
                 } }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", 
-                //   text={shortCodeSeg1[index].substring(0, 7)}
-                text: String(index), fontSize: 12, fill: textColor, onClick: (evt) => this.handleDynamic([0, 1, 2, 3]), onMouseEnter: () => {
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: Seg1Values[index]["shortCodeSeg"].substring(0, 7), 
+                // text={String(index)}  
+                fontSize: 12, fill: textColor, onClick: (evt) => this.handleDynamic([0, 1, 2, 3]), onMouseEnter: () => {
                     this.setState({
-                        titlePlaceholder: titleSeg1[index],
+                        titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: ownerSeg1[index],
                         trendPlaceholder: trendSeg1[index],
                         baseLineDatePlaceholder: beginSeg1[index],
@@ -35037,7 +35003,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     });
                 } }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 5, y: 10, width: 40 * 2, height: 40 * 2, text: statusSeg1[index] === "red" ? "🚩" : "", fontSize: 30, fill: textColor }))));
-        // console.log(Segment1Categories)
         const legendStyle = {
             fontSize: '18px',
             marginBottom: '10px',
@@ -35055,7 +35020,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 //  console.log(indexList);
             }
             else {
-                console.log("successorsListSeg1 is undefined or empty");
+                // console.log("successorsListSeg1 is undefined or empty");
             }
         }
         const dataArrayList = [];
@@ -35078,6 +35043,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         }
          */
         //console.log(dataArrayList);
+        //console.log("week numbers from the list",weekNoFromList);
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", height: "80vh" } },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", height: " 500px", flexGrow: 3 } },
@@ -35111,7 +35077,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, Segment1Categories),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 5, height: 800, fill: "green" }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation, y: 35, text: "Today", fontSize: 15, fill: "white" }))))),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation + 3, y: 10, text: "Today", fontSize: 15, fill: "black" }))))),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
                             width: "20%",
                             backgroundColor: backgroundColorVis,
@@ -35120,25 +35086,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { margin: "auto" } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { colSpan: 2 },
-                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", { style: legendStyle }, "Legend"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'grey' } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Not Started"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'red' } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Late"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'yellow' } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> At Risk"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'green' } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> On Plan"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'blue' } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Complete"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null)))),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Title"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, titlePlaceholder)),
@@ -35161,7 +35108,27 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Slip"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
                                         slipPlaceholder,
-                                        " Days")))))),
+                                        " Days")),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { colSpan: 2 },
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", { style: legendStyle }, "Legend"),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'grey' } }),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Not Started"),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'red' } }),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Late"),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'yellow' } }),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> At Risk"),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'green' } }),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> On Plan"),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: 'blue' } }),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Complete"),
+                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null)))))))),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "50vh" } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", fontSize: "15px", tableLayout: "fixed", borderCollapse: "collapse", backgroundColor: "grey" } },
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null,

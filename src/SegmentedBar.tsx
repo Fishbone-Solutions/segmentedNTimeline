@@ -238,8 +238,7 @@ export class segmentedBar extends React.Component<any, State> {
       
     } = this.state;
 
-    var weeknoList = [];
-    var weekDates = [];
+
     var months = [];
     var years = [];
     var finsldates = [];
@@ -359,6 +358,8 @@ export class segmentedBar extends React.Component<any, State> {
     var plannedStartSeg1 = []
     var plannedFinishSeg1 = []
     var segmentColor: Array<string | CanvasGradient> = [];
+    var visitedWeeks = []
+    var countMap = []
 
 
     const N: number = 123; // Number of terms to repeat
@@ -386,15 +387,17 @@ export class segmentedBar extends React.Component<any, State> {
       const start = subMonths(result.min, 1);
       const week = new Date(Date.parse(element));
       const weekNos =
-        Math.abs(differenceInCalendarMonths(start, week)) * 5 +
-        week.getDate() / 7;
+        Math.floor(Math.abs(differenceInCalendarMonths(start, week)) * 5 +
+        week.getDate() / 7);
       return weekNos;
     });
+   
 
-    
+    console.log(weekNoFromList);
+ 
     for (let i = 0; i < activityIDList.length; i++) {
 
-        
+         
         shortCodeSeg1.push(activityIDList[i]);
         titleSeg1.push(activityNameList[i]);
         ownerSeg1.push(ownerList[i]);
@@ -444,13 +447,17 @@ export class segmentedBar extends React.Component<any, State> {
             segmentColor.push(segments[j]['fill'])
           }
         }
-   
-
-
+       
+        // even numbered weeks
+        //  odd numbered weeks
+        visitedWeeks.push(weekNoFromList[i]);
+        visitedWeeks.forEach((num) => {
+          countMap[num] = (countMap[num] || 0) + 1;
+        });
 
         let circle = {
-          x: Math.floor(55 * Number(weekNoFromList[i])),
-          y: categoryListDisplayYSeg1[i],
+          x: 55 * Number(weekNoFromList[i]),
+          y: 100+Number(countMap[weekNoFromList[i]])*30,
           fill: statusSeg1[i],
           id: "SEG1" + i,
           shortCodeSeg: shortCodeSeg1[i],
@@ -468,59 +475,6 @@ export class segmentedBar extends React.Component<any, State> {
   
       
     }
-     const Seg1List = Seg1Values.sort((a, b) => a.x - b.x);
-    
-     if (Seg1List && Seg1List[2]) {
-
-     /*  Seg1List[2].y = 140;
-      Seg1List[8].y = 390;
-      Seg1List[18].y = 250;
-
-      Seg1List[17].y = 170;
-
-      Seg1List[16].y = 170;
-      Seg1List[15].y = 250;
-      Seg1List[14].y = 390;
-      Seg1List[21].y = 390;
-
-      Seg1List[23].y = 390;
-
-      Seg1List[44].y = 390;
-      
-      Seg1List[49].y = 390;
-      Seg1List[57].y = 450;
-     
-      Seg1List[70].y = 170;
-      Seg1List[69].y = 250;
-
-
-      Seg1List[112].y = 200;
-
-      Seg1List[118].y = 200; */
-
-
-
-
-
-
-    }
-
-     for (let i = 0; i < Seg1List.length-1; i++) {
-        if (Seg1List[i].x == Seg1List[i+1].x){
-          console.log(Seg1List[i].x ,Seg1List[i+1].x )
-        }
-
-    }
-    for (let i = 0; i < Seg1List.length; i++) {
-      const listItem = Seg1List[i];
-      const correspondingItem = Seg1Values.find(item => item.id === listItem.id);
-      
-      if (correspondingItem) {
-        correspondingItem.y = listItem.y;
-      }
-    }
-
-    console.log(Seg1Values)
 
    
      const Segment1Categories = finishDateList.map((week, index) => (
@@ -542,7 +496,7 @@ export class segmentedBar extends React.Component<any, State> {
 
           onMouseEnter={() => {
             this.setState({
-              titlePlaceholder: titleSeg1[index],
+              titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: ownerSeg1[index],
               trendPlaceholder: trendSeg1[index],
               baseLineDatePlaceholder: beginSeg1[index],
@@ -555,7 +509,7 @@ export class segmentedBar extends React.Component<any, State> {
           }}
           onMouseLeave={() => {
             this.setState({
-              titlePlaceholder: titleSeg1[index],
+              titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: ownerSeg1[index],
               trendPlaceholder: trendSeg1[index],
               baseLineDatePlaceholder: beginSeg1[index],
@@ -574,15 +528,16 @@ export class segmentedBar extends React.Component<any, State> {
           height={40 * 2}
           align="center"
           verticalAlign="middle"
-       //   text={shortCodeSeg1[index].substring(0, 7)}
-       text={String(index)}  
+          text={Seg1Values[index]["shortCodeSeg"].substring(0, 7)}
+      // text={String(index)}  
        fontSize={12}
           fill={textColor}
           onClick={(evt) => this.handleDynamic([0,1,2,3])}
 
           onMouseEnter={() => {
             this.setState({
-              titlePlaceholder: titleSeg1[index],
+              titlePlaceholder: Seg1Values[index]["titleSeg"],
+
               ownerPlaceholder: ownerSeg1[index],
               trendPlaceholder: trendSeg1[index],
               baseLineDatePlaceholder: beginSeg1[index],
@@ -660,7 +615,6 @@ export class segmentedBar extends React.Component<any, State> {
      
       </>
     )); 
-   // console.log(Segment1Categories)
     const legendStyle: React.CSSProperties = {
         fontSize: '18px',
         marginBottom: '10px',
@@ -678,7 +632,7 @@ if (successorsListSeg1 && successorsListSeg1.length > 0) {
   const indexList = successorsList.map(element => shortCodeSeg1.indexOf(element));
 //  console.log(indexList);
 } else {
-  console.log("successorsListSeg1 is undefined or empty");
+ // console.log("successorsListSeg1 is undefined or empty");
 }
 }
 
@@ -702,6 +656,8 @@ const indexList = [0,1,2,3,4,5]
 }
  */
 //console.log(dataArrayList);
+
+//console.log("week numbers from the list",weekNoFromList);
 
 return (
       <>
@@ -883,11 +839,11 @@ return (
                       fill="green"
                     ></Rect>
                     <Text
-                      x={todayDateLocation}
-                      y={35}
+                      x={todayDateLocation+ 3}
+                      y={10}
                       text="Today"
                       fontSize={15}
-                      fill="white"
+                      fill="black"
                     ></Text>
                   </Layer>
                 </Stage>
@@ -903,24 +859,7 @@ return (
             >
                <table style={{ margin: "auto" }}>
       <tbody>
-      <tr>
-          <td colSpan={2}>
-            <div>
-              <p style={legendStyle}>Legend</p>
-              <div style={{ ...colorRectStyle, backgroundColor: 'grey' }}></div>
-              <span>-&gt; Not Started</span><br />
-              <div style={{ ...colorRectStyle, backgroundColor: 'red' }}></div>
-              <span>-&gt; Late</span><br />
-              <div style={{ ...colorRectStyle, backgroundColor: 'yellow' }}></div>
-              <span>-&gt; At Risk</span><br />
-              <div style={{ ...colorRectStyle, backgroundColor: 'green' }}></div>
-              <span>-&gt; On Plan</span><br />
-              <div style={{ ...colorRectStyle, backgroundColor: 'blue' }}></div>
-              <span>-&gt; Complete</span><br />
-            </div>
-          </td>
-        </tr>
-        <tr>
+         <tr>
           <td style={{ fontWeight: "bold" }}>Title</td>
           <td>{titlePlaceholder}</td>
         </tr>
@@ -950,9 +889,27 @@ return (
           <td style={{ fontWeight: "bold" }}>Slip</td>
           <td>{slipPlaceholder} Days</td>
         </tr>
+        <br></br>
+        <tr>
+          <td colSpan={2}>
+            <div>
+              <p style={legendStyle}>Legend</p>
+              <div style={{ ...colorRectStyle, backgroundColor: 'grey' }}></div>
+              <span>-&gt; Not Started</span><br />
+              <div style={{ ...colorRectStyle, backgroundColor: 'red' }}></div>
+              <span>-&gt; Late</span><br />
+              <div style={{ ...colorRectStyle, backgroundColor: 'yellow' }}></div>
+              <span>-&gt; At Risk</span><br />
+              <div style={{ ...colorRectStyle, backgroundColor: 'green' }}></div>
+              <span>-&gt; On Plan</span><br />
+              <div style={{ ...colorRectStyle, backgroundColor: 'blue' }}></div>
+              <span>-&gt; Complete</span><br />
+            </div>
+          </td>
+        </tr>
        
       </tbody>
-    </table>
+               </table>
             </div>
           </div>
           <div style={{ height: "50vh" }}>
