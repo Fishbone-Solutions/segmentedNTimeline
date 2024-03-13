@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Stage, Layer, Rect, Text, Line, Circle } from "react-konva";
+import { Stage, Layer, Rect, Text, Line, Circle,Image } from "react-konva";
 import * as moment from "moment";
 import { IoMdTrendingUp } from "react-icons/io";
 import {
@@ -9,6 +9,26 @@ import {
   getWeek,
 } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
+import useImage from 'use-image';
+
+// the first very simple and recommended way:
+const LionImage = (props) => {
+  if(props.status === "up"){
+    const [image] = useImage('https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stick.png');
+    return <Image  width={30} height={30} image={image} x={props.x} y={props.y} />;
+
+  }
+  else  if(props.status === "down"){
+    const [image] = useImage('https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/down.png');
+    return <Image  width={30} height={30} image={image} x={props.x} y={props.y} />;
+
+  }
+  else  if(props.status === "stable"){
+    const [image] = useImage('https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stable.png');
+    return <Image  width={30} height={30} image={image} x={props.x} y={props.y} />;
+
+  }
+};
 export interface State {
   commentaryPlaceholder?: string;
   backgroundColorVis?: string;
@@ -124,82 +144,10 @@ export class segmentedBar extends React.Component<any, State> {
   public componentWillUnmount() {
     segmentedBar.updateCallback = null;
   }
-  handleDynamic = (indexList: Number[]) => {
+  handleDynamic = (dynamicData) => {
 
+   this.dataArrayList = dynamicData;
 
-    for (let i = 0; i < 2; i++) {
-      const index = indexList[i];
-      const data: DataItem = {
-        milestone: "1",
-         title: "title",
-        owner: "ownerSeg1[index]",
-        impactedBy: "successorsListSeg1[index]",
-        planDate: "beginSeg1[index]",
-        projectedStart: "plannedStartSeg1[index]",
-        planFinish: "endSeg1[index]",
-        projectedFinish: "plannedFinishSeg1[index]",
-        comments: "commentarySeg1[index]"
-      };
-
-      this.dataArrayList.push(data);
-
-    
-    const data7: DataItem = {
-      milestone: "32",
-      title: "title",
-      owner: "ownerSeg1[index]",
-      impactedBy: "successorsListSeg1[index]",
-      planDate: "beginSeg1[index]",
-      projectedStart: "plannedStartSeg1[index]",
-      planFinish: "endSeg1[index]",
-      projectedFinish: "plannedFinishSeg1[index]",
-      comments: "commentarySeg1[index]"
-    };
-
-    this.dataArrayList.push(data7);
-    const data4: DataItem = {
-      milestone: "9",
-      title: "title",
-      owner: "ownerSeg1[index]",
-      impactedBy: "successorsListSeg1[index]",
-      planDate: "beginSeg1[index]",
-      projectedStart: "plannedStartSeg1[index]",
-      planFinish: "endSeg1[index]",
-      projectedFinish: "plannedFinishSeg1[index]",
-      comments: "commentarySeg1[index]"
-    };
-
-    this.dataArrayList.push(data4);
-    const data3: DataItem = {
-      milestone: "6",
-      title: "title",
-      owner: "ownerSeg1[index]",
-      impactedBy: "successorsListSeg1[index]",
-      planDate: "beginSeg1[index]",
-      projectedStart: "plannedStartSeg1[index]",
-      planFinish: "endSeg1[index]",
-      projectedFinish: "plannedFinishSeg1[index]",
-      comments: "commentarySeg1[index]"
-    };
-
-    this.dataArrayList.push(data3);
-    const data2: DataItem = {
-      milestone: "3",
-      title: "title",
-      owner: "ownerSeg1[index]",
-      impactedBy: "successorsListSeg1[index]",
-      planDate: "beginSeg1[index]",
-      projectedStart: "plannedStartSeg1[index]",
-      planFinish: "endSeg1[index]",
-      projectedFinish: "plannedFinishSeg1[index]",
-      comments: "commentarySeg1[index]"
-    };
-
-    this.dataArrayList.push(data2);
-  
-  
-
-  }
 
 }
   render() {
@@ -360,6 +308,9 @@ export class segmentedBar extends React.Component<any, State> {
     var segmentColor: Array<string | CanvasGradient> = [];
     var visitedWeeks = []
     var countMap = []
+    var ypositionLocator;
+    var indexList = [];
+    var dynamicData = []
 
 
     const N: number = 123; // Number of terms to repeat
@@ -411,14 +362,22 @@ export class segmentedBar extends React.Component<any, State> {
         plannedStartSeg1.push(projectedStartDateList[i])
         plannedFinishSeg1.push(projectedFinishDateList[i])
 
+        if (successorsListSeg1 && successorsListSeg1.length > 0) {
+        indexList = successorsList.map(element => shortCodeSeg1.indexOf(element));
+        //  indexList = [5,6]
+          console.log(indexList);
+        } else {
+         // console.log("successorsListSeg1 is undefined or empty");
+        }
+
         if (trendLists[i].toLowerCase().includes("no change")) {
-          trendSeg1.push("↔️");
+          trendSeg1.push("stable");
         }
         if (trendLists[i].toLowerCase().includes("deteriorated")) {
-          trendSeg1.push("⬇️");
+          trendSeg1.push("down");
         }
         if (trendLists[i].toLowerCase().includes("improved")) {
-          trendSeg1.push(<IoMdTrendingUp />);
+          trendSeg1.push("up");
         }
 
         if (statusNameList[i].toLowerCase().includes("not started")) {
@@ -454,71 +413,116 @@ export class segmentedBar extends React.Component<any, State> {
         visitedWeeks.forEach((num) => {
           countMap[num] = (countMap[num] || 0) + 1;
         });
+        ypositionLocator = 0
+        if (weekNoFromList[i] % 2 === 0) {
+          ypositionLocator = 150 + Number(countMap[weekNoFromList[i]]) * 35;
+          } else {
+            ypositionLocator = 180 + Number(countMap[weekNoFromList[i]]) * 35;
+       }
+          
+       if (ypositionLocator > 500  ) {
+            ypositionLocator = 280
+          }
+       for (let i = 0; i < indexList.length; i++) {
+            const index = indexList[i];
+            let  data  = {
+              milestone:  activityIDList[index],
+               title: activityNameList[index],
+              owner: ownerList[index],
+              impactedBy: successorsList[index],
+              planDate: startDateList[index],
+              projectedStart: projectedStartDateList[index],
+              planFinish: finishDateList[index],
+              projectedFinish: projectedFinishDateList[index],
+              comments: commentaryList[index]
+            };
+            dynamicData.push(data);
+      
+        
+      
+        }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
         let circle = {
           x: 55 * Number(weekNoFromList[i]),
-          y: 100+Number(countMap[weekNoFromList[i]])*30,
+          y: ypositionLocator,
           fill: statusSeg1[i],
           id: "SEG1" + i,
           shortCodeSeg: shortCodeSeg1[i],
           titleSeg: titleSeg1[i],
+          ybarSeg: yBarSeg1[i],
           ownerSeg1: ownerSeg1[i],
           beginSeg1: beginSeg1[i],
           endSeg1: endSeg1[i],
           lastReportedEndDateSeg1: lastReportedEndDateSeg1[i],
           slipSeg1: slipSeg1[i],
           commentarySeg1: commentarySeg1[i],
-          categoryListDisplaySeg1: categoryListDisplaySeg1[i]
+          categoryListDisplaySeg1: categoryListDisplaySeg1[i],
+          trendSeg: trendSeg1[i],
+          indexList: dynamicData
         };
         Seg1Values.push(circle);
-       
-  
+        console.log("x",i, 55 * Number(weekNoFromList[i]),"y",ypositionLocator)
       
     }
 
+
+    
    
      const Segment1Categories = finishDateList.map((week, index) => (
       <>
-      <Line
-          points={[Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"],Seg1Values[index]["y"]]}
-          stroke={segmentColor[index]}
-          strokeWidth={5}
-        />
-                 <Circle
+                <Circle
           x={Seg1Values[index]["x"]}
           y={ Seg1Values[index]["y"]+ 25.8}
           radius={30}
           stroke={statusSeg1[index]}
           strokeWidth={3}
+
           fill={"white"}
 
-          onClick={() => this.handleDynamic(indexList)}
+          onClick={() => this.handleDynamic(Seg1Values[index]['indexList'])}
 
           onMouseEnter={() => {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
+              ownerPlaceholder: Seg1Values[index]["ownerSeg"],
+              trendPlaceholder: Seg1Values[index]["trendSeg"],
+              baseLineDatePlaceholder:String(Seg1Values[index]["beginSeg1"]),             
+              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),  
               lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
+                Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
-              slipPlaceholder: slipSeg1[index],
+              slipPlaceholder:  Seg1Values[index]["slipSeg1"]
             });
           }}
           onMouseLeave={() => {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
+              ownerPlaceholder: Seg1Values[index]["ownerSeg"],
+              trendPlaceholder: Seg1Values[index]["trendSeg"],
+              baseLineDatePlaceholder:String(Seg1Values[index]["beginSeg1"]),             
+              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),  
               lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
+                Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
-              slipPlaceholder: slipSeg1[index],
+              slipPlaceholder:  Seg1Values[index]["slipSeg1"]
             });
+    
           }}
         ></Circle>
           <Text
@@ -529,92 +533,62 @@ export class segmentedBar extends React.Component<any, State> {
           align="center"
           verticalAlign="middle"
           text={Seg1Values[index]["shortCodeSeg"].substring(0, 7)}
-      // text={String(index)}  
-       fontSize={12}
+          fontSize={12}
           fill={textColor}
-          onClick={(evt) => this.handleDynamic([0,1,2,3])}
+          onClick={() => this.handleDynamic(Seg1Values[index]['indexList'])}
 
           onMouseEnter={() => {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
-
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
+              ownerPlaceholder: Seg1Values[index]["ownerSeg"],
+              trendPlaceholder: Seg1Values[index]["trendSeg"],
+              baseLineDatePlaceholder:String(Seg1Values[index]["beginSeg1"]),             
+              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),  
               lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
+                Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
-              slipPlaceholder: slipSeg1[index],
+              slipPlaceholder:  Seg1Values[index]["slipSeg1"]
             });
           }}
           onMouseLeave={() => {
             this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
+              titlePlaceholder: Seg1Values[index]["titleSeg"],
+              ownerPlaceholder: Seg1Values[index]["ownerSeg"],
+              trendPlaceholder: Seg1Values[index]["trendSeg"],
+              baseLineDatePlaceholder:String(Seg1Values[index]["beginSeg1"]),             
+              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),  
               lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
+                Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
-              slipPlaceholder: slipSeg1[index],
+              slipPlaceholder:  Seg1Values[index]["slipSeg1"]
             });
+    
           }}
+     
         /> 
 
         
      
         <Text
           x={Seg1Values[index]["x"] - 5}
-          y={10}
+          y={Seg1Values[index]["ybarSeg"] }
           width={40 * 2}
           height={40 * 2}
-          text={ statusSeg1[index] === "red" ? "🚩" : ""}
+          text={Seg1Values[index]["trendSeg"] === "red" ? "🚩" : ""}
           fontSize={30}
           fill={textColor}
         />
        
-
-    {/*   <Text
-          x={Seg1Values[index]["x"] - 40}
-          y={categoryListDisplayYSeg1[index] - 20}
-          width={40 * 2}
-          height={40 * 2}
-          align="center"
-          verticalAlign="middle"
-          text={trendSeg1[index]}
-          fontSize={20}
-          fill={textColor}
-          onMouseEnter={() => {
-            this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
-              lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
-              ),
-              slipPlaceholder: slipSeg1[index],
-            });
-          }}
-          onMouseLeave={() => {
-            this.setState({
-              titlePlaceholder: titleSeg1[index],
-              ownerPlaceholder: ownerSeg1[index],
-              trendPlaceholder: trendSeg1[index],
-              baseLineDatePlaceholder: beginSeg1[index],
-              endDatePlaceholder: String(endSeg1[index]),
-              lastReportedDatePlaceholder: String(
-                lastReportedEndDateSeg1[index]
-              ),
-              slipPlaceholder: slipSeg1[index],
-            });
-          }}    />*/}
-     
+    
+       <LionImage status={Seg1Values[index]['trendSeg']}  x={Seg1Values[index]["x"]-14 } y={Seg1Values[index]["y"]+10} ></LionImage>
       </>
     )); 
+    const Segment1Lines = finishDateList.map((week, index) => (
+    <Line
+    points={[Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"],Seg1Values[index]["y"]]}
+    stroke={segmentColor[index]}
+    strokeWidth={5}
+  />))
     const legendStyle: React.CSSProperties = {
         fontSize: '18px',
         marginBottom: '10px',
@@ -628,16 +602,11 @@ export class segmentedBar extends React.Component<any, State> {
         display: 'inline-block',
       };
 for (let i =0;  i <=successorsListSeg1.length; i++ ){
-if (successorsListSeg1 && successorsListSeg1.length > 0) {
-  const indexList = successorsList.map(element => shortCodeSeg1.indexOf(element));
-//  console.log(indexList);
-} else {
- // console.log("successorsListSeg1 is undefined or empty");
-}
+
 }
 
 const dataArrayList = [];
-const indexList = [0,1,2,3,4,5]
+//const indexList = [0,1,2,3,4,5]
 /* for (let i = 0; i < indexList.length; i++) {
   const index = indexList[i];
   const data = {
@@ -657,7 +626,9 @@ const indexList = [0,1,2,3,4,5]
  */
 //console.log(dataArrayList);
 
-//console.log("week numbers from the list",weekNoFromList);
+
+const offsetY = 46 // Translation value in pixels
+
 
 return (
       <>
@@ -667,7 +638,7 @@ return (
           <div style={{ display: "flex", height:" 500px", flexGrow: 3 }}>
 
             <div style={{ width: "20%", backgroundColor: "white" }}>
-              <svg
+              {/* <svg
                 height="100%"
                 strokeMiterlimit="10"
                 version="1.1"
@@ -737,59 +708,115 @@ return (
                     {categoryListDisplay[5]}
                   </text>
                 </g>
-{/*                 <text x={25} y={520} fontSize={18} fill={textColor}>
-                    {"Legend"}
-                  </text>
-                  <rect
-                    x="25"
-                    y="540"
-                    width="50"
-                    height="25"
-                    fill="grey"
-                  ></rect>
-                   <rect
-                    x="25"
-                    y="560"
-                    width="50"
-                    height="25"
-                    fill="red"
-                  ></rect>
-                   <rect
-                    x="25"
-                    y="585"
-                    width="50"
-                    height="25"
-                    fill="yellow"
-                  ></rect>
-                  <rect
-                    x="25"
-                    y="610"
-                    width="50"
-                    height="25"
-                    fill="green"
-                  ></rect>
-                     <rect
-                    x="25"
-                    y="635"
-                    width="50"
-                    height="25"
-                    fill="blue"
-                  ></rect>
-                  <text x={80} y={560} fontSize={18} fill="black">
-                    {" - > Not Started"}
-                  </text>
-                 <text x={80} y={580} fontSize={18} fill="black">
-                    {" - > Late"}
-                  </text>
-                  <text x={80} y={600} fontSize={18} fill="black">
-                    {" - > At Risk"}
-                  </text>                 
-                  <text x={80} y={635} fontSize={18} fill="black">
-                    {" - > On Plan"}
-                  </text><text x={80} y={655} fontSize={18} fill="black">
-                    {" - > Complete"}
-                  </text> */}
-              </svg>
+                <g>
+                <line x1="200" y1="180" x2="350" y2="65"  stroke={Segment1Color} />
+
+                
+
+                </g>
+              </svg> */}
+                  <Stage width={300} height={550}>
+      <Layer>
+        <Rect x={20} y={50} width={200} height={25} fill={Segment1Color} />
+        <Rect x={20} y={90} width={200} height={25} fill={Segment2Color} />
+        <Rect x={20} y={130} width={200} height={25} fill={Segment3Color} />
+        <Rect x={20} y={170} width={200} height={25} fill={Segment4Color} />
+        <Rect x={20} y={210} width={200} height={25} fill={Segment5Color} />
+        <Rect x={20} y={250} width={200} height={25} fill={Segment6Color} />
+    
+        <Line
+          points={[220, 50, 270, 78, 220, 75]}
+          fill={Segment1Color}
+          closed
+        />
+        <Line
+          points={[220, 90, 270, 97, 220, 114]}
+          fill={Segment2Color}
+          closed
+        />
+        <Line
+          points={[220, 130, 265, 110, 220, 156]}
+          fill={Segment3Color}
+          closed
+        />
+          <Line
+          points={[220, 170, 260, 135, 220, 196]}
+          fill={Segment4Color}
+          closed
+        />
+        <Line
+          points={[220, 210, 264, 150, 220, 236]}
+          fill={Segment5Color}
+          closed
+        />
+        <Line
+          points={[220, 210 + offsetY, 264-7, 150 + offsetY, 220, 236 + offsetY]}
+
+fill={Segment6Color}
+          closed
+        />
+                <Text
+          x={20} // Center x-coordinate of the rectangle
+          y={62.5-10} // Center y-coordinate of the rectangle
+          text={categoryListDisplay[0]}
+          fontSize={14}
+          align="center"
+          fill={"white"}
+
+          verticalAlign="middle"
+        />
+
+        <Text
+          x={20} // Center x-coordinate of the rectangle
+          y={102.5-10} // Center y-coordinate of the rectangle
+          text={categoryListDisplay[1]}
+          fontSize={14}
+          align="center"
+          verticalAlign="middle"
+        />
+
+        <Text
+          x={20} // Center x-coordinate of the rectangle
+          y={142.5-10} // Center y-coordinate of the rectangle
+            text={categoryListDisplay[2]}
+      
+          fontSize={14}
+          align="center"
+          verticalAlign="middle"
+        />
+
+        <Text
+          x={20} // Center x-coordinate of the rectangle
+          y={182.5-10} // Center y-coordinate of the rectangle
+          text={categoryListDisplay[3]}
+          fill={"white"}
+          fontSize={14}
+          align="center"
+          verticalAlign="middle"
+        />
+
+        <Text
+          x={20} // Center x-coordinate of the rectangle
+          y={222.5-10} // Center y-coordinate of the rectangle
+          text={categoryListDisplay[4]}
+
+          fontSize={14}
+          align="center"
+          verticalAlign="middle"
+        />
+
+        <Text
+          x={20} // Center x-coordinate of the rectangle
+          y={262.5-10} // Center y-coordinate of the rectangle
+          text={categoryListDisplay[6]}
+
+          fontSize={14}
+          align="center"
+          verticalAlign="middle"
+        />
+
+      </Layer>
+                 </Stage>
             </div>
             <div
               ref={this.scrollReference}
@@ -827,9 +854,10 @@ return (
                     ))}
                   </Layer>
                   <Layer>
-                    {Segment1Categories}
+                  {Segment1Lines}
+                  {Segment1Categories}
                   </Layer>
-
+ 
                   <Layer>
                     <Rect
                       x={todayDateLocation}
