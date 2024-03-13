@@ -5,8 +5,8 @@ import VisualConstructorOptions = powerbiVisualsApi.extensibility.visual.VisualC
 import DialogConstructorOptions = powerbiVisualsApi.extensibility.visual.DialogConstructorOptions;
 var powerbiKey: any = "powerbi";
 var powerbi: any = window[powerbiKey];
-var segmentedNNewBuild182Jan_DEBUG: IVisualPlugin = {
-    name: 'segmentedNNewBuild182Jan_DEBUG',
+var NewBuild_DEBUG: IVisualPlugin = {
+    name: 'NewBuild_DEBUG',
     displayName: 'segmentedNtimeline',
     class: 'Visual',
     apiVersion: '5.3.0',
@@ -27,6 +27,6 @@ var segmentedNNewBuild182Jan_DEBUG: IVisualPlugin = {
 if (typeof powerbi !== "undefined") {
     powerbi.visuals = powerbi.visuals || {};
     powerbi.visuals.plugins = powerbi.visuals.plugins || {};
-    powerbi.visuals.plugins["segmentedNNewBuild182Jan_DEBUG"] = segmentedNNewBuild182Jan_DEBUG;
+    powerbi.visuals.plugins["NewBuild_DEBUG"] = NewBuild_DEBUG;
 }
-export default segmentedNNewBuild182Jan_DEBUG;
+export default NewBuild_DEBUG;

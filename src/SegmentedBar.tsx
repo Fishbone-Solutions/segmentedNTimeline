@@ -1,32 +1,33 @@
 import * as React from "react";
-import { Stage, Layer, Rect, Text, Line, Circle,Image } from "react-konva";
+import { Stage, Layer, Rect, Text, Line, Circle, Image } from "react-konva";
 import * as moment from "moment";
-import { IoMdTrendingUp } from "react-icons/io";
-import {
-  differenceInCalendarMonths,
-  addMonths,
-  subMonths,
-  getWeek,
-} from "date-fns";
+import { differenceInCalendarMonths, subMonths } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
-import useImage from 'use-image';
+import useImage from "use-image";
 
 // the first very simple and recommended way:
 const LionImage = (props) => {
-  if(props.status === "up"){
-    const [image] = useImage('https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stick.png');
-    return <Image  width={30} height={30} image={image} x={props.x} y={props.y} />;
-
-  }
-  else  if(props.status === "down"){
-    const [image] = useImage('https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/down.png');
-    return <Image  width={30} height={30} image={image} x={props.x} y={props.y} />;
-
-  }
-  else  if(props.status === "stable"){
-    const [image] = useImage('https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stable.png');
-    return <Image  width={30} height={30} image={image} x={props.x} y={props.y} />;
-
+  if (props.status === "up") {
+    const [image] = useImage(
+      "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stick.png"
+    );
+    return (
+      <Image width={30} height={30} image={image} x={props.x} y={props.y} />
+    );
+  } else if (props.status === "down") {
+    const [image] = useImage(
+      "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/down.png"
+    );
+    return (
+      <Image width={30} height={30} image={image} x={props.x} y={props.y} />
+    );
+  } else if (props.status === "stable") {
+    const [image] = useImage(
+      "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stable.png"
+    );
+    return (
+      <Image width={30} height={30} image={image} x={props.x} y={props.y} />
+    );
   }
 };
 export interface State {
@@ -63,10 +64,7 @@ export interface State {
   endDatePlaceholder?: string;
   lastReportedDatePlaceholder?: string;
   slipPlaceholder?: string;
-
 }
-
-
 
 export const initialState: State = {
   backgroundColorVis: "white",
@@ -107,10 +105,10 @@ interface DataItem {
   planFinish: string;
   projectedFinish: string;
   comments: string;
-};
+}
 export class segmentedBar extends React.Component<any, State> {
   public dataArrayList: DataItem[] = [];
-  
+
   private static updateCallback: (data: object) => void = null;
   scrollReference: React.RefObject<HTMLDivElement>;
 
@@ -145,11 +143,8 @@ export class segmentedBar extends React.Component<any, State> {
     segmentedBar.updateCallback = null;
   }
   handleDynamic = (dynamicData) => {
-
-   this.dataArrayList = dynamicData;
-
-
-}
+    this.dataArrayList = dynamicData;
+  };
   render() {
     const {
       backgroundColorVis,
@@ -162,7 +157,6 @@ export class segmentedBar extends React.Component<any, State> {
       textColor,
       activityIDList,
       categoryList,
-      milestoneLevelList,
       activityNameList,
       statusNameList,
       startDateList,
@@ -183,9 +177,7 @@ export class segmentedBar extends React.Component<any, State> {
       endDatePlaceholder,
       lastReportedDatePlaceholder,
       slipPlaceholder,
-      
     } = this.state;
-
 
     var months = [];
     var years = [];
@@ -300,34 +292,25 @@ export class segmentedBar extends React.Component<any, State> {
     var commentarySeg1 = [];
     var Seg1Values = [];
     var yBarSeg1 = [];
-    var categoryListDisplaySeg1 = []
-    var categoryListDisplayYSeg1 = []
-    var successorsListSeg1 = []
-    var plannedStartSeg1 = []
-    var plannedFinishSeg1 = []
+    var categoryListDisplaySeg1 = [];
+    var categoryListDisplayYSeg1 = [];
+    var successorsListSeg1 = [];
+    var plannedStartSeg1 = [];
+    var plannedFinishSeg1 = [];
     var segmentColor: Array<string | CanvasGradient> = [];
-    var visitedWeeks = []
-    var countMap = []
+    var visitedWeeks = [];
+    var countMap = [];
     var ypositionLocator;
     var indexList = [];
-    var dynamicData = []
+    var dynamicData = [];
 
-
-    const N: number = 123; // Number of terms to repeat
-    const categoryListDisplayYSeg1Target: number[] = [380, 360, 340, 320, 300, 280, 260, 240, 220, 200];
-    let array: number[] = [];
-    for (let i = 0; i < N; i++) {
-      array = array.concat(categoryListDisplayYSeg1Target);
-    }
-    
-    //console.log("Array:", array);
     const segments = [
-      { y: 30, fill: Segment1Color ,y1:380},
-      { y: 50, fill: Segment2Color ,y1:320},
-      { y: 70, fill: Segment3Color,y1:260 },
-      { y: 90, fill: Segment4Color,y1:220},
-      { y: 110, fill: Segment5Color ,y1:380},
-      { y: 130, fill: Segment6Color ,y1:300},
+      { y: 30, fill: Segment1Color, y1: 380 },
+      { y: 50, fill: Segment2Color, y1: 320 },
+      { y: 70, fill: Segment3Color, y1: 260 },
+      { y: 90, fill: Segment4Color, y1: 220 },
+      { y: 110, fill: Segment5Color, y1: 380 },
+      { y: 130, fill: Segment6Color, y1: 300 },
     ];
 
     const handleClick = (e) => {
@@ -337,177 +320,145 @@ export class segmentedBar extends React.Component<any, State> {
     const weekNoFromList = finishDateList.map((element) => {
       const start = subMonths(result.min, 1);
       const week = new Date(Date.parse(element));
-      const weekNos =
-        Math.floor(Math.abs(differenceInCalendarMonths(start, week)) * 5 +
-        week.getDate() / 7);
+      const weekNos = Math.floor(
+        Math.abs(differenceInCalendarMonths(start, week)) * 5 +
+          week.getDate() / 7
+      );
       return weekNos;
     });
-   
 
-    console.log(weekNoFromList);
- 
     for (let i = 0; i < activityIDList.length; i++) {
+      shortCodeSeg1.push(activityIDList[i]);
+      titleSeg1.push(activityNameList[i]);
+      ownerSeg1.push(ownerList[i]);
+      beginSeg1.push(startDateList[i]);
+      endSeg1.push(finishDateList[i]);
+      lastReportedEndDateSeg1.push(lastReportedEndDateList[i]);
+      slipSeg1.push(totalFloatList[i]);
+      commentarySeg1.push(commentaryList[i]);
+      successorsListSeg1.push(successorsList[i]);
+      categoryListDisplaySeg1.push(categoryList[i]);
+      plannedStartSeg1.push(projectedStartDateList[i]);
+      plannedFinishSeg1.push(projectedFinishDateList[i]);
 
-         
-        shortCodeSeg1.push(activityIDList[i]);
-        titleSeg1.push(activityNameList[i]);
-        ownerSeg1.push(ownerList[i]);
-        beginSeg1.push(startDateList[i]);
-        endSeg1.push(finishDateList[i]);
-        lastReportedEndDateSeg1.push(lastReportedEndDateList[i]);
-        slipSeg1.push(totalFloatList[i]);
-        commentarySeg1.push(commentaryList[i]);
-        successorsListSeg1.push(successorsList[i]);
-        categoryListDisplaySeg1.push(categoryList[i]);
-        plannedStartSeg1.push(projectedStartDateList[i])
-        plannedFinishSeg1.push(projectedFinishDateList[i])
+      if (successorsListSeg1 && successorsListSeg1.length > 0) {
+        indexList = successorsList.map((element) =>
+          shortCodeSeg1.indexOf(element)
+        );
+        console.log(indexList);
+      } else {
+        // console.log("successorsListSeg1 is undefined or empty");
+      }
 
-        if (successorsListSeg1 && successorsListSeg1.length > 0) {
-        indexList = successorsList.map(element => shortCodeSeg1.indexOf(element));
-        //  indexList = [5,6]
-          console.log(indexList);
-        } else {
-         // console.log("successorsListSeg1 is undefined or empty");
+      if (trendLists[i].toLowerCase().includes("no change")) {
+        trendSeg1.push("stable");
+      }
+      if (trendLists[i].toLowerCase().includes("deteriorated")) {
+        trendSeg1.push("down");
+      }
+      if (trendLists[i].toLowerCase().includes("improved")) {
+        trendSeg1.push("up");
+      }
+
+      if (statusNameList[i].toLowerCase().includes("not started")) {
+        statusSeg1.push("grey");
+      }
+      if (statusNameList[i].toLowerCase().includes("late")) {
+        statusSeg1.push("red");
+      }
+      if (statusNameList[i].toLowerCase().includes("at risk")) {
+        statusSeg1.push("yellow");
+      }
+      if (statusNameList[i].toLowerCase().includes("on plan")) {
+        statusSeg1.push("green");
+      }
+      if (statusNameList[i].toLowerCase().includes("completed")) {
+        statusSeg1.push("blue");
+      } else {
+        statusSeg1.push("black");
+      }
+      for (let j = 0; j < categoryListDisplay.length; j++) {
+        if (categoryList[i].includes(categoryListDisplay[j])) {
+          yBarSeg1.push(segments[j]["y"]);
+          categoryListDisplayYSeg1.push(segments[j]["y1"]);
+          segmentColor.push(segments[j]["fill"]);
         }
+      }
 
-        if (trendLists[i].toLowerCase().includes("no change")) {
-          trendSeg1.push("stable");
-        }
-        if (trendLists[i].toLowerCase().includes("deteriorated")) {
-          trendSeg1.push("down");
-        }
-        if (trendLists[i].toLowerCase().includes("improved")) {
-          trendSeg1.push("up");
-        }
+      // even numbered weeks
+      //  odd numbered weeks
+      visitedWeeks.push(weekNoFromList[i]);
+      visitedWeeks.forEach((num) => {
+        countMap[num] = (countMap[num] || 0) + 1;
+      });
+      ypositionLocator = 0;
+      if (weekNoFromList[i] % 2 === 0) {
+        ypositionLocator = 150 + Number(countMap[weekNoFromList[i]]) * 35;
+      } else {
+        ypositionLocator = 180 + Number(countMap[weekNoFromList[i]]) * 35;
+      }
 
-        if (statusNameList[i].toLowerCase().includes("not started")) {
-          statusSeg1.push("grey");
-        }
-        if (statusNameList[i].toLowerCase().includes("late")) {
-          statusSeg1.push("red");
-        }
-        if (statusNameList[i].toLowerCase().includes("at risk")) {
-          statusSeg1.push("yellow");
-        }
-        if (statusNameList[i].toLowerCase().includes("on plan")) {
-          statusSeg1.push("green");
-        }
-        if (statusNameList[i].toLowerCase().includes("completed")) {
-          statusSeg1.push("blue");
-        }
-        else {
-          statusSeg1.push("black");
-
-        }
-        for (let j = 0; j < categoryListDisplay.length; j++) {
-          if (categoryList[i].includes(categoryListDisplay[j])) {
-            yBarSeg1.push(segments[j]['y']);
-            categoryListDisplayYSeg1.push(segments[j]['y1']);
-            segmentColor.push(segments[j]['fill'])
-          }
-        }
-       
-        // even numbered weeks
-        //  odd numbered weeks
-        visitedWeeks.push(weekNoFromList[i]);
-        visitedWeeks.forEach((num) => {
-          countMap[num] = (countMap[num] || 0) + 1;
-        });
-        ypositionLocator = 0
-        if (weekNoFromList[i] % 2 === 0) {
-          ypositionLocator = 150 + Number(countMap[weekNoFromList[i]]) * 35;
-          } else {
-            ypositionLocator = 180 + Number(countMap[weekNoFromList[i]]) * 35;
-       }
-          
-       if (ypositionLocator > 500  ) {
-            ypositionLocator = 280
-          }
-       for (let i = 0; i < indexList.length; i++) {
-            const index = indexList[i];
-            let  data  = {
-              milestone:  activityIDList[index],
-               title: activityNameList[index],
-              owner: ownerList[index],
-              impactedBy: successorsList[index],
-              planDate: startDateList[index],
-              projectedStart: projectedStartDateList[index],
-              planFinish: finishDateList[index],
-              projectedFinish: projectedFinishDateList[index],
-              comments: commentaryList[index]
-            };
-            dynamicData.push(data);
-      
-        
-      
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
-        let circle = {
-          x: 55 * Number(weekNoFromList[i]),
-          y: ypositionLocator,
-          fill: statusSeg1[i],
-          id: "SEG1" + i,
-          shortCodeSeg: shortCodeSeg1[i],
-          titleSeg: titleSeg1[i],
-          ybarSeg: yBarSeg1[i],
-          ownerSeg1: ownerSeg1[i],
-          beginSeg1: beginSeg1[i],
-          endSeg1: endSeg1[i],
-          lastReportedEndDateSeg1: lastReportedEndDateSeg1[i],
-          slipSeg1: slipSeg1[i],
-          commentarySeg1: commentarySeg1[i],
-          categoryListDisplaySeg1: categoryListDisplaySeg1[i],
-          trendSeg: trendSeg1[i],
-          indexList: dynamicData
+      if (ypositionLocator > 500) {
+        ypositionLocator = 280;
+      }
+      for (let i = 0; i < indexList.length; i++) {
+        const index = indexList[i];
+        let data = {
+          milestone: activityIDList[index],
+          title: activityNameList[index],
+          owner: ownerList[index],
+          impactedBy: successorsList[index],
+          planDate: startDateList[index],
+          projectedStart: projectedStartDateList[index],
+          planFinish: finishDateList[index],
+          projectedFinish: projectedFinishDateList[index],
+          comments: commentaryList[index],
         };
-        Seg1Values.push(circle);
-        console.log("x",i, 55 * Number(weekNoFromList[i]),"y",ypositionLocator)
-      
+        dynamicData.push(data);
+      }
+
+      let circle = {
+        x: 55 * Number(weekNoFromList[i]),
+        y: ypositionLocator,
+        fill: statusSeg1[i],
+        id: "SEG1" + i,
+        shortCodeSeg: shortCodeSeg1[i],
+        titleSeg: titleSeg1[i],
+        ybarSeg: yBarSeg1[i],
+        ownerSeg1: ownerSeg1[i],
+        beginSeg1: beginSeg1[i],
+        endSeg1: endSeg1[i],
+        lastReportedEndDateSeg1: lastReportedEndDateSeg1[i],
+        slipSeg1: slipSeg1[i],
+        commentarySeg1: commentarySeg1[i],
+        categoryListDisplaySeg1: categoryListDisplaySeg1[i],
+        trendSeg: trendSeg1[i],
+        indexList: dynamicData,
+      };
+      Seg1Values.push(circle);
     }
 
-
-    
-   
-     const Segment1Categories = finishDateList.map((week, index) => (
+    const Segment1Categories = finishDateList.map((week, index) => (
       <>
-                <Circle
+        <Circle
           x={Seg1Values[index]["x"]}
-          y={ Seg1Values[index]["y"]+ 25.8}
+          y={Seg1Values[index]["y"] + 25.8}
           radius={30}
           stroke={statusSeg1[index]}
           strokeWidth={3}
-
           fill={"white"}
-
-          onClick={() => this.handleDynamic(Seg1Values[index]['indexList'])}
-
+          onClick={() => this.handleDynamic(Seg1Values[index]["indexList"])}
           onMouseEnter={() => {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
               trendPlaceholder: Seg1Values[index]["trendSeg"],
-              baseLineDatePlaceholder:String(Seg1Values[index]["beginSeg1"]),             
-              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),  
+              baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
+              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
-              slipPlaceholder:  Seg1Values[index]["slipSeg1"]
+              slipPlaceholder: Seg1Values[index]["slipSeg1"],
             });
           }}
           onMouseLeave={() => {
@@ -515,17 +466,16 @@ export class segmentedBar extends React.Component<any, State> {
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
               trendPlaceholder: Seg1Values[index]["trendSeg"],
-              baseLineDatePlaceholder:String(Seg1Values[index]["beginSeg1"]),             
-              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),  
+              baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
+              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
-              slipPlaceholder:  Seg1Values[index]["slipSeg1"]
+              slipPlaceholder: Seg1Values[index]["slipSeg1"],
             });
-    
           }}
         ></Circle>
-          <Text
+        <Text
           x={Seg1Values[index]["x"] - 40}
           y={Seg1Values[index]["y"]}
           width={40 * 2}
@@ -535,19 +485,18 @@ export class segmentedBar extends React.Component<any, State> {
           text={Seg1Values[index]["shortCodeSeg"].substring(0, 7)}
           fontSize={12}
           fill={textColor}
-          onClick={() => this.handleDynamic(Seg1Values[index]['indexList'])}
-
+          onClick={() => this.handleDynamic(Seg1Values[index]["indexList"])}
           onMouseEnter={() => {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
               trendPlaceholder: Seg1Values[index]["trendSeg"],
-              baseLineDatePlaceholder:String(Seg1Values[index]["beginSeg1"]),             
-              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),  
+              baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
+              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
-              slipPlaceholder:  Seg1Values[index]["slipSeg1"]
+              slipPlaceholder: Seg1Values[index]["slipSeg1"],
             });
           }}
           onMouseLeave={() => {
@@ -555,89 +504,66 @@ export class segmentedBar extends React.Component<any, State> {
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
               trendPlaceholder: Seg1Values[index]["trendSeg"],
-              baseLineDatePlaceholder:String(Seg1Values[index]["beginSeg1"]),             
-              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),  
+              baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
+              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
-              slipPlaceholder:  Seg1Values[index]["slipSeg1"]
+              slipPlaceholder: Seg1Values[index]["slipSeg1"],
             });
-    
           }}
-     
-        /> 
+        />
 
-        
-     
         <Text
           x={Seg1Values[index]["x"] - 5}
-          y={Seg1Values[index]["ybarSeg"] }
+          y={Seg1Values[index]["ybarSeg"]}
           width={40 * 2}
           height={40 * 2}
           text={Seg1Values[index]["trendSeg"] === "red" ? "🚩" : ""}
           fontSize={30}
           fill={textColor}
         />
-       
-    
-       <LionImage status={Seg1Values[index]['trendSeg']}  x={Seg1Values[index]["x"]-14 } y={Seg1Values[index]["y"]+10} ></LionImage>
+
+        <LionImage
+          status={Seg1Values[index]["trendSeg"]}
+          x={Seg1Values[index]["x"] - 14}
+          y={Seg1Values[index]["y"] + 10}
+        ></LionImage>
       </>
-    )); 
+    ));
     const Segment1Lines = finishDateList.map((week, index) => (
-    <Line
-    points={[Seg1Values[index]["x"], yBarSeg1[index], Seg1Values[index]["x"],Seg1Values[index]["y"]]}
-    stroke={segmentColor[index]}
-    strokeWidth={5}
-  />))
+      <Line
+        points={[
+          Seg1Values[index]["x"],
+          yBarSeg1[index],
+          Seg1Values[index]["x"],
+          Seg1Values[index]["y"],
+        ]}
+        stroke={segmentColor[index]}
+        strokeWidth={5}
+      />
+    ));
     const legendStyle: React.CSSProperties = {
-        fontSize: '18px',
-        marginBottom: '10px',
-        marginTop:'-10px'
-      };
-    
-      const colorRectStyle: React.CSSProperties = {
-        width: '50px',
-        height: '25px',
-        marginRight: '10px',
-        display: 'inline-block',
-      };
-for (let i =0;  i <=successorsListSeg1.length; i++ ){
+      fontSize: "18px",
+      marginBottom: "10px",
+      marginTop: "-10px",
+    };
 
-}
+    const colorRectStyle: React.CSSProperties = {
+      width: "50px",
+      height: "25px",
+      marginRight: "10px",
+      display: "inline-block",
+    };
+    const offsetY = 46; // Translation value in pixels
 
-const dataArrayList = [];
-//const indexList = [0,1,2,3,4,5]
-/* for (let i = 0; i < indexList.length; i++) {
-  const index = indexList[i];
-  const data = {
-    milestone: shortCodeSeg1[index],
-    title: titleSeg1[index],
-    owner: ownerSeg1[index],
-    impactedBy: successorsListSeg1[index],
-    planDate: beginSeg1[index],
-    projectedStart: plannedStartSeg1[index],
-    planFinish: endSeg1[index],
-    projectedFinish: plannedFinishSeg1[index],
-    comments: commentarySeg1[index]
-  };
-
-  dataArrayList.push(data);
-}
- */
-//console.log(dataArrayList);
-
-
-const offsetY = 46 // Translation value in pixels
-
-
-return (
+    return (
       <>
         <div
-          style={{ display: "flex", flexDirection: "column", height: "80vh" }}
+          style={{ display: "flex", flexDirection: "column", height: "80vh",  }}
         >
-          <div style={{ display: "flex", height:" 500px", flexGrow: 3 }}>
-
-            <div style={{ width: "20%", backgroundColor: "white" }}>
+          <div style={{ display: "flex", height: " 500px", flexGrow: 3 }}>
+            <div style={{ width: "20%", backgroundColor: backgroundColorVis }}>
               {/* <svg
                 height="100%"
                 strokeMiterlimit="10"
@@ -715,120 +641,157 @@ return (
 
                 </g>
               </svg> */}
-                  <Stage width={300} height={550}>
-      <Layer>
-        <Rect x={20} y={50} width={200} height={25} fill={Segment1Color} />
-        <Rect x={20} y={90} width={200} height={25} fill={Segment2Color} />
-        <Rect x={20} y={130} width={200} height={25} fill={Segment3Color} />
-        <Rect x={20} y={170} width={200} height={25} fill={Segment4Color} />
-        <Rect x={20} y={210} width={200} height={25} fill={Segment5Color} />
-        <Rect x={20} y={250} width={200} height={25} fill={Segment6Color} />
-    
-        <Line
-          points={[220, 50, 270, 78, 220, 75]}
-          fill={Segment1Color}
-          closed
-        />
-        <Line
-          points={[220, 90, 270, 97, 220, 114]}
-          fill={Segment2Color}
-          closed
-        />
-        <Line
-          points={[220, 130, 265, 110, 220, 156]}
-          fill={Segment3Color}
-          closed
-        />
-          <Line
-          points={[220, 170, 260, 135, 220, 196]}
-          fill={Segment4Color}
-          closed
-        />
-        <Line
-          points={[220, 210, 264, 150, 220, 236]}
-          fill={Segment5Color}
-          closed
-        />
-        <Line
-          points={[220, 210 + offsetY, 264-7, 150 + offsetY, 220, 236 + offsetY]}
+              <Stage width={300} height={550} >
+                <Layer>
+                  <Rect
+                    x={20}
+                    y={50}
+                    width={200}
+                    height={25}
+                    fill={Segment1Color}
+                  />
+                  <Rect
+                    x={20}
+                    y={90}
+                    width={200}
+                    height={25}
+                    fill={Segment2Color}
+                  />
+                  <Rect
+                    x={20}
+                    y={130}
+                    width={200}
+                    height={25}
+                    fill={Segment3Color}
+                  />
+                  <Rect
+                    x={20}
+                    y={170}
+                    width={200}
+                    height={25}
+                    fill={Segment4Color}
+                  />
+                  <Rect
+                    x={20}
+                    y={210}
+                    width={200}
+                    height={25}
+                    fill={Segment5Color}
+                  />
+                  <Rect
+                    x={20}
+                    y={250}
+                    width={200}
+                    height={25}
+                    fill={Segment6Color}
+                  />
 
-fill={Segment6Color}
-          closed
-        />
-                <Text
-          x={20} // Center x-coordinate of the rectangle
-          y={62.5-10} // Center y-coordinate of the rectangle
-          text={categoryListDisplay[0]}
-          fontSize={14}
-          align="center"
-          fill={"white"}
+                  <Line
+                    points={[220, 50, 270, 78, 220, 75]}
+                    fill={Segment1Color}
+                    closed
+                  />
+                  <Line
+                    points={[220, 90, 270, 97, 220, 114]}
+                    fill={Segment2Color}
+                    closed
+                  />
+                  <Line
+                    points={[220, 130, 265, 110, 220, 156]}
+                    fill={Segment3Color}
+                    closed
+                  />
+                  <Line
+                    points={[220, 170, 260, 135, 220, 196]}
+                    fill={Segment4Color}
+                    closed
+                  />
+                  <Line
+                    points={[220, 210, 264, 150, 220, 236]}
+                    fill={Segment5Color}
+                    closed
+                  />
+                  <Line
+                    points={[
+                      220,
+                      210 + offsetY,
+                      264 - 7,
+                      150 + offsetY,
+                      220,
+                      236 + offsetY,
+                    ]}
+                    fill={Segment6Color}
+                    closed
+                  />
+                  <Text
+                    x={20} // Center x-coordinate of the rectangle
+                    y={62.5 - 10} // Center y-coordinate of the rectangle
+                    text={categoryListDisplay[0]}
+                    fontSize={14}
+                    align="center"
+                    fill={"white"}
+                    verticalAlign="middle"
+                  />
 
-          verticalAlign="middle"
-        />
+                  <Text
+                    x={20} // Center x-coordinate of the rectangle
+                    y={102.5 - 10} // Center y-coordinate of the rectangle
+                    text={categoryListDisplay[1]}
+                    fontSize={14}
+                    align="center"
+                    verticalAlign="middle"
+                  />
 
-        <Text
-          x={20} // Center x-coordinate of the rectangle
-          y={102.5-10} // Center y-coordinate of the rectangle
-          text={categoryListDisplay[1]}
-          fontSize={14}
-          align="center"
-          verticalAlign="middle"
-        />
+                  <Text
+                    x={20} // Center x-coordinate of the rectangle
+                    y={142.5 - 10} // Center y-coordinate of the rectangle
+                    text={categoryListDisplay[2]}
+                    fontSize={14}
+                    align="center"
+                    verticalAlign="middle"
+                  />
 
-        <Text
-          x={20} // Center x-coordinate of the rectangle
-          y={142.5-10} // Center y-coordinate of the rectangle
-            text={categoryListDisplay[2]}
-      
-          fontSize={14}
-          align="center"
-          verticalAlign="middle"
-        />
+                  <Text
+                    x={20} // Center x-coordinate of the rectangle
+                    y={182.5 - 10} // Center y-coordinate of the rectangle
+                    text={categoryListDisplay[3]}
+                    fill={"white"}
+                    fontSize={14}
+                    align="center"
+                    verticalAlign="middle"
+                  />
 
-        <Text
-          x={20} // Center x-coordinate of the rectangle
-          y={182.5-10} // Center y-coordinate of the rectangle
-          text={categoryListDisplay[3]}
-          fill={"white"}
-          fontSize={14}
-          align="center"
-          verticalAlign="middle"
-        />
+                  <Text
+                    x={20} // Center x-coordinate of the rectangle
+                    y={222.5 - 10} // Center y-coordinate of the rectangle
+                    text={categoryListDisplay[4]}
+                    fontSize={14}
+                    align="center"
+                    verticalAlign="middle"
+                  />
 
-        <Text
-          x={20} // Center x-coordinate of the rectangle
-          y={222.5-10} // Center y-coordinate of the rectangle
-          text={categoryListDisplay[4]}
-
-          fontSize={14}
-          align="center"
-          verticalAlign="middle"
-        />
-
-        <Text
-          x={20} // Center x-coordinate of the rectangle
-          y={262.5-10} // Center y-coordinate of the rectangle
-          text={categoryListDisplay[6]}
-
-          fontSize={14}
-          align="center"
-          verticalAlign="middle"
-        />
-
-      </Layer>
-                 </Stage>
+                  <Text
+                    x={20} // Center x-coordinate of the rectangle
+                    y={262.5 - 10} // Center y-coordinate of the rectangle
+                    text={categoryListDisplay[6]}
+                    fontSize={14}
+                    align="center"
+                    verticalAlign="middle"
+                  />
+                </Layer>
+              </Stage>
             </div>
             <div
               ref={this.scrollReference}
               style={{
                 width: "60%",
-                height:"400px",
+                height: "500px",
                 overflowX: "scroll",
                 overflowY: "scroll",
-                backgroundColor: "white",
+                backgroundColor: backgroundColorVis,
               }}
             >
-              <div >
+              <div>
                 <div
                   className="relative"
                   style={{ backgroundColor: backgroundColorVis }}
@@ -841,23 +804,23 @@ fill={Segment6Color}
                   height={1000}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
-                    <Layer>
+                  <Layer>
                     {segments.map((segment, index) => (
                       <Rect
                         key={index}
                         x={0}
                         y={segment.y}
-                        width={ months.length * 5 * 55 }
+                        width={months.length * 5 * 55}
                         height={6}
                         fill={segment.fill}
                       />
                     ))}
                   </Layer>
                   <Layer>
-                  {Segment1Lines}
-                  {Segment1Categories}
+                    {Segment1Lines}
+                    {Segment1Categories}
                   </Layer>
- 
+
                   <Layer>
                     <Rect
                       x={todayDateLocation}
@@ -867,7 +830,7 @@ fill={Segment6Color}
                       fill="green"
                     ></Rect>
                     <Text
-                      x={todayDateLocation+ 3}
+                      x={todayDateLocation + 3}
                       y={10}
                       text="Today"
                       fontSize={15}
@@ -877,106 +840,273 @@ fill={Segment6Color}
                 </Stage>
               </div>
             </div>
-              <div
+            <div
               style={{
                 width: "20%",
                 backgroundColor: backgroundColorVis,
                 display: "flex",
-                justifyContent: "flex-start"
+                justifyContent: "flex-start",
               }}
             >
-               <table style={{ margin: "auto" }}>
-      <tbody>
-         <tr>
-          <td style={{ fontWeight: "bold" }}>Title</td>
-          <td>{titlePlaceholder}</td>
-        </tr>
-        <tr>
-          <td style={{ fontWeight: "bold" }}>Owner</td>
-          <td>{ownerPlaceholder}</td>
-        </tr>
-        <tr>
-          <td style={{ fontWeight: "bold" }}>Trend</td>
-          <td>{trendPlaceholder}</td>
-        </tr>
-        <tr>
-          <td style={{ fontWeight: "bold" }}>BaseLine</td>
-          <td>{baseLineDatePlaceholder.split("T")[0]}</td>
-        </tr>
-        <tr>
-          <td style={{ fontWeight: "bold" }}>End Date</td>
-          <td>{endDatePlaceholder.split("T")[0]}</td>
-        </tr>
-        <tr>
-          <td style={{ fontWeight: "bold" }}>
-            Last Reported  End Date
-          </td>
-          <td>{lastReportedDatePlaceholder.split("T")[0]}</td>
-        </tr>
-        <tr>
-          <td style={{ fontWeight: "bold" }}>Slip</td>
-          <td>{slipPlaceholder} Days</td>
-        </tr>
-        <br></br>
-        <tr>
-          <td colSpan={2}>
-            <div>
-              <p style={legendStyle}>Legend</p>
-              <div style={{ ...colorRectStyle, backgroundColor: 'grey' }}></div>
-              <span>-&gt; Not Started</span><br />
-              <div style={{ ...colorRectStyle, backgroundColor: 'red' }}></div>
-              <span>-&gt; Late</span><br />
-              <div style={{ ...colorRectStyle, backgroundColor: 'yellow' }}></div>
-              <span>-&gt; At Risk</span><br />
-              <div style={{ ...colorRectStyle, backgroundColor: 'green' }}></div>
-              <span>-&gt; On Plan</span><br />
-              <div style={{ ...colorRectStyle, backgroundColor: 'blue' }}></div>
-              <span>-&gt; Complete</span><br />
-            </div>
-          </td>
-        </tr>
-       
-      </tbody>
-               </table>
+              <table style={{ margin: "auto" }}>
+                <tbody>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Title</td>
+                    <td>{titlePlaceholder}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Owner</td>
+                    <td>{ownerPlaceholder}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Trend</td>
+                    <td>{trendPlaceholder}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>BaseLine</td>
+                    <td>{baseLineDatePlaceholder.split("T")[0]}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>End Date</td>
+                    <td>{endDatePlaceholder.split("T")[0]}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>
+                      Last Reported End Date
+                    </td>
+                    <td>{lastReportedDatePlaceholder.split("T")[0]}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ fontWeight: "bold" }}>Slip</td>
+                    <td>{slipPlaceholder} Days</td>
+                  </tr>
+                  <br></br>
+                  <tr>
+                    <td colSpan={2}>
+                      <div>
+                        <p style={legendStyle}>Legend</p>
+                        <div
+                          style={{ ...colorRectStyle, backgroundColor: "grey" }}
+                        ></div>
+                        <span>-&gt; Not Started</span>
+                        <br />
+                        <div
+                          style={{ ...colorRectStyle, backgroundColor: "red" }}
+                        ></div>
+                        <span>-&gt; Late</span>
+                        <br />
+                        <div
+                          style={{
+                            ...colorRectStyle,
+                            backgroundColor: "yellow",
+                          }}
+                        ></div>
+                        <span>-&gt; At Risk</span>
+                        <br />
+                        <div
+                          style={{
+                            ...colorRectStyle,
+                            backgroundColor: "green",
+                          }}
+                        ></div>
+                        <span>-&gt; On Plan</span>
+                        <br />
+                        <div
+                          style={{ ...colorRectStyle, backgroundColor: "blue" }}
+                        ></div>
+                        <span>-&gt; Complete</span>
+                        <br />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <div style={{ height: "50vh" }}>
-  <table style={{ width: "100%", fontSize: "15px", tableLayout: "fixed", borderCollapse: "collapse", backgroundColor:"grey" }}>
-    <thead>
-      <tr>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Milestone</th>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Title</th>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Owner</th>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Impacted by</th>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Plan Date</th>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Projected Start</th>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Plan Finish</th>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Projected Finish</th>
-        <th style={{ textAlign: "left", border: "1px solid #ccc", padding: "8px" }}>Comments</th>
-      </tr>
-    </thead>
-  </table>
-  <div style={{ height: "100px", overflowY: "auto", display: "flex" }}>
-    <table style={{ width: "100%", fontSize: "15px", tableLayout: "fixed", borderCollapse: "collapse" }}>
-      <tbody>
-        {[...new Set(this.dataArrayList.map((data) => data.milestone))].map((milestone, index) => (
-          <tr key={index}>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).milestone}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).title}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).owner}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).impactedBy}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).planDate}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).projectedStart}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).planFinish}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).projectedFinish}</td>
-            <td style={{ border: "1px solid #ccc", padding: "8px" }}>{this.dataArrayList.find((data) => data.milestone === milestone).comments}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</div>
-           </div> 
+            <table
+              style={{
+                width: "100%",
+                fontSize: "15px",
+                tableLayout: "fixed",
+                borderCollapse: "collapse",
+                backgroundColor: "grey",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Milestone
+                  </th>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Title
+                  </th>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Owner
+                  </th>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Impacted by
+                  </th>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Plan Date
+                  </th>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Projected Start
+                  </th>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Plan Finish
+                  </th>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Projected Finish
+                  </th>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                    }}
+                  >
+                    Comments
+                  </th>
+                </tr>
+              </thead>
+            </table>
+            <div
+              style={{ height: "100px", overflowY: "auto", display: "flex" }}
+            >
+              <table
+                style={{
+                  width: "100%",
+                  fontSize: "15px",
+                  tableLayout: "fixed",
+                  borderCollapse: "collapse",
+                }}
+              >
+                <tbody>
+                  {[
+                    ...new Set(
+                      this.dataArrayList.map((data) => data.milestone)
+                    ),
+                  ].map((milestone, index) => (
+                    <tr key={index}>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).milestone
+                        }
+                      </td>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).title
+                        }
+                      </td>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).owner
+                        }
+                      </td>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).impactedBy
+                        }
+                      </td>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).planDate
+                        }
+                      </td>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).projectedStart
+                        }
+                      </td>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).planFinish
+                        }
+                      </td>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).projectedFinish
+                        }
+                      </td>
+                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                        {
+                          this.dataArrayList.find(
+                            (data) => data.milestone === milestone
+                          ).comments
+                        }
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </>
     );
   }
