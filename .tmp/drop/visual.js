@@ -34927,8 +34927,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             plannedStartSeg1.push(projectedStartDateList[i]);
             plannedFinishSeg1.push(projectedFinishDateList[i]);
             if (successorsListSeg1 && successorsListSeg1.length > 0) {
-                // indexList = successorsList.map(element => shortCodeSeg1.indexOf(element));
-                indexList = [5, 6];
+                indexList = successorsList.map(element => shortCodeSeg1.indexOf(element));
+                //  indexList = [5,6]
                 console.log(indexList);
             }
             else {
