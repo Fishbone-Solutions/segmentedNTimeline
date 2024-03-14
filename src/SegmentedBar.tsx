@@ -4,7 +4,7 @@ import * as moment from "moment";
 import { differenceInCalendarMonths, subMonths } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
 import useImage from "use-image";
-
+import { MdOutlineTrendingUp, MdOutlineTrendingDown, MdOutlineTrendingFlat } from 'react-icons/md';
 
 const StatusIcon = (props) => {
   if (props.status === "up") {
@@ -110,8 +110,6 @@ interface DataItem {
 }
 export class segmentedBar extends React.Component<any, State> {
   public dataArrayList: DataItem[] = [];
-
-
   private static updateCallback: (data: object) => void = null;
   scrollReference: React.RefObject<HTMLDivElement>;
   scrollIndicator: Number;
@@ -132,21 +130,9 @@ export class segmentedBar extends React.Component<any, State> {
 
 
   }
-  componentDidMount() {
-    this.centerScroll();
-  }
-  centerScroll = () => {
-    const container = this.scrollReference.current;
-    if (container) {
-      const scrollWidth = container.scrollWidth;
-      const clientWidth = container.clientWidth;
-      const scrollPosition = (scrollWidth - clientWidth) / 3.4;
-      container.scrollLeft = scrollPosition;
-      console.log(this.state)
-    }
-  }
+
+
      handleClick = (twoDArray,successorsList) => {
-      this.dataArrayList = [];
       const cleanedList = successorsList.replace(/\n/g, '');
       const list = cleanedList.split(',');
       console.log(list)
@@ -196,13 +182,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
      
     }
   
-
-
-
-
-
-
-  public componentWillMount() {
+public componentWillMount() {
     segmentedBar.updateCallback = (newState: State): void => {
       this.setState(newState);
     };
@@ -301,6 +281,11 @@ for (let i = 0; i < flattenedArray.length; i++) {
     const todayDateLocation =
       Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 55 +currentWeek * 55 -24;
     
+      const EndDateLocation =
+      Math.abs(differenceInCalendarMonths(start, endDate.toDate())) * 5 * 55;
+
+
+      console.log(EndDateLocation)
 
     const weeksArray = months.map((week, index) => (
       <>
@@ -322,6 +307,10 @@ for (let i = 0; i < flattenedArray.length; i++) {
       </div>
     ));
 
+
+    const handleClick = (e) => {
+      this.scrollReference.current.scrollLeft = todayDateLocation - 250;
+    };
 
     var shortCodeSeg1 = [];
     var statusSeg1 = [];
@@ -346,17 +335,14 @@ for (let i = 0; i < flattenedArray.length; i++) {
     var ypositionLocator;
 
     const segments = [
-      { y: 30, fill: Segment1Color, y1: 380 },
-      { y: 50, fill: Segment2Color, y1: 320 },
-      { y: 70, fill: Segment3Color, y1: 260 },
-      { y: 90, fill: Segment4Color, y1: 220 },
-      { y: 110, fill: Segment5Color, y1: 380 },
-      { y: 130, fill: Segment6Color, y1: 300 },
+      { y: 25, fill: Segment1Color, y1: 380 },
+      { y: 57, fill: Segment2Color, y1: 320 },
+      { y: 89, fill: Segment3Color, y1: 260 },
+      { y: 121, fill: Segment4Color, y1: 220 },
+      { y: 153, fill: Segment5Color, y1: 380 },
+      { y: 185, fill: Segment6Color, y1: 300 },
     ];
-
-   
-
-
+    
     const weekNoFromList = finishDateList.map((element) => {
       const start = subMonths(result.min, 1);
       const week = new Date(Date.parse(element));
@@ -423,13 +409,13 @@ for (let i = 0; i < flattenedArray.length; i++) {
       });
       ypositionLocator = 0;
       if (weekNoFromList[i] % 2 === 0) {
-        ypositionLocator = 150 + Number(countMap[weekNoFromList[i]]) * 35;
+        ypositionLocator = 200 + Number(countMap[weekNoFromList[i]]) * 35;
       } else {
-        ypositionLocator = 180 + Number(countMap[weekNoFromList[i]]) * 35;
+        ypositionLocator = 220 + Number(countMap[weekNoFromList[i]]) * 35;
       }
 
       if (ypositionLocator > 500) {
-        ypositionLocator = 350;
+        ypositionLocator = 340;
       }
    
       let circle = {
@@ -529,8 +515,8 @@ for (let i = 0; i < flattenedArray.length; i++) {
           height={40 * 2}
           align="center"
           verticalAlign="middle"
-          text={Seg1Values[index]["shortCodeSeg"].substring(0, 7)}
-          fontSize={12}
+          text={Seg1Values[index]["shortCodeSeg"]}
+          fontSize={8}
           fill={textColor}
           onClick={()=>{
             
@@ -578,7 +564,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
           y={Seg1Values[index]["ybarSeg"]}
           width={40 * 2}
           height={40 * 2}
-          text={Seg1Values[index]["trendSeg"] === "red" ? "🚩" : ""}
+          text={Seg1Values[index]["fill"] == "red" ? "🚩" : ""}
           fontSize={30}
           fill={textColor}
 
@@ -596,32 +582,33 @@ for (let i = 0; i < flattenedArray.length; i++) {
       </>
     ));
     const Segment1Lines = finishDateList.map((week, index) => (
-      <Line
-        points={[
-          Seg1Values[index]["x"],
-          yBarSeg1[index],
-          Seg1Values[index]["x"],
-          Seg1Values[index]["y"],
-        ]}
-        stroke={segmentColor[index]}
-        strokeWidth={5}
-      />
+     <Line
+     points={[
+       Seg1Values[index]["x"],
+       yBarSeg1[index],
+       Seg1Values[index]["x"],
+       Seg1Values[index]["y"],
+     ]}
+     stroke={segmentColor[index]}
+     strokeWidth={5}
+   />
     ));
     const legendStyle: React.CSSProperties = {
       fontSize: "18px",
       marginBottom: "10px",
       marginTop: "-10px",
+      
     };
 
     const colorRectStyle: React.CSSProperties = {
-      width: "50px",
-      height: "25px",
+      width: "25px",
+      height: "12px",
       marginRight: "10px",
       display: "inline-block",
     };
     const offsetY = 46; // Translation value in pixels
   
- 
+   const Xval = [60,92,124,156,188,220]
     return (
       
         <div
@@ -629,145 +616,156 @@ for (let i = 0; i < flattenedArray.length; i++) {
         >
           <div style={{ display: "flex", height: " 500px", flexGrow: 3 }}>
             <div style={{ width: "20%", backgroundColor: backgroundColorVis  }}>
-              <Stage width={300} height={550} >
-                <Layer>
-                  <Rect
-                    x={20}
-                    y={50}
-                    width={200}
-                    height={25}
-                    fill={Segment1Color}
-                  />
-                  <Rect
-                    x={20}
-                    y={90}
-                    width={200}
-                    height={25}
-                    fill={Segment2Color}
-                  />
-                  <Rect
-                    x={20}
-                    y={130}
-                    width={200}
-                    height={25}
-                    fill={Segment3Color}
-                  />
-                  <Rect
-                    x={20}
-                    y={170}
-                    width={200}
-                    height={25}
-                    fill={Segment4Color}
-                  />
-                  <Rect
-                    x={20}
-                    y={210}
-                    width={200}
-                    height={25}
-                    fill={Segment5Color}
-                  />
-                  <Rect
-                    x={20}
-                    y={250}
-                    width={200}
-                    height={25}
-                    fill={Segment6Color}
-                  />
 
-                  <Line
-                    points={[220, 50, 270, 78, 220, 75]}
-                    fill={Segment1Color}
-                    closed
-                  />
-                  <Line
-                    points={[220, 90, 270, 97, 220, 114]}
-                    fill={Segment2Color}
-                    closed
-                  />
-                  <Line
-                    points={[220, 130, 265, 110, 220, 156]}
-                    fill={Segment3Color}
-                    closed
-                  />
-                  <Line
-                    points={[220, 170, 260, 135, 220, 196]}
-                    fill={Segment4Color}
-                    closed
-                  />
-                  <Line
-                    points={[220, 210, 264, 150, 220, 236]}
-                    fill={Segment5Color}
-                    closed
-                  />
-                  <Line
-                    points={[
-                      220,
-                      210 + offsetY,
-                      264 - 7,
-                      150 + offsetY,
-                      220,
-                      236 + offsetY,
-                    ]}
-                    fill={Segment6Color}
-                    closed
-                  />
-                  <Text
-                    x={20} 
-                    y={62.5 - 10} 
-                    text={categoryListDisplay[0]}
-                    fontSize={14}
-                    align="center"
-                    fill={"white"}
-                    verticalAlign="middle"
-                  />
+            <div className="sidebar">
+    <Stage width={251.64} height={500} style={{ zIndex:0}} >
+    <Layer>
+  {categoryListDisplay[0] && (
+    <>
+      <Rect
+        id="Rectangle1"
+        x={50}
+        y={Xval[0]}
+        width={208.9}
+        height={20}
+        fill={Segment1Color}
+      />
+      <Text
+        x={50}
+        y={Xval[0]}
+        width={208.9}
+        height={20}
+        text={categoryListDisplay[0]}
+        fill="white"
+        align="center"
+        verticalAlign="middle"
+      />
+    </>
+  )}
 
-                  <Text
-                    x={20} // Center x-coordinate of the rectangle
-                    y={102.5 - 10} // Center y-coordinate of the rectangle
-                    text={categoryListDisplay[1]}
-                    fontSize={14}
-                    align="center"
-                    verticalAlign="middle"
-                  />
+  {categoryListDisplay[1] && (
+    <>
+      <Rect
+        id="Rectangle2"
+        x={50}
+        y={Xval[1]}
+        width={208.9}
+        height={20}
+        fill={Segment2Color}
+      />
+      <Text
+        x={50}
+        y={Xval[1]}
+        width={208.9}
+        height={20}
+        text={categoryListDisplay[1]}
+        fill="white"
+        align="center"
+        verticalAlign="middle"
+      />
+    </>
+  )}
 
-                  <Text
-                    x={20} // Center x-coordinate of the rectangle
-                    y={142.5 - 10} // Center y-coordinate of the rectangle
-                    text={categoryListDisplay[2]}
-                    fontSize={14}
-                    align="center"
-                    verticalAlign="middle"
-                  />
+  {categoryListDisplay[2] && (
+    <>
+      <Rect
+        id="Rectangle3"
+        x={50}
+        y={Xval[2]}
+        width={208.9}
+        height={20}
+        fill={Segment3Color}
+      />
+      <Text
+        x={50}
+        y={Xval[2]}
+        width={208.9}
+        height={20}
+        text={categoryListDisplay[2]}
+        fill="white"
+        align="center"
+        verticalAlign="middle"
+      />
+    </>
+  )}
 
-                  <Text
-                    x={20} // Center x-coordinate of the rectangle
-                    y={182.5 - 10} // Center y-coordinate of the rectangle
-                    text={categoryListDisplay[3]}
-                    fill={"white"}
-                    fontSize={14}
-                    align="center"
-                    verticalAlign="middle"
-                  />
+  {categoryListDisplay[3] && (
+    <>
+      <Rect
+        id="Rectangle4"
+        x={50}
+        y={Xval[3]}
+        width={208.9}
+        height={20}
+        fill={Segment4Color}
+      />
+      <Text
+        x={50}
+        y={Xval[3]}
+        width={208.9}
+        height={20}
+        text={categoryListDisplay[3]}
+        fill="white"
+        align="center"
+        verticalAlign="middle"
+      />
+    </>
+  )}
 
-                  <Text
-                    x={20} // Center x-coordinate of the rectangle
-                    y={222.5 - 10} // Center y-coordinate of the rectangle
-                    text={categoryListDisplay[4]}
-                    fontSize={14}
-                    align="center"
-                    verticalAlign="middle"
-                  />
+  {categoryListDisplay[4] && (
+    <>
+      <Rect
+        id="Rectangle5"
+        x={50}
+        y={Xval[4]}
+        width={208.9}
+        height={20}
+        fill={Segment5Color}
+      />
+      <Text
+        x={50}
+        y={Xval[4]}
+        width={208.9}
+        height={20}
+        text={categoryListDisplay[4]}
+        fill="white"
+        align="center"
+        verticalAlign="middle"
+      />
+    </>
+  )}
 
-                  <Text
-                    x={20} // Center x-coordinate of the rectangle
-                    y={262.5 - 10} // Center y-coordinate of the rectangle
-                    text={categoryListDisplay[6]}
-                    fontSize={14}
-                    align="center"
-                    verticalAlign="middle"
-                  />
-                </Layer>
-              </Stage>
+  {categoryListDisplay[5] && (
+    <>
+      <Rect
+        id="Rectangle6"
+        x={50}
+        y={Xval[5]}
+        width={208.9}
+        height={20}
+        fill={Segment6Color}
+      />
+      <Text
+        x={50}
+        y={Xval[5]}
+        width={208.9}
+        height={20}
+        text={categoryListDisplay[5]}
+        fill="white"
+        align="center"
+        verticalAlign="middle"
+      />
+    </>
+  )}
+</Layer>
+  </Stage>
+  {/* <polygon id="Segment1" points="208.9 31.29 236.64 54.97 208.9 0 208.9 31.29" fill={Segment1Color} stroke-width="0"/>
+  <polygon id="Segment5" points="208.9 158.15 236.64 129.61 236.64 136.57 208.9 189.44 208.9 158.15"  fill={Segment5Color} stroke-width="0"/>
+  <polygon id="Segment6" points="208.9 198.32 236.64 149.27 236.64 158.15 208.9 229.62 208.9 198.32"  fill={Segment6Color} stroke-width="0"/>
+  <polyline id="Segment2" points="208.9 39.33 236.64 70.62 236.64 76.31 208.9 70.62 208.9 40.85"  fill={Segment2Color} stroke-width="0"/>
+  <polygon id="Segment3" points="208.9 78.65 236.64 90.63 236.64 95.97 208.9 109.94 208.9 78.65"  fill={Segment3Color}  stroke-width="0"/>
+  <polygon id="Segment4P" points="208.9 117.98 236.64 109.94 236.64 115.99 208.9 149.27 208.9 117.98"  fill={Segment4Color} stroke-width="0"/> */}
+</div>
             </div>
             <div
               ref={this.scrollReference}
@@ -782,39 +780,23 @@ for (let i = 0; i < flattenedArray.length; i++) {
               <div>
                 <div
                   className="relative"
-                  style={{ backgroundColor: backgroundColorVis }}
-                >
+                  style={{ backgroundColor: backgroundColorVis }}>
+      
                   {monthsArray}
                 </div>
                 <div className="relative">{weeksArray}</div>
                 <Stage
-                  width={Number(months.length) * 275}
-                  height={1000}
+                  width= {17500}
+                  height={480}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
-                  <Layer>
-                    {segments.map((segment, index) => (
-                      <Rect
-                        key={index}
-                        x={0}
-                        y={segment.y}
-                        width={months.length * 5 * 55}
-                        height={6}
-                        fill={segment.fill}
-                      />
-                    ))}
-                  </Layer>
-                  <Layer>
-                    {Segment1Lines}
-                    {Segment1Categories}
-                  </Layer>
-                  <Layer>
-                    <Rect
+                   <Layer>
+                  <Rect
                       x={todayDateLocation}
                       y={5}
-                      width={5}
+                      width={0.8}
                       height={800}
-                      fill="green"
+                      fill="black"
                     ></Rect>
                     <Text
                       x={todayDateLocation + 3}
@@ -824,18 +806,45 @@ for (let i = 0; i < flattenedArray.length; i++) {
                       fill="black"
                     ></Text>
                   </Layer>
+                  {segments.map((segment, index) => {
+  if (categoryListDisplay[index]) {
+    return (
+      <Layer>
+      <Rect
+        key={index}
+        x={0}
+        y={segment.y}
+        width={months.length * 5 * 55}
+        height={6}
+        fill={segment.fill}
+      />
+      </Layer>
+    );
+  }
+  return null;
+})}
+                  <Layer>
+                    {Segment1Lines}
+                    {Segment1Categories}
+                  </Layer>
+  
                 </Stage>
               </div>
             </div>
             <div
               style={{
-                width: "20%",
+                width: "40%",
                 backgroundColor: backgroundColorVis,
                 display: "flex",
               }}
             >
+
               <table style={{ margin: "fixed" }}>
                 <tbody>
+                  <tr>
+                    <td>              <button style={{ zIndex:999}} onClick={(e) => handleClick(e)}>Scroll To Today</button>   
+</td>
+                  </tr>
                 <tr>
                     <td style={{ fontWeight: "bold" }}>Activity Category</td>
                     <td>{activityPlaceholder}</td>
@@ -850,21 +859,23 @@ for (let i = 0; i < flattenedArray.length; i++) {
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>Trend</td>
-                    <td><StatusIcon image="up"></StatusIcon></td>
+                    <td> {trendPlaceholder === "up" ? <MdOutlineTrendingUp style={{ color: "green",fontSize: "2em" }} />
+    : trendPlaceholder === "down" ? <MdOutlineTrendingDown style={{ color: "red",fontSize: "2em" }} />
+    : <MdOutlineTrendingFlat style={{ color: "yellow",fontSize: "2em" }} />}</td>
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>BaseLine</td>
-                    <td>{baseLineDatePlaceholder.split("T")[0]}</td>
+                    <td>{baseLineDatePlaceholder.split("T")[0].split("-").reverse().join("-")}</td>
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>End Date</td>
-                    <td>{endDatePlaceholder.split("T")[0]}</td>
+                    <td>{endDatePlaceholder.split("T")[0].split("-").reverse().join("-")}</td>
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>
                       Last Reported End Date
                     </td>
-                    <td>{lastReportedDatePlaceholder.split("T")[0]}</td>
+                    <td>{lastReportedDatePlaceholder.split("T")[0].split("-").reverse().join("-")}</td>
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>Slip</td>
@@ -874,7 +885,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
                   <tr>
                     <td colSpan={2}>
                       <div>
-                        <p style={legendStyle}>Legend</p>
+                        <p style={legendStyle}><b>{"Legend"}</b></p>
                         <div
                           style={{ ...colorRectStyle, backgroundColor: "grey" }}
                         ></div>
