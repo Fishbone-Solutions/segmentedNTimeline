@@ -1,4 +1,4 @@
-var NewBuild_DEBUG;
+var segmentedCVLVISUAL_DEBUG;
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -34713,8 +34713,7 @@ const monthNames = [
 
 
 
-// the first very simple and recommended way:
-const LionImage = (props) => {
+const StatusIcon = (props) => {
     if (props.status === "up") {
         const [image] = use_image__WEBPACK_IMPORTED_MODULE_3___default()("https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stick.png");
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Image */ .Ee, { width: 30, height: 30, image: image, x: props.x, y: props.y }));
@@ -34737,7 +34736,6 @@ const initialState = {
     activityLevelList: [],
     activityNameList: [],
     statusNameList: [],
-    milestoneLevelList: [],
     startDateList: [],
     projectedStartDateList: [],
     projectedFinishDateList: [],
@@ -34760,6 +34758,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     dataArrayList = [];
     static updateCallback = null;
     scrollReference;
+    scrollIndicator;
     static update(newState) {
         if (typeof segmentedBar.updateCallback === "function") {
             segmentedBar.updateCallback(newState);
@@ -34769,15 +34768,22 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     constructor(props) {
         super(props);
         this.state = initialState;
-        this.scrollReference = react__WEBPACK_IMPORTED_MODULE_0__.createRef();
         this.dataArrayList = this.dataArrayList;
+        this.scrollReference = react__WEBPACK_IMPORTED_MODULE_0__.createRef();
+    }
+    componentDidMount() {
+        this.centerScroll();
+    }
+    centerScroll = () => {
         const container = this.scrollReference.current;
         if (container) {
-            const containerWidth = container.offsetWidth;
-            const scrollPosition = containerWidth / 2;
+            const scrollWidth = container.scrollWidth;
+            const clientWidth = container.clientWidth;
+            const scrollPosition = (scrollWidth - clientWidth) / 3.2;
             container.scrollLeft = scrollPosition;
+            console.log(this.state);
         }
-    }
+    };
     componentWillMount() {
         segmentedBar.updateCallback = (newState) => {
             this.setState(newState);
@@ -34786,11 +34792,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     componentWillUnmount() {
         segmentedBar.updateCallback = null;
     }
-    handleDynamic = (dynamicData) => {
-        this.dataArrayList = dynamicData;
-    };
     render() {
-        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, } = this.state;
+        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, scrollPositionIndicator } = this.state;
         var months = [];
         var years = [];
         var finsldates = [];
@@ -34827,9 +34830,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const todaysLine = todayDate.getDate() + todayDate.getDay();
         const prefix = [0, 1, 2, 3, 4, 5];
         const currentWeek = prefix[0 | (todaysLine / 7)] + 1;
-        const todayDateLocation = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_6__/* .differenceInCalendarMonths */ .T)(start, Date.now())) * 5 * 55 +
-            currentWeek * 55 -
-            24;
+        const todayDateLocation = Math.abs((0,date_fns__WEBPACK_IMPORTED_MODULE_6__/* .differenceInCalendarMonths */ .T)(start, Date.now())) * 5 * 55 + currentWeek * 55 - 24;
         const weeksArray = months.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 55, padding: 0, border: 0 } }, 1),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { width: 55, padding: 0, border: 0 } }, 2),
@@ -34839,30 +34840,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const monthsArray = months.map((month, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "monthitem", style: { backgroundColor: backgroundColorVis } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, month),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, years[index]))));
-        // console.log('activityIDList:', activityIDList);
-        // console.log('categoryList:', categoryList);
-        // console.log('milestoneLevelList:', milestoneLevelList);
-        // console.log('activityNameList:', activityNameList);
-        // console.log('statusNameList:', statusNameList);
-        // console.log('startDateList:', startDateList);
-        // console.log('finishDateList:', finishDateList);
-        // console.log('projectedStartDateList:', projectedStartDateList);
-        // console.log('projectedFinishDateList:', projectedFinishDateList);
-        // console.log('ownerList:', ownerList);
-        // console.log('predecessorsList:', predecessorsList);
-        // console.log('successorsList:', successorsList);
-        // console.log('commentaryList:', commentaryList);
-        // console.log('totalFloatList:', totalFloatList);
-        // console.log('trendLists:', trendLists);
-        // console.log('lastReportedEndDateList:', lastReportedEndDateList);
-        // console.log('titlePlaceholder:', titlePlaceholder);
-        // console.log('ownerPlaceholder:', ownerPlaceholder);
-        // console.log('trendPlaceholder:', trendPlaceholder);
-        // console.log('baseLineDatePlaceholder:', baseLineDatePlaceholder);
-        // console.log('endDatePlaceholder:', endDatePlaceholder);
-        // console.log('lastReportedDatePlaceholder:', lastReportedDatePlaceholder);
-        // console.log('slipPlaceholder:', slipPlaceholder);
-        // Segment 1 Values
         var shortCodeSeg1 = [];
         var statusSeg1 = [];
         var trendSeg1 = [];
@@ -34884,8 +34861,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var visitedWeeks = [];
         var countMap = [];
         var ypositionLocator;
-        var indexList = [];
-        var dynamicData = [];
+        var SegmentDyamicTable = [];
+        var dynamicTablesRows = [];
         const segments = [
             { y: 30, fill: Segment1Color, y1: 380 },
             { y: 50, fill: Segment2Color, y1: 320 },
@@ -34917,13 +34894,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             categoryListDisplaySeg1.push(categoryList[i]);
             plannedStartSeg1.push(projectedStartDateList[i]);
             plannedFinishSeg1.push(projectedFinishDateList[i]);
-            if (successorsListSeg1 && successorsListSeg1.length > 0) {
-                indexList = successorsList.map((element) => shortCodeSeg1.indexOf(element));
-                console.log(indexList);
-            }
-            else {
-                // console.log("successorsListSeg1 is undefined or empty");
-            }
             if (trendLists[i].toLowerCase().includes("no change")) {
                 trendSeg1.push("stable");
             }
@@ -34972,22 +34942,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 ypositionLocator = 180 + Number(countMap[weekNoFromList[i]]) * 35;
             }
             if (ypositionLocator > 500) {
-                ypositionLocator = 280;
+                ypositionLocator = 350;
             }
-            for (let i = 0; i < indexList.length; i++) {
-                const index = indexList[i];
-                let data = {
-                    milestone: activityIDList[index],
-                    title: activityNameList[index],
-                    owner: ownerList[index],
-                    impactedBy: successorsList[index],
-                    planDate: startDateList[index],
-                    projectedStart: projectedStartDateList[index],
-                    planFinish: finishDateList[index],
-                    projectedFinish: projectedFinishDateList[index],
-                    comments: commentaryList[index],
-                };
-                dynamicData.push(data);
+            var dynamiclink = successorsListSeg1[i].split(", ");
+            if (dynamiclink !== null) {
+                console.log(dynamiclink);
             }
             let circle = {
                 x: 55 * Number(weekNoFromList[i]),
@@ -35005,18 +34964,56 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 commentarySeg1: commentarySeg1[i],
                 categoryListDisplaySeg1: categoryListDisplaySeg1[i],
                 trendSeg: trendSeg1[i],
-                indexList: dynamicData,
+                successorsList: successorsListSeg1[i],
+                dynamiclink: dynamiclink
             };
             Seg1Values.push(circle);
         }
+        let twoDArray = [];
+        for (let i = 0; i < Seg1Values.length; i++) {
+            let row = [];
+            row.push(Seg1Values[i].shortCodeSeg);
+            row.push(Seg1Values[i].titleSeg);
+            row.push(Seg1Values[i].ownerSeg1);
+            row.push(Seg1Values[i].beginSeg1);
+            row.push(Seg1Values[i].endSeg1);
+            row.push(Seg1Values[i].lastReportedEndDateSeg1);
+            row.push(Seg1Values[i].slipSeg1);
+            row.push(Seg1Values[i].commentarySeg1);
+            row.push(Seg1Values[i].trendSeg);
+            row.push(Seg1Values[i].successorsList);
+            twoDArray.push(row);
+        }
+        /* for (let j =0; j < Seg1Values.length; j++){
+          if (Seg1Values[j]["dynamiclink"]!= null){
+            var targetCodes=new Set(["TRANST4",
+              "VTT11",
+              "VTT61",
+              "VTT121"])
+        
+              const matchingRows = {};
+        
+              for (let i = 0; i < twoDArray.length; i++) {
+                const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
+                
+                if (targetCodes.has(targetCode)) {
+                  if (matchingRows[targetCode]) {
+                    matchingRows[targetCode].add(twoDArray[i]);
+                  } else {
+                    matchingRows[targetCode] = new Set([twoDArray[i]]);
+                  }
+                }
+              }
+              console.log(matchingRows);
+            }} */
         const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: Seg1Values[index]["y"] + 25.8, radius: 30, stroke: statusSeg1[index], strokeWidth: 3, fill: "white", onClick: () => this.handleDynamic(Seg1Values[index]["indexList"]), onMouseEnter: () => {
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: Seg1Values[index]["y"] + 25.8, radius: 30, stroke: Seg1Values[index]["fill"], strokeWidth: 3, fill: backgroundColorVis, onMouseEnter: () => {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
                         trendPlaceholder: Seg1Values[index]["trendSeg"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-                        endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
+                        endDatePlaceholder: Seg1Values[index]["endSeg1"],
                         lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
@@ -35031,7 +35028,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
                 } }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: Seg1Values[index]["shortCodeSeg"].substring(0, 7), fontSize: 12, fill: textColor, onClick: () => this.handleDynamic(Seg1Values[index]["indexList"]), onMouseEnter: () => {
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: Seg1Values[index]["shortCodeSeg"].substring(0, 7), fontSize: 12, fill: textColor, onMouseEnter: () => {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
@@ -35053,7 +35050,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     });
                 } }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 5, y: Seg1Values[index]["ybarSeg"], width: 40 * 2, height: 40 * 2, text: Seg1Values[index]["trendSeg"] === "red" ? "🚩" : "", fontSize: 30, fill: textColor }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(LionImage, { status: Seg1Values[index]["trendSeg"], x: Seg1Values[index]["x"] - 14, y: Seg1Values[index]["y"] + 10 }))));
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { status: Seg1Values[index]["trendSeg"], x: Seg1Values[index]["x"] - 14, y: Seg1Values[index]["y"] + 10, onClick: () => handleClick }))));
         const Segment1Lines = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [
                 Seg1Values[index]["x"],
                 yBarSeg1[index],
@@ -35072,186 +35069,184 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             display: "inline-block",
         };
         const offsetY = 46; // Translation value in pixels
-        return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", height: "80vh", } },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", height: " 500px", flexGrow: 3 } },
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: "20%", backgroundColor: backgroundColorVis } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 300, height: 550 },
+        return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", height: "80vh", } },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", height: " 500px", flexGrow: 3 } },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: "20%", backgroundColor: backgroundColorVis } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 300, height: 550 },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 50, width: 200, height: 25, fill: Segment1Color }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 90, width: 200, height: 25, fill: Segment2Color }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 130, width: 200, height: 25, fill: Segment3Color }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 170, width: 200, height: 25, fill: Segment4Color }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 210, width: 200, height: 25, fill: Segment5Color }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 250, width: 200, height: 25, fill: Segment6Color }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 50, 270, 78, 220, 75], fill: Segment1Color, closed: true }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 90, 270, 97, 220, 114], fill: Segment2Color, closed: true }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 130, 265, 110, 220, 156], fill: Segment3Color, closed: true }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 170, 260, 135, 220, 196], fill: Segment4Color, closed: true }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 210, 264, 150, 220, 236], fill: Segment5Color, closed: true }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [
+                                    220,
+                                    210 + offsetY,
+                                    264 - 7,
+                                    150 + offsetY,
+                                    220,
+                                    236 + offsetY,
+                                ], fill: Segment6Color, closed: true }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 62.5 - 10, text: categoryListDisplay[0], fontSize: 14, align: "center", fill: "white", verticalAlign: "middle" }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 102.5 - 10, text: categoryListDisplay[1], fontSize: 14, align: "center", verticalAlign: "middle" }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 142.5 - 10, text: categoryListDisplay[2], fontSize: 14, align: "center", verticalAlign: "middle" }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 182.5 - 10, text: categoryListDisplay[3], fill: "white", fontSize: 14, align: "center", verticalAlign: "middle" }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 222.5 - 10, text: categoryListDisplay[4], fontSize: 14, align: "center", verticalAlign: "middle" }),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 262.5 - 10, text: categoryListDisplay[6], fontSize: 14, align: "center", verticalAlign: "middle" })))),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { ref: this.scrollReference, style: {
+                        width: "100%",
+                        height: "500px",
+                        overflowX: "scroll",
+                        overflowY: "scroll",
+                        backgroundColor: backgroundColorVis,
+                    } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis } }, monthsArray),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: Number(months.length) * 275, height: 1000, style: { backgroundColor: backgroundColorVis } },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, segments.map((segment, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { key: index, x: 0, y: segment.y, width: months.length * 5 * 55, height: 6, fill: segment.fill })))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 50, width: 200, height: 25, fill: Segment1Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 90, width: 200, height: 25, fill: Segment2Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 130, width: 200, height: 25, fill: Segment3Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 170, width: 200, height: 25, fill: Segment4Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 210, width: 200, height: 25, fill: Segment5Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: 20, y: 250, width: 200, height: 25, fill: Segment6Color }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 50, 270, 78, 220, 75], fill: Segment1Color, closed: true }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 90, 270, 97, 220, 114], fill: Segment2Color, closed: true }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 130, 265, 110, 220, 156], fill: Segment3Color, closed: true }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 170, 260, 135, 220, 196], fill: Segment4Color, closed: true }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [220, 210, 264, 150, 220, 236], fill: Segment5Color, closed: true }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [
-                                        220,
-                                        210 + offsetY,
-                                        264 - 7,
-                                        150 + offsetY,
-                                        220,
-                                        236 + offsetY,
-                                    ], fill: Segment6Color, closed: true }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 62.5 - 10, text: categoryListDisplay[0], fontSize: 14, align: "center", fill: "white", verticalAlign: "middle" }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 102.5 - 10, text: categoryListDisplay[1], fontSize: 14, align: "center", verticalAlign: "middle" }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 142.5 - 10, text: categoryListDisplay[2], fontSize: 14, align: "center", verticalAlign: "middle" }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 182.5 - 10, text: categoryListDisplay[3], fill: "white", fontSize: 14, align: "center", verticalAlign: "middle" }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 222.5 - 10, text: categoryListDisplay[4], fontSize: 14, align: "center", verticalAlign: "middle" }),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 20, y: 262.5 - 10, text: categoryListDisplay[6], fontSize: 14, align: "center", verticalAlign: "middle" })))),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { ref: this.scrollReference, style: {
-                            width: "60%",
-                            height: "500px",
-                            overflowX: "scroll",
-                            overflowY: "scroll",
-                            backgroundColor: backgroundColorVis,
-                        } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis } }, monthsArray),
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: Number(months.length) * 275, height: 1000, style: { backgroundColor: backgroundColorVis } },
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null, segments.map((segment, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { key: index, x: 0, y: segment.y, width: months.length * 5 * 55, height: 6, fill: segment.fill })))),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
-                                    Segment1Lines,
-                                    Segment1Categories),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 5, height: 800, fill: "green" }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation + 3, y: 10, text: "Today", fontSize: 15, fill: "black" }))))),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
-                            width: "20%",
-                            backgroundColor: backgroundColorVis,
-                            display: "flex",
-                            justifyContent: "flex-start",
-                        } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { margin: "auto" } },
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Title"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, titlePlaceholder)),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Owner"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, ownerPlaceholder)),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Trend"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, trendPlaceholder)),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "BaseLine"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, baseLineDatePlaceholder.split("T")[0])),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "End Date"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, endDatePlaceholder.split("T")[0])),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Last Reported End Date"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, lastReportedDatePlaceholder.split("T")[0])),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Slip"),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
-                                        slipPlaceholder,
-                                        " Days")),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { colSpan: 2 },
-                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", { style: legendStyle }, "Legend"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: "grey" } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Not Started"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: "red" } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Late"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
-                                                    ...colorRectStyle,
-                                                    backgroundColor: "yellow",
-                                                } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> At Risk"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
-                                                    ...colorRectStyle,
-                                                    backgroundColor: "green",
-                                                } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> On Plan"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: "blue" } }),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Complete"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null)))))))),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "50vh" } },
+                                Segment1Lines,
+                                Segment1Categories),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 5, height: 800, fill: "green" }),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation + 3, y: 10, text: "Today", fontSize: 15, fill: "black" }))))),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
+                        width: "20%",
+                        backgroundColor: backgroundColorVis,
+                        display: "flex",
+                    } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { margin: "fixed" } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Title"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, titlePlaceholder)),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Owner"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, ownerPlaceholder)),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Trend"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, trendPlaceholder)),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "BaseLine"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, baseLineDatePlaceholder.split("T")[0])),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "End Date"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, endDatePlaceholder.split("T")[0])),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Last Reported End Date"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, lastReportedDatePlaceholder.split("T")[0])),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Slip"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
+                                    slipPlaceholder,
+                                    " Days")),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { colSpan: 2 },
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", { style: legendStyle }, "Legend"),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: "grey" } }),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Not Started"),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: "red" } }),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Late"),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
+                                                ...colorRectStyle,
+                                                backgroundColor: "yellow",
+                                            } }),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> At Risk"),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
+                                                ...colorRectStyle,
+                                                backgroundColor: "green",
+                                            } }),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> On Plan"),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: "blue" } }),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "-> Complete"),
+                                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null)))))))),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "50vh" } },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: {
+                        width: "100%",
+                        fontSize: "15px",
+                        tableLayout: "fixed",
+                        borderCollapse: "collapse",
+                        backgroundColor: "grey",
+                    } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null,
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Milestone"),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Title"),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Owner"),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Impacted by"),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Plan Date"),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Projected Start"),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Plan Finish"),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Projected Finish"),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
+                                    textAlign: "left",
+                                    border: "1px solid #ccc",
+                                    padding: "8px",
+                                } }, "Comments")))),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "100px", overflowY: "auto", display: "flex" } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: {
                             width: "100%",
                             fontSize: "15px",
                             tableLayout: "fixed",
                             borderCollapse: "collapse",
-                            backgroundColor: "grey",
                         } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null,
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Milestone"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Title"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Owner"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Impacted by"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Plan Date"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Projected Start"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Plan Finish"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Projected Finish"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", { style: {
-                                        textAlign: "left",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                    } }, "Comments")))),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "100px", overflowY: "auto", display: "flex" } },
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: {
-                                width: "100%",
-                                fontSize: "15px",
-                                tableLayout: "fixed",
-                                borderCollapse: "collapse",
-                            } },
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, [
-                                ...new Set(this.dataArrayList.map((data) => data.milestone)),
-                            ].map((milestone, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { key: index },
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).milestone),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).title),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).owner),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).impactedBy),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).planDate),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).projectedStart),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).planFinish),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).projectedFinish),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).comments)))))))))));
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, [
+                            ...new Set(this.dataArrayList.map((data) => data.milestone)),
+                        ].map((milestone, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { key: index },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).milestone),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).title),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).owner),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).impactedBy),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).planDate),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).projectedStart),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).planFinish),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).projectedFinish),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { border: "1px solid #ccc", padding: "8px" } }, this.dataArrayList.find((data) => data.milestone === milestone).comments))))))))));
     }
 }
 /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (segmentedBar)));
@@ -35317,7 +35312,7 @@ class Visual {
         this.reactRoot = react__WEBPACK_IMPORTED_MODULE_0__.createElement(_SegmentedBar__WEBPACK_IMPORTED_MODULE_3__/* .segmentedBar */ .Yp, {});
         react_dom__WEBPACK_IMPORTED_MODULE_1__.render(this.reactRoot, this.target);
         this.columnIndices = [];
-        for (let i = 1; i < 17; i++) {
+        for (let i = 1; i <= 15; i++) {
             let name = "c" + i;
             this.columnIndices[name] = 0;
         }
@@ -35336,7 +35331,6 @@ class Visual {
             let categoryList = [];
             let activityNameList = [];
             let statusNameList = [];
-            let milestoneLevelList = [];
             let startDateList = [];
             let finishDateList = [];
             let projectedStartDateList = [];
@@ -35357,30 +35351,28 @@ class Visual {
                 activityNameList[i] = `${row[this.columnIndices['c3']]}`;
                 // Populate statusNameList
                 statusNameList[i] = `${row[this.columnIndices['c4']]}`;
-                // Populate milestoneLevelList
-                milestoneLevelList[i] = `${row[this.columnIndices['c5']]}`;
                 // Populate startDateList
-                startDateList[i] = `${row[this.columnIndices['c6']]}`;
+                startDateList[i] = `${row[this.columnIndices['c5']]}`;
                 // Populate finishDateList
-                finishDateList[i] = `${row[this.columnIndices['c7']]}`;
+                finishDateList[i] = `${row[this.columnIndices['c6']]}`;
                 // Populate projectedStartDateList
-                projectedStartDateList[i] = `${row[this.columnIndices['c8']]}`;
+                projectedStartDateList[i] = `${row[this.columnIndices['c7']]}`;
                 // Populate projectedFinishDateList
-                projectedFinishDateList[i] = `${row[this.columnIndices['c9']]}`;
+                projectedFinishDateList[i] = `${row[this.columnIndices['c8']]}`;
                 // Populate ownerList
-                ownerList[i] = `${row[this.columnIndices['c10']]}`;
+                ownerList[i] = `${row[this.columnIndices['c9']]}`;
                 // Populate predecessorsList
-                predecessorsList[i] = `${row[this.columnIndices['c11']]}`;
+                predecessorsList[i] = `${row[this.columnIndices['c10']]}`;
                 // Populate successorsList
-                successorsList[i] = `${row[this.columnIndices['c12']]}`;
+                successorsList[i] = `${row[this.columnIndices['c11']]}`;
                 // Populate commentaryList
-                commentaryList[i] = `${row[this.columnIndices['c13']]}`;
+                commentaryList[i] = `${row[this.columnIndices['c12']]}`;
                 // Populate totalFloatList
-                totalFloatList[i] = `${row[this.columnIndices['c14']]}`;
+                totalFloatList[i] = `${row[this.columnIndices['c13']]}`;
                 // Populate trendLists
-                trendLists[i] = `${row[this.columnIndices['c15']]}`;
+                trendLists[i] = `${row[this.columnIndices['c14']]}`;
                 // Populate lastReportedEndDateList
-                lastReportedEndDateList[i] = `${row[this.columnIndices['c16']]}`;
+                lastReportedEndDateList[i] = `${row[this.columnIndices['c15']]}`;
             }
             _SegmentedBar__WEBPACK_IMPORTED_MODULE_3__/* .segmentedBar */ .Yp.update({
                 Segment1Color: object && object.Segment1Color ? object.Segment1Color : undefined,
@@ -35394,7 +35386,6 @@ class Visual {
                 categoryList: categoryList,
                 activityNameList: activityNameList,
                 statusNameList: statusNameList,
-                milestoneLevelList: milestoneLevelList,
                 startDateList: startDateList,
                 finishDateList: finishDateList,
                 projectedStartDateList: projectedStartDateList,
@@ -35998,9 +35989,9 @@ __webpack_require__.r(__webpack_exports__);
 
 var powerbiKey = "powerbi";
 var powerbi = window[powerbiKey];
-var NewBuild_DEBUG = {
-    name: 'NewBuild_DEBUG',
-    displayName: 'segmentedNtimeline',
+var segmentedCVLVISUAL_DEBUG = {
+    name: 'segmentedCVLVISUAL_DEBUG',
+    displayName: 'segmentedCVLVISUAL',
     class: 'Visual',
     apiVersion: '5.3.0',
     create: (options) => {
@@ -36020,13 +36011,13 @@ var NewBuild_DEBUG = {
 if (typeof powerbi !== "undefined") {
     powerbi.visuals = powerbi.visuals || {};
     powerbi.visuals.plugins = powerbi.visuals.plugins || {};
-    powerbi.visuals.plugins["NewBuild_DEBUG"] = NewBuild_DEBUG;
+    powerbi.visuals.plugins["segmentedCVLVISUAL_DEBUG"] = segmentedCVLVISUAL_DEBUG;
 }
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NewBuild_DEBUG);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (segmentedCVLVISUAL_DEBUG);
 
 })();
 
-NewBuild_DEBUG = __webpack_exports__;
+segmentedCVLVISUAL_DEBUG = __webpack_exports__;
 /******/ })()
 ;
 //# sourceMappingURL=https://localhost:8080/assets/visual.js.map

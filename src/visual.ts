@@ -27,7 +27,7 @@ export class Visual implements IVisual {
         this.reactRoot = React.createElement(segmentedBar, {});
         ReactDOM.render(this.reactRoot, this.target);
         this.columnIndices = [];
-        for (let i = 1; i < 17; i++) {
+        for (let i = 1; i <=15; i++) {
             let name = "c" + i;
             this.columnIndices[name] = 0;
         }
@@ -49,7 +49,6 @@ export class Visual implements IVisual {
             let categoryList: string[] = [];
             let activityNameList: string[] = [];
             let statusNameList: string[] = [];
-            let milestoneLevelList: string[] = [];
             let startDateList: string[] = [];
             let finishDateList: string[] = [];
             let projectedStartDateList: string[] = [];
@@ -74,43 +73,42 @@ export class Visual implements IVisual {
                 // Populate statusNameList
                 statusNameList[i] = `${row[this.columnIndices['c4']]}`;
 
-                // Populate milestoneLevelList
-                milestoneLevelList[i] = `${row[this.columnIndices['c5']]}`;
 
                 // Populate startDateList
-                startDateList[i] = `${row[this.columnIndices['c6']]}`;
+                startDateList[i] = `${row[this.columnIndices['c5']]}`;
 
                 // Populate finishDateList
-                finishDateList[i] = `${row[this.columnIndices['c7']]}`;
+                finishDateList[i] = `${row[this.columnIndices['c6']]}`;
 
                 // Populate projectedStartDateList
-                projectedStartDateList[i] = `${row[this.columnIndices['c8']]}`;
+                projectedStartDateList[i] = `${row[this.columnIndices['c7']]}`;
 
                 // Populate projectedFinishDateList
-                projectedFinishDateList[i] = `${row[this.columnIndices['c9']]}`;
+                projectedFinishDateList[i] = `${row[this.columnIndices['c8']]}`;
 
                 // Populate ownerList
-                ownerList[i] = `${row[this.columnIndices['c10']]}`;
+                ownerList[i] = `${row[this.columnIndices['c9']]}`;
 
                 // Populate predecessorsList
-                predecessorsList[i] = `${row[this.columnIndices['c11']]}`;
+                predecessorsList[i] = `${row[this.columnIndices['c10']]}`;
 
                 // Populate successorsList
-                successorsList[i] = `${row[this.columnIndices['c12']]}`;
+                successorsList[i] = `${row[this.columnIndices['c11']]}`;
 
                 // Populate commentaryList
-                commentaryList[i] = `${row[this.columnIndices['c13']]}`;
+                commentaryList[i] = `${row[this.columnIndices['c12']]}`;
 
                 // Populate totalFloatList
-                totalFloatList[i] = `${row[this.columnIndices['c14']]}`;
+                totalFloatList[i] = `${row[this.columnIndices['c13']]}`;
 
                 // Populate trendLists
-                trendLists[i] = `${row[this.columnIndices['c15']]}`;
+                trendLists[i] = `${row[this.columnIndices['c14']]}`;
 
                 // Populate lastReportedEndDateList
-                lastReportedEndDateList[i] = `${row[this.columnIndices['c16']]}`;
+                lastReportedEndDateList[i] = `${row[this.columnIndices['c15']]}`;
 
-            }
+            } 
+
             segmentedBar.update({
                 Segment1Color: object && object.Segment1Color ? object.Segment1Color : undefined,
                 Segment2Color: object && object.Segment2Color ? object.Segment2Color : undefined,
@@ -123,7 +121,6 @@ export class Visual implements IVisual {
                 categoryList: categoryList,
                 activityNameList: activityNameList,
                 statusNameList: statusNameList,
-                milestoneLevelList: milestoneLevelList,
                 startDateList: startDateList,
                 finishDateList: finishDateList,
                 projectedStartDateList: projectedStartDateList,
@@ -136,6 +133,7 @@ export class Visual implements IVisual {
                 trendLists: trendLists,
                 lastReportedEndDateList: lastReportedEndDateList,
                 backgroundColorVis: object && object.circleColor ? object.circleColor : undefined,
+
             });
 
 

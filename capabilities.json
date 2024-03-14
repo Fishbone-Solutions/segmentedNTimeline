@@ -1,7 +1,7 @@
 {
     "dataRoles": [
         {
-            "displayName": "Activity ID",
+            "displayName": "Activity ID / Short Code",
             "name": "c1",
             "kind": "Grouping"
         },
@@ -16,68 +16,63 @@
             "kind": "Grouping"
         },
         {
-            "displayName": "Status Name",
+            "displayName": "Activity Status ",
             "name": "c4",
             "kind": "Grouping"
         },
         {
-            "displayName": "Milestone Level",
+            "displayName": "Start Date",
             "name": "c5",
             "kind": "Grouping"
         },
         {
-            "displayName": "Start Date",
+            "displayName": "Finish Date",
             "name": "c6",
             "kind": "Grouping"
         },
         {
-            "displayName": "Finish Date",
+            "displayName": "Projected Start Date",
             "name": "c7",
             "kind": "Grouping"
         },
         {
-            "displayName": "Projected Start Date",
+            "displayName": "Projected Finish Date",
             "name": "c8",
             "kind": "Grouping"
         },
         {
-            "displayName": "Projected Finish Date",
+            "displayName": "Owner",
             "name": "c9",
             "kind": "Grouping"
         },
         {
-            "displayName": "Owner",
+            "displayName": "Predecessors",
             "name": "c10",
             "kind": "Grouping"
         },
         {
-            "displayName": "Predecessors",
+            "displayName": "Successors",
             "name": "c11",
             "kind": "Grouping"
         },
         {
-            "displayName": "Successors",
+            "displayName": "Comments",
             "name": "c12",
             "kind": "Grouping"
         },
         {
-            "displayName": "Commentary",
+            "displayName": "Total Float",
             "name": "c13",
             "kind": "Grouping"
         },
         {
-            "displayName": "Total Float",
+            "displayName": "Trend",
             "name": "c14",
             "kind": "Grouping"
         },
         {
-            "displayName": "Trend",
-            "name": "c15",
-            "kind": "Grouping"
-        },
-        {
             "displayName": "Last Reported End Date",
-            "name": "c16",
+            "name": "c15",
             "kind": "Grouping"
         }
     ],

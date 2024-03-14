@@ -5,8 +5,8 @@ import { differenceInCalendarMonths, subMonths } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
 import useImage from "use-image";
 
-// the first very simple and recommended way:
-const LionImage = (props) => {
+
+const StatusIcon = (props) => {
   if (props.status === "up") {
     const [image] = useImage(
       "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stick.png"
@@ -45,7 +45,6 @@ export interface State {
   activityLevelList?: string[];
   activityNameList?: string[];
   statusNameList?: string[];
-  milestoneLevelList?: string[];
   startDateList?: string[];
   finishDateList?: string[];
   projectedStartDateList?: string[];
@@ -64,6 +63,7 @@ export interface State {
   endDatePlaceholder?: string;
   lastReportedDatePlaceholder?: string;
   slipPlaceholder?: string;
+  scrollPositionIndicator?:Number
 }
 
 export const initialState: State = {
@@ -75,7 +75,6 @@ export const initialState: State = {
   activityLevelList: [],
   activityNameList: [],
   statusNameList: [],
-  milestoneLevelList: [],
   startDateList: [],
   projectedStartDateList: [],
   projectedFinishDateList: [],
@@ -109,8 +108,10 @@ interface DataItem {
 export class segmentedBar extends React.Component<any, State> {
   public dataArrayList: DataItem[] = [];
 
+
   private static updateCallback: (data: object) => void = null;
   scrollReference: React.RefObject<HTMLDivElement>;
+  scrollIndicator: Number;
 
   public static update(newState: State) {
     if (typeof segmentedBar.updateCallback === "function") {
@@ -123,16 +124,27 @@ export class segmentedBar extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
     this.state = initialState;
-    this.scrollReference = React.createRef();
     this.dataArrayList = this.dataArrayList;
+    this.scrollReference = React.createRef();
 
+
+  }
+  componentDidMount() {
+    this.centerScroll();
+  }
+  centerScroll = () => {
     const container = this.scrollReference.current;
     if (container) {
-      const containerWidth = container.offsetWidth;
-      const scrollPosition = containerWidth / 2;
+      const scrollWidth = container.scrollWidth;
+      const clientWidth = container.clientWidth;
+      const scrollPosition = (scrollWidth - clientWidth) / 3.2;
       container.scrollLeft = scrollPosition;
+      console.log(this.state)
     }
   }
+
+
+
   public componentWillMount() {
     segmentedBar.updateCallback = (newState: State): void => {
       this.setState(newState);
@@ -142,9 +154,7 @@ export class segmentedBar extends React.Component<any, State> {
   public componentWillUnmount() {
     segmentedBar.updateCallback = null;
   }
-  handleDynamic = (dynamicData) => {
-    this.dataArrayList = dynamicData;
-  };
+
   render() {
     const {
       backgroundColorVis,
@@ -177,6 +187,7 @@ export class segmentedBar extends React.Component<any, State> {
       endDatePlaceholder,
       lastReportedDatePlaceholder,
       slipPlaceholder,
+      scrollPositionIndicator
     } = this.state;
 
     var months = [];
@@ -231,9 +242,8 @@ export class segmentedBar extends React.Component<any, State> {
     const currentWeek = prefix[0 | (todaysLine / 7)] + 1;
 
     const todayDateLocation =
-      Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 55 +
-      currentWeek * 55 -
-      24;
+      Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 55 +currentWeek * 55 -24;
+    
 
     const weeksArray = months.map((week, index) => (
       <>
@@ -255,31 +265,7 @@ export class segmentedBar extends React.Component<any, State> {
       </div>
     ));
 
-    // console.log('activityIDList:', activityIDList);
-    // console.log('categoryList:', categoryList);
-    // console.log('milestoneLevelList:', milestoneLevelList);
-    // console.log('activityNameList:', activityNameList);
-    // console.log('statusNameList:', statusNameList);
-    // console.log('startDateList:', startDateList);
-    // console.log('finishDateList:', finishDateList);
-    // console.log('projectedStartDateList:', projectedStartDateList);
-    // console.log('projectedFinishDateList:', projectedFinishDateList);
-    // console.log('ownerList:', ownerList);
-    // console.log('predecessorsList:', predecessorsList);
-    // console.log('successorsList:', successorsList);
-    // console.log('commentaryList:', commentaryList);
-    // console.log('totalFloatList:', totalFloatList);
-    // console.log('trendLists:', trendLists);
-    // console.log('lastReportedEndDateList:', lastReportedEndDateList);
-    // console.log('titlePlaceholder:', titlePlaceholder);
-    // console.log('ownerPlaceholder:', ownerPlaceholder);
-    // console.log('trendPlaceholder:', trendPlaceholder);
-    // console.log('baseLineDatePlaceholder:', baseLineDatePlaceholder);
-    // console.log('endDatePlaceholder:', endDatePlaceholder);
-    // console.log('lastReportedDatePlaceholder:', lastReportedDatePlaceholder);
-    // console.log('slipPlaceholder:', slipPlaceholder);
 
-    // Segment 1 Values
     var shortCodeSeg1 = [];
     var statusSeg1 = [];
     var trendSeg1 = [];
@@ -301,8 +287,8 @@ export class segmentedBar extends React.Component<any, State> {
     var visitedWeeks = [];
     var countMap = [];
     var ypositionLocator;
-    var indexList = [];
-    var dynamicData = [];
+    var SegmentDyamicTable = []
+    var dynamicTablesRows  =[]
 
     const segments = [
       { y: 30, fill: Segment1Color, y1: 380 },
@@ -340,16 +326,6 @@ export class segmentedBar extends React.Component<any, State> {
       categoryListDisplaySeg1.push(categoryList[i]);
       plannedStartSeg1.push(projectedStartDateList[i]);
       plannedFinishSeg1.push(projectedFinishDateList[i]);
-
-      if (successorsListSeg1 && successorsListSeg1.length > 0) {
-        indexList = successorsList.map((element) =>
-          shortCodeSeg1.indexOf(element)
-        );
-        console.log(indexList);
-      } else {
-        // console.log("successorsListSeg1 is undefined or empty");
-      }
-
       if (trendLists[i].toLowerCase().includes("no change")) {
         trendSeg1.push("stable");
       }
@@ -399,24 +375,12 @@ export class segmentedBar extends React.Component<any, State> {
       }
 
       if (ypositionLocator > 500) {
-        ypositionLocator = 280;
+        ypositionLocator = 350;
       }
-      for (let i = 0; i < indexList.length; i++) {
-        const index = indexList[i];
-        let data = {
-          milestone: activityIDList[index],
-          title: activityNameList[index],
-          owner: ownerList[index],
-          impactedBy: successorsList[index],
-          planDate: startDateList[index],
-          projectedStart: projectedStartDateList[index],
-          planFinish: finishDateList[index],
-          projectedFinish: projectedFinishDateList[index],
-          comments: commentaryList[index],
-        };
-        dynamicData.push(data);
-      }
-
+      var dynamiclink:[] = successorsListSeg1[i].split(", ");
+      if (dynamiclink !== null) {
+      console.log(dynamiclink)
+      }      
       let circle = {
         x: 55 * Number(weekNoFromList[i]),
         y: ypositionLocator,
@@ -433,10 +397,56 @@ export class segmentedBar extends React.Component<any, State> {
         commentarySeg1: commentarySeg1[i],
         categoryListDisplaySeg1: categoryListDisplaySeg1[i],
         trendSeg: trendSeg1[i],
-        indexList: dynamicData,
+        successorsList: successorsListSeg1[i],
+        dynamiclink:dynamiclink
       };
       Seg1Values.push(circle);
+    } 
+  
+    let twoDArray: any[][] = [];
+
+    for (let i = 0; i < Seg1Values.length; i++) {
+      let row: any[] = [];
+      row.push(Seg1Values[i].shortCodeSeg);
+      row.push(Seg1Values[i].titleSeg);
+      row.push(Seg1Values[i].ownerSeg1);
+      row.push(Seg1Values[i].beginSeg1);
+      row.push(Seg1Values[i].endSeg1);
+      row.push(Seg1Values[i].lastReportedEndDateSeg1);
+      row.push(Seg1Values[i].slipSeg1);
+      row.push(Seg1Values[i].commentarySeg1);
+      row.push(Seg1Values[i].trendSeg);
+      row.push(Seg1Values[i].successorsList);
+      
+      twoDArray.push(row);
     }
+
+
+
+
+/* for (let j =0; j < Seg1Values.length; j++){
+  if (Seg1Values[j]["dynamiclink"]!= null){
+    var targetCodes=new Set(["TRANST4",
+      "VTT11",
+      "VTT61",
+      "VTT121"])
+
+      const matchingRows = {};
+
+      for (let i = 0; i < twoDArray.length; i++) {
+        const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
+        
+        if (targetCodes.has(targetCode)) {
+          if (matchingRows[targetCode]) {
+            matchingRows[targetCode].add(twoDArray[i]);
+          } else {
+            matchingRows[targetCode] = new Set([twoDArray[i]]);
+          }
+        }
+      }
+      console.log(matchingRows);
+    }} */
+    
 
     const Segment1Categories = finishDateList.map((week, index) => (
       <>
@@ -444,17 +454,16 @@ export class segmentedBar extends React.Component<any, State> {
           x={Seg1Values[index]["x"]}
           y={Seg1Values[index]["y"] + 25.8}
           radius={30}
-          stroke={statusSeg1[index]}
+          stroke={Seg1Values[index]["fill"]}
           strokeWidth={3}
-          fill={"white"}
-          onClick={() => this.handleDynamic(Seg1Values[index]["indexList"])}
+          fill={backgroundColorVis}
           onMouseEnter={() => {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
               trendPlaceholder: Seg1Values[index]["trendSeg"],
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
+              endDatePlaceholder: Seg1Values[index]["endSeg1"],
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
@@ -485,7 +494,6 @@ export class segmentedBar extends React.Component<any, State> {
           text={Seg1Values[index]["shortCodeSeg"].substring(0, 7)}
           fontSize={12}
           fill={textColor}
-          onClick={() => this.handleDynamic(Seg1Values[index]["indexList"])}
           onMouseEnter={() => {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
@@ -524,11 +532,12 @@ export class segmentedBar extends React.Component<any, State> {
           fill={textColor}
         />
 
-        <LionImage
+        <StatusIcon
           status={Seg1Values[index]["trendSeg"]}
           x={Seg1Values[index]["x"] - 14}
           y={Seg1Values[index]["y"] + 10}
-        ></LionImage>
+          onClick={()=>handleClick}
+        ></StatusIcon>
       </>
     ));
     const Segment1Lines = finishDateList.map((week, index) => (
@@ -556,91 +565,15 @@ export class segmentedBar extends React.Component<any, State> {
       display: "inline-block",
     };
     const offsetY = 46; // Translation value in pixels
-
+  
+ 
     return (
-      <>
+      
         <div
           style={{ display: "flex", flexDirection: "column", height: "80vh",  }}
         >
           <div style={{ display: "flex", height: " 500px", flexGrow: 3 }}>
             <div style={{ width: "20%", backgroundColor: backgroundColorVis }}>
-              {/* <svg
-                height="100%"
-                strokeMiterlimit="10"
-                version="1.1"
-                viewBox="0 0 300 700"
-                width="100%"
-                transform="translate(0,27.2)"
-              >
-                <g clipPath="Sidebar" id="Layer-1" fill="green">
-                  <rect
-                    x="20"
-                    y="130"
-                    width="235"
-                    height="35"
-                    fill={Segment1Color}
-                  ></rect>
-                  <rect
-                    x="20"
-                    y="190"
-                    width="235"
-                    height="35"
-                    fill={Segment2Color}
-                  ></rect>
-                  <rect
-                    x="20"
-                    y="250"
-                    width="235"
-                    height="35"
-                    fill={Segment3Color}
-                  ></rect>
-                  <rect
-                    x="20"
-                    y="310"
-                    width="235"
-                    height="35"
-                    fill={Segment4Color}
-                  ></rect>
-                  <rect
-                    x="20"
-                    y="370"
-                    width="235"
-                    height="35"
-                    fill={Segment5Color}
-                  ></rect>
-                  <rect
-                    x="20"
-                    y="430"
-                    width="235"
-                    height="35"
-                    fill={Segment6Color}
-                  ></rect>
-                  <text x={25} y={150} fontSize={18} fill={"white"}>
-                    {categoryListDisplay[0]}
-                  </text>
-                  <text x={25} y={210} fontSize={18} fill={textColor}>
-                    {categoryListDisplay[1]}
-                  </text>
-                  <text x={25} y={270} fontSize={18} fill={textColor}>
-                    {categoryListDisplay[2]}
-                  </text>
-                  <text x={25} y={330} fontSize={18} fill="white">
-                    {categoryListDisplay[3]}
-                  </text>
-                  <text x={25} y={387} fontSize={18} fill={textColor}>
-                    {categoryListDisplay[4]}
-                  </text>
-                  <text x={25} y={480} fontSize={18} fill={textColor}>
-                    {categoryListDisplay[5]}
-                  </text>
-                </g>
-                <g>
-                <line x1="200" y1="180" x2="350" y2="65"  stroke={Segment1Color} />
-
-                
-
-                </g>
-              </svg> */}
               <Stage width={300} height={550} >
                 <Layer>
                   <Rect
@@ -724,8 +657,8 @@ export class segmentedBar extends React.Component<any, State> {
                     closed
                   />
                   <Text
-                    x={20} // Center x-coordinate of the rectangle
-                    y={62.5 - 10} // Center y-coordinate of the rectangle
+                    x={20} 
+                    y={62.5 - 10} 
                     text={categoryListDisplay[0]}
                     fontSize={14}
                     align="center"
@@ -784,7 +717,7 @@ export class segmentedBar extends React.Component<any, State> {
             <div
               ref={this.scrollReference}
               style={{
-                width: "60%",
+                width: "100%",
                 height: "500px",
                 overflowX: "scroll",
                 overflowY: "scroll",
@@ -820,7 +753,6 @@ export class segmentedBar extends React.Component<any, State> {
                     {Segment1Lines}
                     {Segment1Categories}
                   </Layer>
-
                   <Layer>
                     <Rect
                       x={todayDateLocation}
@@ -845,10 +777,9 @@ export class segmentedBar extends React.Component<any, State> {
                 width: "20%",
                 backgroundColor: backgroundColorVis,
                 display: "flex",
-                justifyContent: "flex-start",
               }}
             >
-              <table style={{ margin: "auto" }}>
+              <table style={{ margin: "fixed" }}>
                 <tbody>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>Title</td>
@@ -1107,7 +1038,7 @@ export class segmentedBar extends React.Component<any, State> {
             </div>
           </div>
         </div>
-      </>
+      
     );
   }
 }
