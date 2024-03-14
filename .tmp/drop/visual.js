@@ -34784,6 +34784,44 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             console.log(this.state);
         }
     };
+    handleClick = (twoDArray, successorsList) => {
+        const cleanedList = successorsList.replace(/\n/g, '');
+        const list = cleanedList.split(',');
+        console.log(list);
+        const matchingRows = {};
+        for (let i = 0; i < twoDArray.length; i++) {
+            const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
+            if (list.includes(targetCode)) {
+                if (matchingRows[targetCode]) {
+                    matchingRows[targetCode].push(twoDArray[i]);
+                }
+                else {
+                    matchingRows[targetCode] = [twoDArray[i]];
+                }
+            }
+        }
+        console.log(matchingRows);
+        console.log("matching", typeof (matchingRows));
+        console.table(matchingRows);
+        const flattenedArray = Object.values(matchingRows).flat();
+        // Iterate over the flattened array
+        for (let i = 0; i < flattenedArray.length; i++) {
+            const nestedArray = flattenedArray[i];
+            console.log("Nested Array:", nestedArray);
+            let datapoint = {
+                milestone: nestedArray[0],
+                title: nestedArray[1],
+                owner: nestedArray[2],
+                impactedBy: nestedArray[9],
+                planDate: nestedArray[3],
+                projectedStart: nestedArray[4],
+                planFinish: nestedArray[6],
+                projectedFinish: nestedArray[5],
+                comments: nestedArray[11]
+            };
+            this.dataArrayList.push(datapoint);
+        }
+    };
     componentWillMount() {
         segmentedBar.updateCallback = (newState) => {
             this.setState(newState);
@@ -34793,14 +34831,14 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         segmentedBar.updateCallback = null;
     }
     render() {
-        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, scrollPositionIndicator } = this.state;
-        var months = [];
-        var years = [];
-        var finsldates = [];
-        for (let i = 0; i < finishDateList.length; i++) {
-            finsldates.push(new Date(Date.parse(finishDateList[i])));
+        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, } = this.state;
+        let months = [];
+        let years = [];
+        let finsldates = [];
+        for (const element of finishDateList) {
+            finsldates.push(new Date(Date.parse(element)));
         }
-        var categoryListDisplay = [...new Set(categoryList)];
+        let categoryListDisplay = [...new Set(categoryList)];
         categoryListDisplay.sort((a, b) => a.localeCompare(b));
         const result = finsldates.reduce((acc, date) => {
             const min = acc.min ? (date < acc.min ? date : acc.min) : date;
@@ -34861,8 +34899,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var visitedWeeks = [];
         var countMap = [];
         var ypositionLocator;
-        var SegmentDyamicTable = [];
-        var dynamicTablesRows = [];
         const segments = [
             { y: 30, fill: Segment1Color, y1: 380 },
             { y: 50, fill: Segment2Color, y1: 320 },
@@ -34871,9 +34907,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             { y: 110, fill: Segment5Color, y1: 380 },
             { y: 130, fill: Segment6Color, y1: 300 },
         ];
-        const handleClick = (e) => {
-            this.scrollReference.current.scrollLeft = todayDateLocation - 250;
-        };
         const weekNoFromList = finishDateList.map((element) => {
             const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_5__/* .subMonths */ .W)(result.min, 1);
             const week = new Date(Date.parse(element));
@@ -34944,10 +34977,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             if (ypositionLocator > 500) {
                 ypositionLocator = 350;
             }
-            var dynamiclink = successorsListSeg1[i].split(", ");
-            if (dynamiclink !== null) {
-                console.log(dynamiclink);
-            }
             let circle = {
                 x: 55 * Number(weekNoFromList[i]),
                 y: ypositionLocator,
@@ -34965,49 +34994,31 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 categoryListDisplaySeg1: categoryListDisplaySeg1[i],
                 trendSeg: trendSeg1[i],
                 successorsList: successorsListSeg1[i],
-                dynamiclink: dynamiclink
             };
             Seg1Values.push(circle);
         }
         let twoDArray = [];
-        for (let i = 0; i < Seg1Values.length; i++) {
+        for (const element of Seg1Values) {
             let row = [];
-            row.push(Seg1Values[i].shortCodeSeg);
-            row.push(Seg1Values[i].titleSeg);
-            row.push(Seg1Values[i].ownerSeg1);
-            row.push(Seg1Values[i].beginSeg1);
-            row.push(Seg1Values[i].endSeg1);
-            row.push(Seg1Values[i].lastReportedEndDateSeg1);
-            row.push(Seg1Values[i].slipSeg1);
-            row.push(Seg1Values[i].commentarySeg1);
-            row.push(Seg1Values[i].trendSeg);
-            row.push(Seg1Values[i].successorsList);
+            row.push(element.shortCodeSeg); //0
+            row.push(element.titleSeg); //1
+            row.push(element.ownerSeg1); //2
+            row.push(element.beginSeg1); //3
+            row.push(element.plannedStartSeg1); //4 
+            row.push(element.plannedFinishSeg1); //5
+            row.push(element.endSeg1); //6
+            row.push(element.lastReportedEndDateSeg1); //7 
+            row.push(element.slipSeg1); //8
+            row.push(element.commentarySeg1); //9
+            row.push(element.trendSeg); //10
+            row.push(element.commentarySeg1); //11
+            row.push(element.successorsList); //12
             twoDArray.push(row);
         }
-        /* for (let j =0; j < Seg1Values.length; j++){
-          if (Seg1Values[j]["dynamiclink"]!= null){
-            var targetCodes=new Set(["TRANST4",
-              "VTT11",
-              "VTT61",
-              "VTT121"])
-        
-              const matchingRows = {};
-        
-              for (let i = 0; i < twoDArray.length; i++) {
-                const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
-                
-                if (targetCodes.has(targetCode)) {
-                  if (matchingRows[targetCode]) {
-                    matchingRows[targetCode].add(twoDArray[i]);
-                  } else {
-                    matchingRows[targetCode] = new Set([twoDArray[i]]);
-                  }
-                }
-              }
-              console.log(matchingRows);
-            }} */
         const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: Seg1Values[index]["y"] + 25.8, radius: 30, stroke: Seg1Values[index]["fill"], strokeWidth: 3, fill: backgroundColorVis, onMouseEnter: () => {
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: Seg1Values[index]["y"] + 25.8, radius: 30, stroke: Seg1Values[index]["fill"], strokeWidth: 3, fill: backgroundColorVis, onClick: () => {
+                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]));
+                }, onMouseEnter: () => {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
@@ -35028,7 +35039,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
                 } }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: Seg1Values[index]["shortCodeSeg"].substring(0, 7), fontSize: 12, fill: textColor, onMouseEnter: () => {
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: Seg1Values[index]["shortCodeSeg"].substring(0, 7), fontSize: 12, fill: textColor, onClick: () => {
+                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]));
+                }, onMouseEnter: () => {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
@@ -35050,7 +35063,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     });
                 } }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 5, y: Seg1Values[index]["ybarSeg"], width: 40 * 2, height: 40 * 2, text: Seg1Values[index]["trendSeg"] === "red" ? "🚩" : "", fontSize: 30, fill: textColor }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { status: Seg1Values[index]["trendSeg"], x: Seg1Values[index]["x"] - 14, y: Seg1Values[index]["y"] + 10, onClick: () => handleClick }))));
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { status: Seg1Values[index]["trendSeg"], x: Seg1Values[index]["x"] - 14, y: Seg1Values[index]["y"] + 10, onClick: () => {
+                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]));
+                } }))));
         const Segment1Lines = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [
                 Seg1Values[index]["x"],
                 yBarSeg1[index],
