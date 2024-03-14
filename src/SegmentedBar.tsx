@@ -65,6 +65,7 @@ export interface State {
   slipPlaceholder?: string;
   scrollPositionIndicator?:number;
   twoDArrayPlaceholder?: any[][]; // 2D array placeholder
+  activityPlaceholder?: string
 }
 
 export const initialState: State = {
@@ -93,6 +94,7 @@ export const initialState: State = {
   endDatePlaceholder: "",
   lastReportedDatePlaceholder: "",
   slipPlaceholder: "",
+  activityPlaceholder:""
 };
 
 interface DataItem {
@@ -138,17 +140,20 @@ export class segmentedBar extends React.Component<any, State> {
     if (container) {
       const scrollWidth = container.scrollWidth;
       const clientWidth = container.clientWidth;
-      const scrollPosition = (scrollWidth - clientWidth) / 3.2;
+      const scrollPosition = (scrollWidth - clientWidth) / 3.4;
       container.scrollLeft = scrollPosition;
       console.log(this.state)
     }
   }
      handleClick = (twoDArray,successorsList) => {
+      this.dataArrayList = [];
       const cleanedList = successorsList.replace(/\n/g, '');
       const list = cleanedList.split(',');
       console.log(list)
       const matchingRows = {};
-
+ if (list === null ){
+   this.dataArrayList = [];
+ }
       for (let i = 0; i < twoDArray.length; i++) {
         const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
         
@@ -176,10 +181,10 @@ for (let i = 0; i < flattenedArray.length; i++) {
     title: nestedArray[1],
     owner: nestedArray[2],
     impactedBy: nestedArray[9],
-    planDate: nestedArray[3],
-    projectedStart: nestedArray[4],
-    planFinish: nestedArray[6],
-    projectedFinish: nestedArray[5],
+    planDate: nestedArray[3]?.split("T")[0],
+    projectedStart: nestedArray[4]?.split("T")[0],
+    planFinish: nestedArray[6]?.split("T")[0],
+    projectedFinish: nestedArray[5]?.split("T")[0],
     comments: nestedArray[11]
   } 
   this.dataArrayList.push(
@@ -239,6 +244,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
       endDatePlaceholder,
       lastReportedDatePlaceholder,
       slipPlaceholder,
+      activityPlaceholder
     } = this.state;
 
     let months = [];
@@ -431,6 +437,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
         y: ypositionLocator,
         fill: statusSeg1[i],
         id: "SEG1" + i,
+        categoryList: categoryList[i],
         shortCodeSeg: shortCodeSeg1[i],
         titleSeg: titleSeg1[i],
         ybarSeg: yBarSeg1[i],
@@ -491,6 +498,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
               trendPlaceholder: Seg1Values[index]["trendSeg"],
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: Seg1Values[index]["endSeg1"],
+              activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
@@ -504,6 +512,8 @@ for (let i = 0; i < flattenedArray.length; i++) {
               trendPlaceholder: Seg1Values[index]["trendSeg"],
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
+              activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
+
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
@@ -534,6 +544,8 @@ for (let i = 0; i < flattenedArray.length; i++) {
               trendPlaceholder: Seg1Values[index]["trendSeg"],
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
+              activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
+
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
@@ -549,6 +561,8 @@ for (let i = 0; i < flattenedArray.length; i++) {
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
               trendPlaceholder: Seg1Values[index]["trendSeg"],
+              activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
+
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               lastReportedDatePlaceholder: String(
@@ -614,7 +628,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
           style={{ display: "flex", flexDirection: "column", height: "80vh",  }}
         >
           <div style={{ display: "flex", height: " 500px", flexGrow: 3 }}>
-            <div style={{ width: "20%", backgroundColor: backgroundColorVis }}>
+            <div style={{ width: "20%", backgroundColor: backgroundColorVis  }}>
               <Stage width={300} height={550} >
                 <Layer>
                   <Rect
@@ -822,6 +836,10 @@ for (let i = 0; i < flattenedArray.length; i++) {
             >
               <table style={{ margin: "fixed" }}>
                 <tbody>
+                <tr>
+                    <td style={{ fontWeight: "bold" }}>Activity Category</td>
+                    <td>{activityPlaceholder}</td>
+                  </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>Title</td>
                     <td>{titlePlaceholder}</td>
@@ -832,7 +850,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>Trend</td>
-                    <td>{trendPlaceholder}</td>
+                    <td><StatusIcon image="up"></StatusIcon></td>
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>BaseLine</td>
@@ -992,7 +1010,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
               </thead>
             </table>
             <div
-              style={{ height: "100px", overflowY: "auto", display: "flex" }}
+              style={{ height: "100px", overflowY: "auto", display: "flex" ,backgroundColor: backgroundColorVis }}
             >
               <table
                 style={{

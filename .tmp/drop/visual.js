@@ -34753,6 +34753,7 @@ const initialState = {
     endDatePlaceholder: "",
     lastReportedDatePlaceholder: "",
     slipPlaceholder: "",
+    activityPlaceholder: ""
 };
 class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     dataArrayList = [];
@@ -34779,16 +34780,20 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         if (container) {
             const scrollWidth = container.scrollWidth;
             const clientWidth = container.clientWidth;
-            const scrollPosition = (scrollWidth - clientWidth) / 3.2;
+            const scrollPosition = (scrollWidth - clientWidth) / 3.4;
             container.scrollLeft = scrollPosition;
             console.log(this.state);
         }
     };
     handleClick = (twoDArray, successorsList) => {
+        this.dataArrayList = [];
         const cleanedList = successorsList.replace(/\n/g, '');
         const list = cleanedList.split(',');
         console.log(list);
         const matchingRows = {};
+        if (list === null) {
+            this.dataArrayList = [];
+        }
         for (let i = 0; i < twoDArray.length; i++) {
             const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
             if (list.includes(targetCode)) {
@@ -34813,10 +34818,10 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 title: nestedArray[1],
                 owner: nestedArray[2],
                 impactedBy: nestedArray[9],
-                planDate: nestedArray[3],
-                projectedStart: nestedArray[4],
-                planFinish: nestedArray[6],
-                projectedFinish: nestedArray[5],
+                planDate: nestedArray[3]?.split("T")[0],
+                projectedStart: nestedArray[4]?.split("T")[0],
+                planFinish: nestedArray[6]?.split("T")[0],
+                projectedFinish: nestedArray[5]?.split("T")[0],
                 comments: nestedArray[11]
             };
             this.dataArrayList.push(datapoint);
@@ -34831,7 +34836,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         segmentedBar.updateCallback = null;
     }
     render() {
-        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, } = this.state;
+        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, activityPlaceholder } = this.state;
         let months = [];
         let years = [];
         let finsldates = [];
@@ -34982,6 +34987,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 y: ypositionLocator,
                 fill: statusSeg1[i],
                 id: "SEG1" + i,
+                categoryList: categoryList[i],
                 shortCodeSeg: shortCodeSeg1[i],
                 titleSeg: titleSeg1[i],
                 ybarSeg: yBarSeg1[i],
@@ -35025,6 +35031,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         trendPlaceholder: Seg1Values[index]["trendSeg"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
                         endDatePlaceholder: Seg1Values[index]["endSeg1"],
+                        activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
                         lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
@@ -35035,6 +35042,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         trendPlaceholder: Seg1Values[index]["trendSeg"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
                         endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
+                        activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
                         lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
@@ -35048,6 +35056,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         trendPlaceholder: Seg1Values[index]["trendSeg"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
                         endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
+                        activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
                         lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
@@ -35056,6 +35065,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
                         trendPlaceholder: Seg1Values[index]["trendSeg"],
+                        activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
                         endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
                         lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
@@ -35140,6 +35150,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { margin: "fixed" } },
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Activity Category"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, activityPlaceholder)),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Title"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, titlePlaceholder)),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
@@ -35147,7 +35160,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, ownerPlaceholder)),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Trend"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, trendPlaceholder)),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { image: "up" }))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "BaseLine"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, baseLineDatePlaceholder.split("T")[0])),
@@ -35243,7 +35257,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     border: "1px solid #ccc",
                                     padding: "8px",
                                 } }, "Comments")))),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "100px", overflowY: "auto", display: "flex" } },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "100px", overflowY: "auto", display: "flex", backgroundColor: backgroundColorVis } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: {
                             width: "100%",
                             fontSize: "15px",
@@ -35290,6 +35304,8 @@ class CircleSettings {
     Segment5Color = "#8EAADC";
     Segment6Color = "#A0D1FE";
     textColor = "red";
+    startDate = null; // Date picker property
+    endDate = null; // Date picker property
 }
 class VisualSettings extends DataViewObjectsParser {
     circle = new CircleSettings();

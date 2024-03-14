@@ -9,6 +9,8 @@ export declare class CircleSettings {
     Segment5Color: string;
     Segment6Color: string;
     textColor: string;
+    startDate: Date | null;
+    endDate: Date | null;
 }
 export declare class VisualSettings extends DataViewObjectsParser {
     circle: CircleSettings;
