@@ -137,9 +137,6 @@ export class segmentedBar extends React.Component<any, State> {
       const list = cleanedList.split(',');
       console.log(list)
       const matchingRows = {};
- if (list === null ){
-   this.dataArrayList = [];
- }
       for (let i = 0; i < twoDArray.length; i++) {
         const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
         
@@ -166,7 +163,7 @@ for (let i = 0; i < flattenedArray.length; i++) {
     milestone: nestedArray[0],
     title: nestedArray[1],
     owner: nestedArray[2],
-    impactedBy: nestedArray[9],
+    impactedBy: nestedArray[12],
     planDate: nestedArray[3]?.split("T")[0],
     projectedStart: nestedArray[4]?.split("T")[0],
     planFinish: nestedArray[6]?.split("T")[0],
@@ -420,8 +417,8 @@ public componentWillMount() {
         ypositionLocator = 220 + Number(countMap[weekNoFromList[i]]) * 35;
       }
 
-      if (ypositionLocator > 500) {
-        ypositionLocator = 340;
+      if (ypositionLocator > 400) {
+        ypositionLocator = 390;
       }
    
       let circle = {
@@ -666,7 +663,7 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[1]}
-        fill="white"
+        fill={textColor}
         align="center"
         verticalAlign="middle"
       />
@@ -689,7 +686,8 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[2]}
-        fill="white"
+        fill={textColor}
+
         align="center"
         verticalAlign="middle"
       />
@@ -735,7 +733,8 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[4]}
-        fill="white"
+        fill={textColor}
+
         align="center"
         verticalAlign="middle"
       />
@@ -758,7 +757,7 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[5]}
-        fill="white"
+        fill={textColor}
         align="center"
         verticalAlign="middle"
       />
@@ -774,21 +773,20 @@ public componentWillMount() {
                 width: "100%",
                 height: "500px",
                 overflowX: "scroll",
-                overflowY: "scroll",
                 backgroundColor: backgroundColorVis,
               }}
             >
               <div>
                 <div
                   className="relative"
-                  style={{ backgroundColor: backgroundColorVis }}>
+                  style={{ backgroundColor: backgroundColorVis,  }}>
       
                   {monthsArray}
                 </div>
                 <div className="relative">{weeksArray}</div>
                 <Stage
-                  width= {17500}
-                  height={480}
+                  width={17500}
+                  height={450}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
                    <Layer>
@@ -859,9 +857,9 @@ public componentWillMount() {
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>Trend</td>
-                    <td> {trendPlaceholder === "Improved" ? <MdOutlineTrendingUp style={{ color: "green",fontSize: "2em" }} />
+                    <td> {trendPlaceholder === "Improved" ? <MdOutlineTrendingUp style={{ color: "#40B04A",fontSize: "2em" }} />
     : trendPlaceholder === "down" ? <MdOutlineTrendingDown style={{ color: "red",fontSize: "2em" }} />
-    : <MdOutlineTrendingFlat style={{ color: "yellow",fontSize: "2em" }} />}</td>
+    : <MdOutlineTrendingFlat style={{ color: "yellow",fontSize: "2em"  }} />}</td>
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>BaseLine</td>

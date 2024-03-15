@@ -34779,9 +34779,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const list = cleanedList.split(',');
         console.log(list);
         const matchingRows = {};
-        if (list === null) {
-            this.dataArrayList = [];
-        }
         for (let i = 0; i < twoDArray.length; i++) {
             const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
             if (list.includes(targetCode)) {
@@ -34805,7 +34802,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 milestone: nestedArray[0],
                 title: nestedArray[1],
                 owner: nestedArray[2],
-                impactedBy: nestedArray[9],
+                impactedBy: nestedArray[12],
                 planDate: nestedArray[3]?.split("T")[0],
                 projectedStart: nestedArray[4]?.split("T")[0],
                 planFinish: nestedArray[6]?.split("T")[0],
@@ -34974,8 +34971,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             else {
                 ypositionLocator = 220 + Number(countMap[weekNoFromList[i]]) * 35;
             }
-            if (ypositionLocator > 500) {
-                ypositionLocator = 340;
+            if (ypositionLocator > 400) {
+                ypositionLocator = 390;
             }
             let circle = {
                 x: 55 * Number(weekNoFromList[i]),
@@ -35102,30 +35099,29 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[0], width: 208.9, height: 20, text: categoryListDisplay[0], fill: "white", align: "center", verticalAlign: "middle" }))),
                                 categoryListDisplay[1] && (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { id: "Rectangle2", x: 50, y: Xval[1], width: 208.9, height: 20, fill: Segment2Color }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[1], width: 208.9, height: 20, text: categoryListDisplay[1], fill: "white", align: "center", verticalAlign: "middle" }))),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[1], width: 208.9, height: 20, text: categoryListDisplay[1], fill: textColor, align: "center", verticalAlign: "middle" }))),
                                 categoryListDisplay[2] && (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { id: "Rectangle3", x: 50, y: Xval[2], width: 208.9, height: 20, fill: Segment3Color }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[2], width: 208.9, height: 20, text: categoryListDisplay[2], fill: "white", align: "center", verticalAlign: "middle" }))),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[2], width: 208.9, height: 20, text: categoryListDisplay[2], fill: textColor, align: "center", verticalAlign: "middle" }))),
                                 categoryListDisplay[3] && (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { id: "Rectangle4", x: 50, y: Xval[3], width: 208.9, height: 20, fill: Segment4Color }),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[3], width: 208.9, height: 20, text: categoryListDisplay[3], fill: "white", align: "center", verticalAlign: "middle" }))),
                                 categoryListDisplay[4] && (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { id: "Rectangle5", x: 50, y: Xval[4], width: 208.9, height: 20, fill: Segment5Color }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[4], width: 208.9, height: 20, text: categoryListDisplay[4], fill: "white", align: "center", verticalAlign: "middle" }))),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[4], width: 208.9, height: 20, text: categoryListDisplay[4], fill: textColor, align: "center", verticalAlign: "middle" }))),
                                 categoryListDisplay[5] && (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { id: "Rectangle6", x: 50, y: Xval[5], width: 208.9, height: 20, fill: Segment6Color }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[5], width: 208.9, height: 20, text: categoryListDisplay[5], fill: "white", align: "center", verticalAlign: "middle" }))))))),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: 50, y: Xval[5], width: 208.9, height: 20, text: categoryListDisplay[5], fill: textColor, align: "center", verticalAlign: "middle" }))))))),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { ref: this.scrollReference, style: {
                         width: "100%",
                         height: "500px",
                         overflowX: "scroll",
-                        overflowY: "scroll",
                         backgroundColor: backgroundColorVis,
                     } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis } }, monthsArray),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis, } }, monthsArray),
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 17500, height: 480, style: { backgroundColor: backgroundColorVis } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 17500, height: 450, style: { backgroundColor: backgroundColorVis } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 0.8, height: 800, fill: "black" }),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation + 3, y: 10, text: "Today", fontSize: 15, fill: "black" })),
@@ -35162,7 +35158,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Trend"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
                                     " ",
-                                    trendPlaceholder === "Improved" ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_7__/* .MdOutlineTrendingUp */ .BsN, { style: { color: "green", fontSize: "2em" } })
+                                    trendPlaceholder === "Improved" ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_7__/* .MdOutlineTrendingUp */ .BsN, { style: { color: "#40B04A", fontSize: "2em" } })
                                         : trendPlaceholder === "down" ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_7__/* .MdOutlineTrendingDown */ .PeX, { style: { color: "red", fontSize: "2em" } })
                                             : react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_7__/* .MdOutlineTrendingFlat */ .R_6, { style: { color: "yellow", fontSize: "2em" } }))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
