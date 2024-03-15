@@ -34814,6 +34814,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             };
             this.dataArrayList.push(datapoint);
         }
+        console.log(this.dataArrayList);
     };
     componentWillMount() {
         segmentedBar.updateCallback = (newState) => {
@@ -35018,7 +35019,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         }
         const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: Seg1Values[index]["y"] + 25.8, radius: 30, stroke: Seg1Values[index]["fill"], strokeWidth: 3, fill: backgroundColorVis, onClick: () => {
-                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]));
+                    var successorsLists = this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]));
                 }, onMouseEnter: () => {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
@@ -35146,8 +35147,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null,
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
-                                    "              ",
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999 }, onClick: (e) => handleClickHome(e) }, "Scroll To Today"))),
+                                    "     ",
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999 }, onClick: (e) => handleClickHome(e) }, "Today"))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Activity Category"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, activityPlaceholder)),

@@ -132,7 +132,7 @@ export class segmentedBar extends React.Component<any, State> {
   }
 
 
-     handleClick = (twoDArray,successorsList) => {
+     handleClick = (twoDArray,successorsList,) => {
       const cleanedList = successorsList.replace(/\n/g, '');
       const list = cleanedList.split(',');
       console.log(list)
@@ -176,8 +176,10 @@ for (let i = 0; i < flattenedArray.length; i++) {
   this.dataArrayList.push(
   datapoint
   )
+  
 }
 
+console.log(this.dataArrayList)
 
      
     }
@@ -476,7 +478,7 @@ public componentWillMount() {
           strokeWidth={3}
           fill={backgroundColorVis}
           onClick={()=>{
-            
+           var successorsLists = 
             this.handleClick(twoDArray,String(Seg1Values[index]["successorsList"]))}
           }
 
@@ -840,7 +842,7 @@ public componentWillMount() {
               <table style={{ margin: "fixed" }}>
                 <tbody>
                   <tr>
-                    <td>              <button style={{ zIndex:999}} onClick={(e) => handleClickHome(e)}>Scroll To Today</button>   
+                    <td>     <button style={{ zIndex:999}} onClick={(e) => handleClickHome(e)}>Today</button>   
 </td>
                   </tr>
                 <tr>
