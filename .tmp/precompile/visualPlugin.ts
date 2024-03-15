@@ -5,9 +5,9 @@ import VisualConstructorOptions = powerbiVisualsApi.extensibility.visual.VisualC
 import DialogConstructorOptions = powerbiVisualsApi.extensibility.visual.DialogConstructorOptions;
 var powerbiKey: any = "powerbi";
 var powerbi: any = window[powerbiKey];
-var segmentedCVLVISUAL_DEBUG: IVisualPlugin = {
-    name: 'segmentedCVLVISUAL_DEBUG',
-    displayName: 'segmentedCVLVISUAL',
+var segmentedCVLVISUALV20: IVisualPlugin = {
+    name: 'segmentedCVLVISUALV20',
+    displayName: 'segmentedCVLVISUAL2',
     class: 'Visual',
     apiVersion: '5.3.0',
     create: (options?: VisualConstructorOptions) => {
@@ -27,6 +27,6 @@ var segmentedCVLVISUAL_DEBUG: IVisualPlugin = {
 if (typeof powerbi !== "undefined") {
     powerbi.visuals = powerbi.visuals || {};
     powerbi.visuals.plugins = powerbi.visuals.plugins || {};
-    powerbi.visuals.plugins["segmentedCVLVISUAL_DEBUG"] = segmentedCVLVISUAL_DEBUG;
+    powerbi.visuals.plugins["segmentedCVLVISUALV20"] = segmentedCVLVISUALV20;
 }
-export default segmentedCVLVISUAL_DEBUG;
+export default segmentedCVLVISUALV20;

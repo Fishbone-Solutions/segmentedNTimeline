@@ -5,10 +5,10 @@
 			{
 				"resourceId": "rId0",
 				"sourceType": 5,
-				"file": "resources/segmentedCVLVISUAL.pbiviz.json"
+				"file": "resources/segmentedCVLVISUALV20.pbiviz.json"
 			}
 		],
-		"visual": {"name":"segmentedNtimeline","displayName":"segmentedCVLVISUAL","guid":"segmentedCVLVISUAL","visualClassName":"Visual","version":"1.0.0.0","description":"Segmented Timelines","supportUrl":"www.fishbonesolutions.co.uk/support","gitHubUrl":""},
+		"visual": {"name":"segmentedNtimeline","displayName":"segmentedCVLVISUAL2","guid":"segmentedCVLVISUALV20","visualClassName":"Visual","version":"1.0.0.0","description":"Segmented Timelines","supportUrl":"www.fishbonesolutions.co.uk/support","gitHubUrl":""},
 		"metadata": {
 			"pbivizjson": {
 				"resourceId": "rId0"

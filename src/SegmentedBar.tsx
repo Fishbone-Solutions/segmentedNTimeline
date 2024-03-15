@@ -98,14 +98,15 @@ export const initialState: State = {
 };
 
 interface DataItem {
+  activeElemnent: string,
   milestone: string;
   title: string;
   owner: string;
   impactedBy: string;
-  planDate: string;
-  projectedStart: string;
-  planFinish: string;
-  projectedFinish: string;
+  planDate?: string;
+  projectedStart?: string;
+  planFinish?: string;
+  projectedFinish?: string;
   comments: string;
 }
 export class segmentedBar extends React.Component<any, State> {
@@ -131,55 +132,46 @@ export class segmentedBar extends React.Component<any, State> {
 
   }
 
-
-     handleClick = (twoDArray,successorsList,) => {
-      const cleanedList = successorsList.replace(/\n/g, '');
-      const list = cleanedList.split(',');
-      console.log(list)
-      const matchingRows = {};
-      for (let i = 0; i < twoDArray.length; i++) {
-        const targetCode = twoDArray[i][0]; // Assuming target code is in the first column
-        
-        if (list.includes(targetCode)) {
-          if (matchingRows[targetCode]) {
-            matchingRows[targetCode].push(twoDArray[i]);
-          } else {
-            matchingRows[targetCode] = [twoDArray[i]];
-          }
-        }
-      }
-      
-      console.log(matchingRows);
-
-console.log("matching",typeof(matchingRows))
-console.table(matchingRows)
-const flattenedArray = Object.values(matchingRows).flat();
-
-// Iterate over the flattened array
-for (let i = 0; i < flattenedArray.length; i++) {
-  const nestedArray = flattenedArray[i];
-  console.log("Nested Array:", nestedArray);
-  let datapoint: DataItem = {
-    milestone: nestedArray[0],
-    title: nestedArray[1],
-    owner: nestedArray[2],
-    impactedBy: nestedArray[12],
-    planDate: nestedArray[3]?.split("T")[0],
-    projectedStart: nestedArray[4]?.split("T")[0],
-    planFinish: nestedArray[6]?.split("T")[0],
-    projectedFinish: nestedArray[5]?.split("T")[0],
-    comments: nestedArray[11]
-  } 
-  this.dataArrayList.push(
-  datapoint
-  )
+  handleClick = (twoDArray, successorsList, activeElement) => {
+    const cleanedList = successorsList.replace(/\n/g, '');
+    const list = cleanedList.split(',');
+    console.log("activeElement", activeElement);
+    list.unshift(activeElement);
+    console.log(list);
   
-}
+    const matchingRows = twoDArray.filter((row) => list.includes(row[0]));
+  
+    console.log("matching", matchingRows);
+    const nestedArray = matchingRows;
+    this.dataArrayList = []; // Reset the array before populating new data
 
-console.log(this.dataArrayList)
+    for (let i = 0; i < nestedArray.length; i++) {
+      let datapoint: DataItem = {
+        activeElemnent: activeElement,
+        milestone: nestedArray[i][0],
+        title: nestedArray[i][1],
+        owner: nestedArray[i][2],
+        impactedBy: nestedArray[i][12],
+        planDate: nestedArray[i][3]?.split("T")[0].split("-").reverse().join("-"),
+       projectedStart: nestedArray[i][4]?.split("T")[0].split("-").reverse().join("-"),
+        planFinish: nestedArray[i][6]?.split("T")[0].split("-").reverse().join("-"),
+        projectedFinish: nestedArray[i][5]?.split("T")[0].split("-").reverse().join("-"),
+        comments: nestedArray[i][11]
+      };
+  
+      this.dataArrayList.push(datapoint);
+    }
+  
+    //this.dataArrayList = this.dataArrayList.filter((element) => element.activeElemnent === activeElement);
+    console.log(this.dataArrayList);
+  }
+
+
+
+
 
      
-    }
+    
   
 public componentWillMount() {
     segmentedBar.updateCallback = (newState: State): void => {
@@ -284,7 +276,6 @@ public componentWillMount() {
       Math.abs(differenceInCalendarMonths(start, endDate.toDate())) * 5 * 55;
 
 
-      console.log(EndDateLocation)
 
     const weeksArray = months.map((week, index) => (
       <>
@@ -355,6 +346,7 @@ public componentWillMount() {
     });
 
     for (let i = 0; i < activityIDList.length; i++) {
+      var xValPositions: Number;
       shortCodeSeg1.push(activityIDList[i]);
       if (trendLists[i].toLowerCase().includes("No Trend")) {
         TrendsList.push("stable");
@@ -421,8 +413,9 @@ public componentWillMount() {
         ypositionLocator = 390;
       }
    
+      console.log("xValPositions",xValPositions)
       let circle = {
-        x: 55 * Number(weekNoFromList[i]),
+        x: 55 * Number(weekNoFromList[i]),//+ 11 * Number(Math.floor(Math.random() * 5)+1),
         y: ypositionLocator,
         fill: statusSeg1[i],
         id: "SEG1" + i,
@@ -442,7 +435,6 @@ public componentWillMount() {
       };
       Seg1Values.push(circle);
     } 
-    console.log(Seg1Values)
   
     let twoDArray: any[][] = [];
 
@@ -475,8 +467,7 @@ public componentWillMount() {
           strokeWidth={3}
           fill={backgroundColorVis}
           onClick={()=>{
-           var successorsLists = 
-            this.handleClick(twoDArray,String(Seg1Values[index]["successorsList"]))}
+            this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"])}
           }
 
           onMouseEnter={() => {
@@ -511,6 +502,7 @@ public componentWillMount() {
           }}
 
         ></Circle>
+     
          <Text
           x={Seg1Values[index]["x"] - 5}
           y={Seg1Values[index]["ybarSeg"]}
@@ -527,10 +519,10 @@ public componentWillMount() {
           y={Seg1Values[index]["y"] + 10}
           status={Seg1Values[index]["trends"] }
           onClick={()=>{
-            
-            this.handleClick(twoDArray,String(Seg1Values[index]["successorsList"]))}
+            this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"])}
           }
 />
+
         <Text
           x={Seg1Values[index]["x"] - 40}
           y={Seg1Values[index]["y"]}
@@ -542,8 +534,7 @@ public componentWillMount() {
           fontSize={8}
           fill={textColor}
           onClick={()=>{
-            
-            this.handleClick(twoDArray,String(Seg1Values[index]["successorsList"]))}
+            this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"])}
           }
 
           onMouseEnter={() => {
@@ -586,16 +577,16 @@ public componentWillMount() {
       </>
     ));
     const Segment1Lines = finishDateList.map((week, index) => (
-     <Line
-     points={[
-       Seg1Values[index]["x"],
-       yBarSeg1[index],
-       Seg1Values[index]["x"],
-       Seg1Values[index]["y"],
-     ]}
-     stroke={segmentColor[index]}
-     strokeWidth={5}
-   />
+      <Line
+      points={[
+        Seg1Values[index]["x"],
+        yBarSeg1[index],
+        Seg1Values[index]["x"],
+        Seg1Values[index]["y"],
+      ]}
+      stroke={segmentColor[index]}
+      strokeWidth={5}
+    />
     ));
     const legendStyle: React.CSSProperties = {
       fontSize: "18px",
@@ -610,7 +601,6 @@ public componentWillMount() {
       marginRight: "10px",
       display: "inline-block",
     };
-    const offsetY = 46; // Translation value in pixels
   
    const Xval = [60,92,124,156,188,220]
     return (
