@@ -7,21 +7,21 @@ import useImage from "use-image";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown, MdOutlineTrendingFlat } from 'react-icons/md';
 
 const StatusIcon = (props) => {
-  if (props.status === "up") {
+  if (props.status === "Improved") {
     const [image] = useImage(
       "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stick.png"
     );
     return (
       <Image width={30} height={30} image={image} x={props.x} y={props.y} />
     );
-  } else if (props.status === "down") {
+  } else if (props.status === "Deteriorated") {
     const [image] = useImage(
       "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/down.png"
     );
     return (
       <Image width={30} height={30} image={image} x={props.x} y={props.y} />
     );
-  } else if (props.status === "stable") {
+  } else if (props.status === "No Change") {
     const [image] = useImage(
       "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stable.png"
     );
@@ -308,7 +308,7 @@ public componentWillMount() {
     ));
 
 
-    const handleClick = (e) => {
+    const handleClickHome = (e) => {
       this.scrollReference.current.scrollLeft = todayDateLocation - 250;
     };
 
@@ -321,6 +321,7 @@ public componentWillMount() {
     var endSeg1 = [];
     var lastReportedEndDateSeg1 = [];
     var slipSeg1 = [];
+    var ypositionLocator;
     var commentarySeg1 = [];
     var Seg1Values = [];
     var yBarSeg1 = [];
@@ -332,7 +333,8 @@ public componentWillMount() {
     var segmentColor: Array<string | CanvasGradient> = [];
     var visitedWeeks = [];
     var countMap = [];
-    var ypositionLocator;
+    var TrendsList = [];
+   
 
     const segments = [
       { y: 25, fill: Segment1Color, y1: 380 },
@@ -355,6 +357,15 @@ public componentWillMount() {
 
     for (let i = 0; i < activityIDList.length; i++) {
       shortCodeSeg1.push(activityIDList[i]);
+      if (trendLists[i].toLowerCase().includes("No Trend")) {
+        TrendsList.push("stable");
+      }
+      if (trendLists[i].toLowerCase().includes("Deteriorated")) {
+        TrendsList.push("down");
+      }
+      if (trendLists[i].toLowerCase().includes("Improved")) {
+        TrendsList.push("up");
+      }
       titleSeg1.push(activityNameList[i]);
       ownerSeg1.push(ownerList[i]);
       beginSeg1.push(startDateList[i]);
@@ -366,15 +377,7 @@ public componentWillMount() {
       categoryListDisplaySeg1.push(categoryList[i]);
       plannedStartSeg1.push(projectedStartDateList[i]);
       plannedFinishSeg1.push(projectedFinishDateList[i]);
-      if (trendLists[i].toLowerCase().includes("no change")) {
-        trendSeg1.push("stable");
-      }
-      if (trendLists[i].toLowerCase().includes("deteriorated")) {
-        trendSeg1.push("down");
-      }
-      if (trendLists[i].toLowerCase().includes("improved")) {
-        trendSeg1.push("up");
-      }
+     
 
       if (statusNameList[i].toLowerCase().includes("not started")) {
         statusSeg1.push("grey");
@@ -393,6 +396,7 @@ public componentWillMount() {
       } else {
         statusSeg1.push("black");
       }
+
       for (let j = 0; j < categoryListDisplay.length; j++) {
         if (categoryList[i].includes(categoryListDisplay[j])) {
           yBarSeg1.push(segments[j]["y"]);
@@ -423,6 +427,7 @@ public componentWillMount() {
         y: ypositionLocator,
         fill: statusSeg1[i],
         id: "SEG1" + i,
+        trends: trendLists[i],
         categoryList: categoryList[i],
         shortCodeSeg: shortCodeSeg1[i],
         titleSeg: titleSeg1[i],
@@ -434,11 +439,11 @@ public componentWillMount() {
         slipSeg1: slipSeg1[i],
         commentarySeg1: commentarySeg1[i],
         categoryListDisplaySeg1: categoryListDisplaySeg1[i],
-        trendSeg: trendSeg1[i],
         successorsList: successorsListSeg1[i],
       };
       Seg1Values.push(circle);
     } 
+    console.log(Seg1Values)
   
     let twoDArray: any[][] = [];
 
@@ -461,8 +466,6 @@ public componentWillMount() {
       twoDArray.push(row);
     }
 
- 
-
     const Segment1Categories = finishDateList.map((week, index) => (
       <>
         <Circle
@@ -481,10 +484,11 @@ public componentWillMount() {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-              trendPlaceholder: Seg1Values[index]["trendSeg"],
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: Seg1Values[index]["endSeg1"],
               activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
+              trendPlaceholder: Seg1Values[index]["trends"],
+
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
@@ -495,7 +499,7 @@ public componentWillMount() {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-              trendPlaceholder: Seg1Values[index]["trendSeg"],
+              trendPlaceholder: Seg1Values[index]["trends"],
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
@@ -508,6 +512,26 @@ public componentWillMount() {
           }}
 
         ></Circle>
+         <Text
+          x={Seg1Values[index]["x"] - 5}
+          y={Seg1Values[index]["ybarSeg"]}
+          width={40 * 2}
+          height={40 * 2}
+          text={Seg1Values[index]["fill"] == "red" ? "🚩" : ""}
+          fontSize={30}
+          fill={textColor}
+
+        />
+
+        <StatusIcon
+          x={Seg1Values[index]["x"] - 14}
+          y={Seg1Values[index]["y"] + 10}
+          status={Seg1Values[index]["trends"] }
+          onClick={()=>{
+            
+            this.handleClick(twoDArray,String(Seg1Values[index]["successorsList"]))}
+          }
+/>
         <Text
           x={Seg1Values[index]["x"] - 40}
           y={Seg1Values[index]["y"]}
@@ -527,7 +551,7 @@ public componentWillMount() {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-              trendPlaceholder: Seg1Values[index]["trendSeg"],
+              trendPlaceholder: Seg1Values[index]["trends"],
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
@@ -546,7 +570,7 @@ public componentWillMount() {
             this.setState({
               titlePlaceholder: Seg1Values[index]["titleSeg"],
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-              trendPlaceholder: Seg1Values[index]["trendSeg"],
+              trendPlaceholder: Seg1Values[index]["trends"],
               activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
 
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
@@ -559,26 +583,7 @@ public componentWillMount() {
           }}
         />
 
-        <Text
-          x={Seg1Values[index]["x"] - 5}
-          y={Seg1Values[index]["ybarSeg"]}
-          width={40 * 2}
-          height={40 * 2}
-          text={Seg1Values[index]["fill"] == "red" ? "🚩" : ""}
-          fontSize={30}
-          fill={textColor}
-
-        />
-
-        <StatusIcon
-          status={Seg1Values[index]["trendSeg"]}
-          x={Seg1Values[index]["x"] - 14}
-          y={Seg1Values[index]["y"] + 10}
-          onClick={()=>{
-            
-            this.handleClick(twoDArray,String(Seg1Values[index]["successorsList"]))}
-          }
-></StatusIcon>
+       
       </>
     ));
     const Segment1Lines = finishDateList.map((week, index) => (
@@ -759,12 +764,6 @@ public componentWillMount() {
   )}
 </Layer>
   </Stage>
-  {/* <polygon id="Segment1" points="208.9 31.29 236.64 54.97 208.9 0 208.9 31.29" fill={Segment1Color} stroke-width="0"/>
-  <polygon id="Segment5" points="208.9 158.15 236.64 129.61 236.64 136.57 208.9 189.44 208.9 158.15"  fill={Segment5Color} stroke-width="0"/>
-  <polygon id="Segment6" points="208.9 198.32 236.64 149.27 236.64 158.15 208.9 229.62 208.9 198.32"  fill={Segment6Color} stroke-width="0"/>
-  <polyline id="Segment2" points="208.9 39.33 236.64 70.62 236.64 76.31 208.9 70.62 208.9 40.85"  fill={Segment2Color} stroke-width="0"/>
-  <polygon id="Segment3" points="208.9 78.65 236.64 90.63 236.64 95.97 208.9 109.94 208.9 78.65"  fill={Segment3Color}  stroke-width="0"/>
-  <polygon id="Segment4P" points="208.9 117.98 236.64 109.94 236.64 115.99 208.9 149.27 208.9 117.98"  fill={Segment4Color} stroke-width="0"/> */}
 </div>
             </div>
             <div
@@ -821,7 +820,6 @@ public componentWillMount() {
       </Layer>
     );
   }
-  return null;
 })}
                   <Layer>
                     {Segment1Lines}
@@ -842,7 +840,7 @@ public componentWillMount() {
               <table style={{ margin: "fixed" }}>
                 <tbody>
                   <tr>
-                    <td>              <button style={{ zIndex:999}} onClick={(e) => handleClick(e)}>Scroll To Today</button>   
+                    <td>              <button style={{ zIndex:999}} onClick={(e) => handleClickHome(e)}>Scroll To Today</button>   
 </td>
                   </tr>
                 <tr>
@@ -859,7 +857,7 @@ public componentWillMount() {
                   </tr>
                   <tr>
                     <td style={{ fontWeight: "bold" }}>Trend</td>
-                    <td> {trendPlaceholder === "up" ? <MdOutlineTrendingUp style={{ color: "green",fontSize: "2em" }} />
+                    <td> {trendPlaceholder === "Improved" ? <MdOutlineTrendingUp style={{ color: "green",fontSize: "2em" }} />
     : trendPlaceholder === "down" ? <MdOutlineTrendingDown style={{ color: "red",fontSize: "2em" }} />
     : <MdOutlineTrendingFlat style={{ color: "yellow",fontSize: "2em" }} />}</td>
                   </tr>

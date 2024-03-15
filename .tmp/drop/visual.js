@@ -34716,15 +34716,15 @@ const monthNames = [
 
 
 const StatusIcon = (props) => {
-    if (props.status === "up") {
+    if (props.status === "Improved") {
         const [image] = use_image__WEBPACK_IMPORTED_MODULE_3___default()("https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stick.png");
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Image */ .Ee, { width: 30, height: 30, image: image, x: props.x, y: props.y }));
     }
-    else if (props.status === "down") {
+    else if (props.status === "Deteriorated") {
         const [image] = use_image__WEBPACK_IMPORTED_MODULE_3___default()("https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/down.png");
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Image */ .Ee, { width: 30, height: 30, image: image, x: props.x, y: props.y }));
     }
-    else if (props.status === "stable") {
+    else if (props.status === "No Change") {
         const [image] = use_image__WEBPACK_IMPORTED_MODULE_3___default()("https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/stable.png");
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Image */ .Ee, { width: 30, height: 30, image: image, x: props.x, y: props.y }));
     }
@@ -34873,7 +34873,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const monthsArray = months.map((month, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "monthitem", style: { backgroundColor: backgroundColorVis } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, month),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, years[index]))));
-        const handleClick = (e) => {
+        const handleClickHome = (e) => {
             this.scrollReference.current.scrollLeft = todayDateLocation - 250;
         };
         var shortCodeSeg1 = [];
@@ -34885,6 +34885,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var endSeg1 = [];
         var lastReportedEndDateSeg1 = [];
         var slipSeg1 = [];
+        var ypositionLocator;
         var commentarySeg1 = [];
         var Seg1Values = [];
         var yBarSeg1 = [];
@@ -34896,7 +34897,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var segmentColor = [];
         var visitedWeeks = [];
         var countMap = [];
-        var ypositionLocator;
+        var TrendsList = [];
         const segments = [
             { y: 25, fill: Segment1Color, y1: 380 },
             { y: 57, fill: Segment2Color, y1: 320 },
@@ -34914,6 +34915,15 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         });
         for (let i = 0; i < activityIDList.length; i++) {
             shortCodeSeg1.push(activityIDList[i]);
+            if (trendLists[i].toLowerCase().includes("No Trend")) {
+                TrendsList.push("stable");
+            }
+            if (trendLists[i].toLowerCase().includes("Deteriorated")) {
+                TrendsList.push("down");
+            }
+            if (trendLists[i].toLowerCase().includes("Improved")) {
+                TrendsList.push("up");
+            }
             titleSeg1.push(activityNameList[i]);
             ownerSeg1.push(ownerList[i]);
             beginSeg1.push(startDateList[i]);
@@ -34925,15 +34935,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             categoryListDisplaySeg1.push(categoryList[i]);
             plannedStartSeg1.push(projectedStartDateList[i]);
             plannedFinishSeg1.push(projectedFinishDateList[i]);
-            if (trendLists[i].toLowerCase().includes("no change")) {
-                trendSeg1.push("stable");
-            }
-            if (trendLists[i].toLowerCase().includes("deteriorated")) {
-                trendSeg1.push("down");
-            }
-            if (trendLists[i].toLowerCase().includes("improved")) {
-                trendSeg1.push("up");
-            }
             if (statusNameList[i].toLowerCase().includes("not started")) {
                 statusSeg1.push("grey");
             }
@@ -34980,6 +34981,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 y: ypositionLocator,
                 fill: statusSeg1[i],
                 id: "SEG1" + i,
+                trends: trendLists[i],
                 categoryList: categoryList[i],
                 shortCodeSeg: shortCodeSeg1[i],
                 titleSeg: titleSeg1[i],
@@ -34991,11 +34993,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 slipSeg1: slipSeg1[i],
                 commentarySeg1: commentarySeg1[i],
                 categoryListDisplaySeg1: categoryListDisplaySeg1[i],
-                trendSeg: trendSeg1[i],
                 successorsList: successorsListSeg1[i],
             };
             Seg1Values.push(circle);
         }
+        console.log(Seg1Values);
         let twoDArray = [];
         for (const element of Seg1Values) {
             let row = [];
@@ -35021,10 +35023,10 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-                        trendPlaceholder: Seg1Values[index]["trendSeg"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
                         endDatePlaceholder: Seg1Values[index]["endSeg1"],
                         activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
+                        trendPlaceholder: Seg1Values[index]["trends"],
                         lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
@@ -35032,13 +35034,17 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-                        trendPlaceholder: Seg1Values[index]["trendSeg"],
+                        trendPlaceholder: Seg1Values[index]["trends"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
                         endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
                         activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
                         lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
+                } }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 5, y: Seg1Values[index]["ybarSeg"], width: 40 * 2, height: 40 * 2, text: Seg1Values[index]["fill"] == "red" ? "🚩" : "", fontSize: 30, fill: textColor }),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: Seg1Values[index]["x"] - 14, y: Seg1Values[index]["y"] + 10, status: Seg1Values[index]["trends"], onClick: () => {
+                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]));
                 } }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: Seg1Values[index]["shortCodeSeg"], fontSize: 8, fill: textColor, onClick: () => {
                     this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]));
@@ -35046,7 +35052,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-                        trendPlaceholder: Seg1Values[index]["trendSeg"],
+                        trendPlaceholder: Seg1Values[index]["trends"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
                         endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
                         activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
@@ -35057,17 +35063,13 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     this.setState({
                         titlePlaceholder: Seg1Values[index]["titleSeg"],
                         ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-                        trendPlaceholder: Seg1Values[index]["trendSeg"],
+                        trendPlaceholder: Seg1Values[index]["trends"],
                         activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
                         baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
                         endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
                         lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
                         slipPlaceholder: Seg1Values[index]["slipSeg1"],
                     });
-                } }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 5, y: Seg1Values[index]["ybarSeg"], width: 40 * 2, height: 40 * 2, text: Seg1Values[index]["fill"] == "red" ? "🚩" : "", fontSize: 30, fill: textColor }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { status: Seg1Values[index]["trendSeg"], x: Seg1Values[index]["x"] - 14, y: Seg1Values[index]["y"] + 10, onClick: () => {
-                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]));
                 } }))));
         const Segment1Lines = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [
                 Seg1Values[index]["x"],
@@ -35131,7 +35133,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                         react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { key: index, x: 0, y: segment.y, width: months.length * 5 * 55, height: 6, fill: segment.fill })));
                                 }
-                                return null;
                             }),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                 Segment1Lines,
@@ -35146,7 +35147,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
                                     "              ",
-                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999 }, onClick: (e) => handleClick(e) }, "Scroll To Today"))),
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999 }, onClick: (e) => handleClickHome(e) }, "Scroll To Today"))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Activity Category"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, activityPlaceholder)),
@@ -35160,7 +35161,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Trend"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
                                     " ",
-                                    trendPlaceholder === "up" ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_7__/* .MdOutlineTrendingUp */ .BsN, { style: { color: "green", fontSize: "2em" } })
+                                    trendPlaceholder === "Improved" ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_7__/* .MdOutlineTrendingUp */ .BsN, { style: { color: "green", fontSize: "2em" } })
                                         : trendPlaceholder === "down" ? react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_7__/* .MdOutlineTrendingDown */ .PeX, { style: { color: "red", fontSize: "2em" } })
                                             : react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_7__/* .MdOutlineTrendingFlat */ .R_6, { style: { color: "yellow", fontSize: "2em" } }))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
