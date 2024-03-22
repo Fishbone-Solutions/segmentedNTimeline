@@ -359,7 +359,7 @@ public componentWillUnmount() {
       else if (statusNameList[i].toLowerCase().includes("on plan")) {
         statusSeg1.push("green");
       }
-      else if (statusNameList[i].toLowerCase().includes("completed")) {
+      else if (statusNameList[i].toLowerCase().includes("complete")) {
         statusSeg1.push("blue");
       }  
       else {
@@ -1021,8 +1021,8 @@ public componentWillUnmount() {
             <div
               style={{ height: "100px", overflowY: "auto", display: "flex" ,backgroundColor: backgroundColorVis }}
             >
-          {/*    <div className="loading-circle"></div> */}
-              <table
+{/*         <div className="loading-circle"></div> 
+ */}              <table
                 style={{
                   width: "100%",
                   fontSize: "15px",
@@ -1030,6 +1030,7 @@ public componentWillUnmount() {
                   borderCollapse: "collapse",
                 }}
               >
+                   {/* <div className="loading-circle"></div>  */}
                 <tbody>
                   {[
                     ...new Set(

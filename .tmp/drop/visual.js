@@ -34952,7 +34952,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             else if (statusNameList[i].toLowerCase().includes("on plan")) {
                 statusSeg1.push("green");
             }
-            else if (statusNameList[i].toLowerCase().includes("completed")) {
+            else if (statusNameList[i].toLowerCase().includes("complete")) {
                 statusSeg1.push("blue");
             }
             else {
@@ -35280,6 +35280,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     padding: "8px",
                                 } }, "Comments")))),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "100px", overflowY: "auto", display: "flex", backgroundColor: backgroundColorVis } },
+                    "              ",
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: {
                             width: "100%",
                             fontSize: "15px",
@@ -35319,16 +35320,14 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
 var DataViewObjectsParser = powerbi_visuals_utils_dataviewutils__WEBPACK_IMPORTED_MODULE_0__/* .DataViewObjectsParser */ .U;
 class CircleSettings {
     circleColor = "#757171";
-    Segment1Color = "#e044a7";
-    Segment2Color = "#a0d1fe";
-    Segment3Color = "#f0a786";
-    Segment4Color = "#a28615";
-    Segment5Color = "#8EAADC";
-    Segment6Color = "#A0D1FE";
+    Segment1Color = "rgb(174,145,110)";
+    Segment2Color = "rgb(131,150,178)";
+    Segment3Color = "rgb(94,66,35)";
+    Segment4Color = "#8877A6";
+    Segment5Color = "#DC8F9F";
+    Segment6Color = "rgb(188,177,205)";
     textColor = "black";
-    SidetextColor = "#A0D1FE";
-    startDate = null; // Date picker property
-    endDate = null; // Date picker property
+    SidetextColor = "white";
 }
 class VisualSettings extends DataViewObjectsParser {
     circle = new CircleSettings();
