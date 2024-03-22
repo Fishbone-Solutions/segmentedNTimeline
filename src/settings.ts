@@ -11,7 +11,8 @@ export class CircleSettings {
     public Segment4Color: string = "#a28615";
     public Segment5Color: string = "#8EAADC";
     public Segment6Color: string = "#A0D1FE";
-    public textColor: string = "red";
+    public textColor: string = "black";
+    public SidetextColor: string = "#A0D1FE";
     public startDate: Date | null = null; // Date picker property
     public endDate: Date | null = null; // Date picker property
 

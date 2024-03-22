@@ -9,6 +9,7 @@ export declare class CircleSettings {
     Segment5Color: string;
     Segment6Color: string;
     textColor: string;
+    SidetextColor: string;
     startDate: Date | null;
     endDate: Date | null;
 }

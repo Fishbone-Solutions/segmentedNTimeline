@@ -40,6 +40,7 @@ export interface State {
   Segment5Color?: string;
   Segment6Color?: string;
   textColor?: string;
+  SidetextColor?:string,
   activityIDList?: string[];
   categoryList?: string[];
   activityLevelList?: string[];
@@ -65,13 +66,14 @@ export interface State {
   slipPlaceholder?: string;
   scrollPositionIndicator?:number;
   twoDArrayPlaceholder?: any[][]; // 2D array placeholder
-  activityPlaceholder?: string
+  activityPlaceholder?: string,
+  rightSideBar?: string
 }
-
 export const initialState: State = {
   backgroundColorVis: "white",
   activityIDList: [],
-  textColor: "white",
+  textColor: "black",
+  SidetextColor:"white",
   finishDateList: [],
   categoryList: [],
   activityLevelList: [],
@@ -94,7 +96,9 @@ export const initialState: State = {
   endDatePlaceholder: "",
   lastReportedDatePlaceholder: "",
   slipPlaceholder: "",
-  activityPlaceholder:""
+  activityPlaceholder:"",
+  rightSideBar: "flex"
+
 };
 
 interface DataItem {
@@ -114,6 +118,7 @@ export class segmentedBar extends React.Component<any, State> {
   private static updateCallback: (data: object) => void = null;
   scrollReference: React.RefObject<HTMLDivElement>;
   scrollIndicator: Number;
+  rightSideBar: String;
 
   public static update(newState: State) {
     if (typeof segmentedBar.updateCallback === "function") {
@@ -122,12 +127,14 @@ export class segmentedBar extends React.Component<any, State> {
   }
 
   public state: State = initialState;
-
   constructor(props: any) {
     super(props);
     this.state = initialState;
     this.dataArrayList = this.dataArrayList;
     this.scrollReference = React.createRef();
+    this.rightSideBar="flex";
+    
+    
 
 
   }
@@ -161,25 +168,22 @@ export class segmentedBar extends React.Component<any, State> {
   
       this.dataArrayList.push(datapoint);
     }
-  
-    //this.dataArrayList = this.dataArrayList.filter((element) => element.activeElemnent === activeElement);
     console.log(this.dataArrayList);
   }
 
+  handleToggleDisplay = () => {
+    this.setState(prevState => ({
+      rightSideBar: prevState.rightSideBar === "flex" ? "none" : "flex"
+    }));
+  };
 
-
-
-
-     
-    
-  
 public componentWillMount() {
     segmentedBar.updateCallback = (newState: State): void => {
       this.setState(newState);
     };
   }
 
-  public componentWillUnmount() {
+public componentWillUnmount() {
     segmentedBar.updateCallback = null;
   }
 
@@ -193,6 +197,7 @@ public componentWillMount() {
       Segment5Color,
       Segment6Color,
       textColor,
+      SidetextColor,
       activityIDList,
       categoryList,
       activityNameList,
@@ -215,20 +220,21 @@ public componentWillMount() {
       endDatePlaceholder,
       lastReportedDatePlaceholder,
       slipPlaceholder,
-      activityPlaceholder
+      activityPlaceholder,
+      rightSideBar
     } = this.state;
 
     let months = [];
     let years = [];
-    let finsldates = [];
+    let finalDatesIterator = [];
 
     for (const element of finishDateList) {
-      finsldates.push(new Date(Date.parse(element)));
+      finalDatesIterator.push(new Date(Date.parse(element)));
     }
     let categoryListDisplay = [...new Set(categoryList)];
     categoryListDisplay.sort((a, b) => a.localeCompare(b));
 
-    const result = finsldates.reduce(
+    const result = finalDatesIterator.reduce(
       (acc, date) => {
         const min = acc.min ? (date < acc.min ? date : acc.min) : date;
         const max = acc.max
@@ -260,23 +266,16 @@ public componentWillMount() {
     }
 
     const start = subMonths(result.min, 1);
-
     const todayDate = new Date();
-
     const todaysLine = todayDate.getDate() + todayDate.getDay();
-
     const prefix = [0, 1, 2, 3, 4, 5];
-
     const currentWeek = prefix[0 | (todaysLine / 7)] + 1;
-
-    const todayDateLocation =
-      Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 55 +currentWeek * 55 -24;
+    const todayDateLocation = Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 55 +currentWeek * 55 -24;
+    const EndDateLocation = Math.abs(differenceInCalendarMonths(start, endDate.toDate())) * 5 * 55;
+    const today = new Date();
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    const todayDateString: string = today.toLocaleDateString('en-UK', options).split('/').join('/');
     
-      const EndDateLocation =
-      Math.abs(differenceInCalendarMonths(start, endDate.toDate())) * 5 * 55;
-
-
-
     const weeksArray = months.map((week, index) => (
       <>
         <button style={{ width: 55, padding: 0, border: 0 }}>{1}</button>
@@ -304,7 +303,6 @@ public componentWillMount() {
 
     var shortCodeSeg1 = [];
     var statusSeg1 = [];
-    var trendSeg1 = [];
     var titleSeg1 = [];
     var ownerSeg1 = [];
     var beginSeg1 = [];
@@ -345,8 +343,30 @@ public componentWillMount() {
       return weekNos;
     });
 
+
+   // console.log("statusNameList",statusNameList)
+  
     for (let i = 0; i < activityIDList.length; i++) {
-      var xValPositions: Number;
+      if (statusNameList[i].toLowerCase().includes("not started")) {
+        statusSeg1.push("grey");
+      }
+      else if (statusNameList[i].toLowerCase().includes("late")) {
+        statusSeg1.push("red");
+      }
+      else if (statusNameList[i].toLowerCase().includes("at risk")) {
+        statusSeg1.push("yellow");
+      }
+      else if (statusNameList[i].toLowerCase().includes("on plan")) {
+        statusSeg1.push("green");
+      }
+      else if (statusNameList[i].toLowerCase().includes("completed")) {
+        statusSeg1.push("blue");
+      }  
+      else {
+        statusSeg1.push("black");
+      }
+    } 
+    for (let i = 0; i < activityIDList.length; i++) {
       shortCodeSeg1.push(activityIDList[i]);
       if (trendLists[i].toLowerCase().includes("No Trend")) {
         TrendsList.push("stable");
@@ -370,23 +390,8 @@ public componentWillMount() {
       plannedFinishSeg1.push(projectedFinishDateList[i]);
      
 
-      if (statusNameList[i].toLowerCase().includes("not started")) {
-        statusSeg1.push("grey");
-      }
-      if (statusNameList[i].toLowerCase().includes("late")) {
-        statusSeg1.push("red");
-      }
-      if (statusNameList[i].toLowerCase().includes("at risk")) {
-        statusSeg1.push("yellow");
-      }
-      if (statusNameList[i].toLowerCase().includes("on plan")) {
-        statusSeg1.push("green");
-      }
-      if (statusNameList[i].toLowerCase().includes("completed")) {
-        statusSeg1.push("blue");
-      } else {
-        statusSeg1.push("black");
-      }
+    
+      
 
       for (let j = 0; j < categoryListDisplay.length; j++) {
         if (categoryList[i].includes(categoryListDisplay[j])) {
@@ -412,10 +417,9 @@ public componentWillMount() {
       if (ypositionLocator > 400) {
         ypositionLocator = 390;
       }
-   
-      console.log("xValPositions",xValPositions)
+      
       let circle = {
-        x: 55 * Number(weekNoFromList[i]),//+ 11 * Number(Math.floor(Math.random() * 5)+1),
+        x: 55 * Number(weekNoFromList[i]),
         y: ypositionLocator,
         fill: statusSeg1[i],
         id: "SEG1" + i,
@@ -435,6 +439,8 @@ public componentWillMount() {
       };
       Seg1Values.push(circle);
     } 
+
+
   
     let twoDArray: any[][] = [];
 
@@ -493,15 +499,13 @@ public componentWillMount() {
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-
               lastReportedDatePlaceholder: String(
                 Seg1Values[index]["lastReportedEndDateSeg1"]
               ),
               slipPlaceholder: Seg1Values[index]["slipSeg1"],
             });
           }}
-
-        ></Circle>
+          / >
      
          <Text
           x={Seg1Values[index]["x"] - 5}
@@ -532,8 +536,9 @@ public componentWillMount() {
           verticalAlign="middle"
           text={Seg1Values[index]["shortCodeSeg"]}
           fontSize={8}
-          fill={textColor}
-          onClick={()=>{
+         // fill={String(segmentColor[index])}
+         fill={textColor}
+         onClick={()=>{
             this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"])}
           }
 
@@ -562,7 +567,6 @@ public componentWillMount() {
               ownerPlaceholder: Seg1Values[index]["ownerSeg"],
               trendPlaceholder: Seg1Values[index]["trends"],
               activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-
               baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
               endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
               lastReportedDatePlaceholder: String(
@@ -601,6 +605,9 @@ public componentWillMount() {
       marginRight: "10px",
       display: "inline-block",
     };
+
+
+
   
    const Xval = [60,92,124,156,188,220]
     return (
@@ -630,7 +637,7 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[0]}
-        fill="white"
+        fill={SidetextColor}
         align="center"
         verticalAlign="middle"
       />
@@ -653,7 +660,7 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[1]}
-        fill={textColor}
+        fill={SidetextColor}
         align="center"
         verticalAlign="middle"
       />
@@ -676,8 +683,7 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[2]}
-        fill={textColor}
-
+        fill={SidetextColor}
         align="center"
         verticalAlign="middle"
       />
@@ -700,7 +706,7 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[3]}
-        fill="white"
+        fill={SidetextColor}
         align="center"
         verticalAlign="middle"
       />
@@ -723,7 +729,7 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[4]}
-        fill={textColor}
+        fill={SidetextColor}
 
         align="center"
         verticalAlign="middle"
@@ -747,7 +753,7 @@ public componentWillMount() {
         width={208.9}
         height={20}
         text={categoryListDisplay[5]}
-        fill={textColor}
+        fill={SidetextColor}
         align="center"
         verticalAlign="middle"
       />
@@ -790,7 +796,7 @@ public componentWillMount() {
                     <Text
                       x={todayDateLocation + 3}
                       y={10}
-                      text="Today"
+                      text={"Today: " + todayDateString} 
                       fontSize={15}
                       fill="black"
                     ></Text>
@@ -819,96 +825,100 @@ public componentWillMount() {
                 </Stage>
               </div>
             </div>
+            <button           onClick={this.handleToggleDisplay}  style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit' }} >{"||"}</button>   
             <div
               style={{
                 width: "40%",
+                height:"500",
                 backgroundColor: backgroundColorVis,
-                display: "flex",
+                display: rightSideBar
+
               }}
             >
+               <table >
 
-              <table style={{ margin: "fixed" }}>
-                <tbody>
-                  <tr>
-                    <td>     <button style={{ zIndex:999}} onClick={(e) => handleClickHome(e)}>Today</button>   
-</td>
-                  </tr>
-                <tr>
-                    <td style={{ fontWeight: "bold" }}>Activity Category</td>
-                    <td>{activityPlaceholder}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Title</td>
-                    <td>{titlePlaceholder}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Owner</td>
-                    <td>{ownerPlaceholder}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Trend</td>
-                    <td> {trendPlaceholder === "Improved" ? <MdOutlineTrendingUp style={{ color: "#40B04A",fontSize: "2em" }} />
-    : trendPlaceholder === "down" ? <MdOutlineTrendingDown style={{ color: "red",fontSize: "2em" }} />
-    : <MdOutlineTrendingFlat style={{ color: "yellow",fontSize: "2em"  }} />}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>BaseLine</td>
-                    <td>{baseLineDatePlaceholder.split("T")[0].split("-").reverse().join("-")}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>End Date</td>
-                    <td>{endDatePlaceholder.split("T")[0].split("-").reverse().join("-")}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>
-                      Last Reported End Date
-                    </td>
-                    <td>{lastReportedDatePlaceholder.split("T")[0].split("-").reverse().join("-")}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Slip</td>
-                    <td>{slipPlaceholder} Days</td>
-                  </tr>
-                  <br></br>
-                  <tr>
-                    <td colSpan={2}>
-                      <div>
-                        <p style={legendStyle}><b>{"Legend"}</b></p>
-                        <div
-                          style={{ ...colorRectStyle, backgroundColor: "grey" }}
-                        ></div>
-                        <span>-&gt; Not Started</span>
-                        <br />
-                        <div
-                          style={{ ...colorRectStyle, backgroundColor: "red" }}
-                        ></div>
-                        <span>-&gt; Late</span>
-                        <br />
-                        <div
-                          style={{
-                            ...colorRectStyle,
-                            backgroundColor: "yellow",
-                          }}
-                        ></div>
-                        <span>-&gt; At Risk</span>
-                        <br />
-                        <div
-                          style={{
-                            ...colorRectStyle,
-                            backgroundColor: "green",
-                          }}
-                        ></div>
-                        <span>-&gt; On Plan</span>
-                        <br />
-                        <div
-                          style={{ ...colorRectStyle, backgroundColor: "blue" }}
-                        ></div>
-                        <span>-&gt; Complete</span>
-                        <br />
-                      </div>
-                    </td>
-                  </tr>
+                <tbody style={{ margin: "fixed",/* borderCollapse: "collapse", border: "1px solid black" */  }}>
+                  <tr style={{ display: 'block', width: '100%' }}></tr>
                 </tbody>
+                </table>
+              <table >
+              <button style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit', }}   onClick={(e) => handleClickHome(e)}>Today</button>   
+
+                <tbody style={{ margin: "fixed", borderCollapse: "collapse", /* border: "1px solid black" */  }}>
+                  <tr style={{ display: 'block', width: '100%' }}>
+                   
+                  </tr>
+                  <tr>
+  <td style={{ fontWeight: "bold", /* border: "1px solid black" */ }}>Activity Category</td>
+  <td style={{ /* border: "1px solid black"*/ }}>{activityPlaceholder}</td>
+</tr>
+<tr>
+  <td style={{ fontWeight: "bold", /* border: "1px solid black" */ }}>Title</td>
+  <td style={{ /* border: "1px solid black" */}}>{titlePlaceholder}</td>
+</tr>
+<tr>
+  <td style={{ fontWeight: "bold", /* border: "1px solid black" */ }}>Owner</td>
+  <td style={{/* border: "1px solid black" */ }}>{ownerPlaceholder}</td>
+</tr>
+<tr>
+  <td style={{ fontWeight: "bold", /*border: "1px solid black"*/ }}>Trend</td>
+  <td style={{/* border: "1px solid black"*/ }}>
+    {trendPlaceholder === "Improved" ? (
+      <MdOutlineTrendingUp style={{ color: "#40B04A", fontSize: "2em" }} />
+    ) : trendPlaceholder === "down" ? (
+      <MdOutlineTrendingDown style={{ color: "red", fontSize: "2em" }} />
+    ) : (
+      <MdOutlineTrendingFlat style={{ color: "yellow", fontSize: "2em" }} />
+    )}
+  </td>
+</tr>
+<tr>
+  <td style={{ fontWeight: "bold",/* border: "1px solid black" */}}>BaseLine</td>
+  <td style={{ /*  border: "1px solid black" */ }}>
+    {baseLineDatePlaceholder.split("T")[0].split("-").reverse().join("-")}
+  </td>
+</tr>
+<tr>
+  <td style={{ fontWeight: "bold",  /* border: "1px solid black" */}}>End Date</td>
+  <td style={{ /* border: "1px solid black" */ }}>
+    {endDatePlaceholder.split("T")[0].split("-").reverse().join("-")}
+  </td>
+</tr>
+<tr>
+  <td style={{ fontWeight: "bold", /*border: "1px solid black"*/ }}>Last Reported End Date</td>
+  <td style={{ /* border: "1px solid black" */ }}>
+    {lastReportedDatePlaceholder.split("T")[0].split("-").reverse().join("-")}
+  </td>
+</tr>
+<tr>
+  <td style={{ fontWeight: "bold", /* border: "1px solid black" */ }}>Slip</td>
+  <td style={{ /* border: "1px solid black" */ }}>{slipPlaceholder} Days</td>
+</tr>
+
+
+                </tbody>
+                <tr>
+  <td colSpan={2} style={{/* border: "1px solid black"*/ }}>
+    <div> 
+      <p style={legendStyle}><b>{"Legend"}</b></p>
+      <div style={{ ...colorRectStyle, backgroundColor: "grey" }}></div>
+      <span>Not Started</span>
+      <br />
+      <div style={{ ...colorRectStyle, backgroundColor: "red" }}></div>
+      <span>Late</span>
+      <br />
+      <div style={{ ...colorRectStyle, backgroundColor: "yellow" }}></div>
+      <span>At Risk</span>
+      <br />
+      <div style={{ ...colorRectStyle, backgroundColor: "green" }}></div>
+      <span>On Plan</span>
+      <br />
+      <div style={{ ...colorRectStyle, backgroundColor: "blue" }}></div>
+      <span>Complete</span>
+      <br />
+</div>
+  </td>
+</tr>
               </table>
             </div>
           </div>
@@ -1011,6 +1021,7 @@ public componentWillMount() {
             <div
               style={{ height: "100px", overflowY: "auto", display: "flex" ,backgroundColor: backgroundColorVis }}
             >
+          {/*    <div className="loading-circle"></div> */}
               <table
                 style={{
                   width: "100%",
@@ -1094,7 +1105,7 @@ public componentWillMount() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> 
         </div>
       
     );

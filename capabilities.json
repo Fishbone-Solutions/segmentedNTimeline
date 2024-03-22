@@ -147,7 +147,7 @@
                     }
                 },
                 "textColor": {
-                    "displayName": "Text Color",
+                    "displayName": "Main Visual Text Color",
                     "description": "Text Color",
                     "type": {
                         "fill": {
@@ -156,7 +156,18 @@
                             }
                         }
                     }
-                },
+                }, 
+                "SidetextColor": {
+                  "displayName": "Category Text Color",
+                  "description": "Category Text Color",
+                  "type": {
+                      "fill": {
+                          "solid": {
+                              "color": true
+                          }
+                      }
+                  }
+              },
                 "circleColor": {
                     "displayName": "Background Color",
                     "description": "The fill color of the circle.",

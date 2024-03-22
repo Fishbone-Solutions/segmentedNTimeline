@@ -117,6 +117,7 @@ export class Visual implements IVisual {
                 Segment5Color: object && object.Segment5Color ? object.Segment5Color : undefined,
                 Segment6Color: object && object.Segment6Color ? object.Segment6Color : undefined,
                 textColor: object && object.textColor ? object.textColor : undefined,
+                SidetextColor: object && object.SidetextColor ? object.SidetextColor : undefined,
                 activityIDList: activityIDList,
                 categoryList: categoryList,
                 activityNameList: activityNameList,
@@ -133,7 +134,6 @@ export class Visual implements IVisual {
                 trendLists: trendLists,
                 lastReportedEndDateList: lastReportedEndDateList,
                 backgroundColorVis: object && object.circleColor ? object.circleColor : undefined,
-
             });
 
 
