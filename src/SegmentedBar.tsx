@@ -5,6 +5,9 @@ import { differenceInCalendarMonths, subMonths } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
 import useImage from "use-image";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown, MdOutlineTrendingFlat } from 'react-icons/md';
+import DataTable,  {TableStyles} from 'react-data-table-component';
+
+
 
 const StatusIcon = (props) => {
   if (props.status === "Improved") {
@@ -27,6 +30,23 @@ const StatusIcon = (props) => {
     );
     return (
       <Image width={30} height={30} image={image} x={props.x} y={props.y} />
+    );
+  }
+
+  else if (props.status === "flag") {
+    const [image] = useImage(
+      "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/flag.png"
+    );
+    return (
+      <Image width={30} height={30} image={image} x={props.x} y={props.y} />
+    );
+  }
+  else if (props.status === null) {
+    const [image] = useImage(
+      "https://raw.githubusercontent.com/Fishbone-Solutions/FB_CDN/main/flag.png"
+    );
+    return (
+     <></>
     );
   }
 };
@@ -130,7 +150,6 @@ export class segmentedBar extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
     this.state = initialState;
-    this.dataArrayList = this.dataArrayList;
     this.scrollReference = React.createRef();
     this.rightSideBar="flex";
     
@@ -301,6 +320,86 @@ public componentWillUnmount() {
       this.scrollReference.current.scrollLeft = todayDateLocation - 250;
     };
 
+
+    const columns = [
+      {
+        name: "Milestone",
+        selector: row => row.title,
+      },
+      {
+        name: "Title",
+        selector: row => row.title,
+      },
+      {
+        name: "Owner",
+        selector: row => row.owner,
+      },
+      {
+        name: "Impacted By",
+        selector: row => row.impactedBy,
+      },
+      {
+        name: "Plan Date",
+        selector: row => row.planDate,
+      },
+      {
+        name: "Projected Start",
+        selector: row => row.projectedStart,
+      },
+      {
+        name: "Plan Finish",
+        selector: row => row.planFinish,
+      },
+      {
+        name: "Projected Finish",
+        selector: row => row.projectedFinish,
+      },
+      {
+        name: "Comments",
+        selector: row => row.comments,
+      },
+    ];
+  
+    
+    const data = [
+      {
+        activeElement: "Milestone 1",
+        milestone: "Milestone 1",
+        title: "Milestone 1",
+        owner: "John Doe",
+        impactedBy: "Jane Doe",
+        planDate: "2023-01-01",
+        projectedStart: "2023-01-02",
+        planFinish: "2023-01-05",
+        projectedFinish: "2023-01-06",
+        comments: "This is a comment.",
+      },
+      {
+        activeElement: "Milestone 2",
+        milestone: "Milestone 2",
+        title: "Milestone 2",
+        owner: "Jane Doe",
+        impactedBy: "John Doe",
+        planDate: "2023-01-06",
+        projectedStart: "2023-01-07",
+        planFinish: "2023-01-10",
+        projectedFinish: "2023-01-11",
+        comments: "This is a comment.",
+      },
+      {
+        activeElement: "Milestone 3",
+        milestone: "Milestone 3",
+        title: "Milestone 3",
+        owner: "John Doe",
+        impactedBy: "Jane Doe",
+        planDate: "2023-01-11",
+        projectedStart: "2023-01-12",
+        planFinish: "2023-01-15",
+        projectedFinish: "2023-01-16",
+        comments: "This is a comment.",
+      },
+    ];
+
     var shortCodeSeg1 = [];
     var statusSeg1 = [];
     var titleSeg1 = [];
@@ -322,6 +421,7 @@ public componentWillUnmount() {
     var visitedWeeks = [];
     var countMap = [];
     var TrendsList = [];
+    var predecessorsListSeg1 = [];
    
 
     const segments = [
@@ -371,10 +471,10 @@ public componentWillUnmount() {
       if (trendLists[i].toLowerCase().includes("No Trend")) {
         TrendsList.push("stable");
       }
-      if (trendLists[i].toLowerCase().includes("Deteriorated")) {
+      else if (trendLists[i].toLowerCase().includes("Deteriorated")) {
         TrendsList.push("down");
       }
-      if (trendLists[i].toLowerCase().includes("Improved")) {
+     else if (trendLists[i].toLowerCase().includes("Improved")) {
         TrendsList.push("up");
       }
       titleSeg1.push(activityNameList[i]);
@@ -388,6 +488,7 @@ public componentWillUnmount() {
       categoryListDisplaySeg1.push(categoryList[i]);
       plannedStartSeg1.push(projectedStartDateList[i]);
       plannedFinishSeg1.push(projectedFinishDateList[i]);
+      predecessorsListSeg1.push(predecessorsList[i]);
      
 
     
@@ -507,16 +608,7 @@ public componentWillUnmount() {
           }}
           / >
      
-         <Text
-          x={Seg1Values[index]["x"] - 5}
-          y={Seg1Values[index]["ybarSeg"]}
-          width={40 * 2}
-          height={40 * 2}
-          text={Seg1Values[index]["fill"] == "red" ? "🚩" : ""}
-          fontSize={30}
-          fill={textColor}
-
-        />
+       
 
         <StatusIcon
           x={Seg1Values[index]["x"] - 14}
@@ -576,11 +668,17 @@ public componentWillUnmount() {
             });
           }}
         />
-
-       
       </>
-    ));
+      ));
     const Segment1Lines = finishDateList.map((week, index) => (
+      <>
+      <StatusIcon
+          x={Seg1Values[index]["x"]}
+          y={Seg1Values[index]["ybarSeg"]}
+          status={Seg1Values[index]["fill"] == "red" ? "flag": null}
+       
+
+        />
       <Line
       points={[
         Seg1Values[index]["x"],
@@ -591,6 +689,8 @@ public componentWillUnmount() {
       stroke={segmentColor[index]}
       strokeWidth={5}
     />
+
+        </>
     ));
     const legendStyle: React.CSSProperties = {
       fontSize: "18px",
@@ -606,8 +706,29 @@ public componentWillUnmount() {
       display: "inline-block",
     };
 
+const ExpandedComponent = ({ data }) => <>
+<p>Precessors Affecting current milestone </p>
+<button style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >TRANST41</button>
+<button  style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >JTRG150</button>
+<button  style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}}>JTRG40</button>
+</>;
 
 
+const customStyles: TableStyles = {
+    headCells: {
+      style: {
+        backgroundColor: "#B93333",
+        color: "#fff",
+        border: "1px solid black", // add a black border
+      },
+    },
+
+    cells: {
+      style: {
+        color: "#32192f",
+      },
+    },
+  };
   
    const Xval = [60,92,124,156,188,220]
     return (
@@ -863,13 +984,13 @@ public componentWillUnmount() {
 <tr>
   <td style={{ fontWeight: "bold", /*border: "1px solid black"*/ }}>Trend</td>
   <td style={{/* border: "1px solid black"*/ }}>
-    {trendPlaceholder === "Improved" ? (
-      <MdOutlineTrendingUp style={{ color: "#40B04A", fontSize: "2em" }} />
-    ) : trendPlaceholder === "down" ? (
-      <MdOutlineTrendingDown style={{ color: "red", fontSize: "2em" }} />
-    ) : (
-      <MdOutlineTrendingFlat style={{ color: "yellow", fontSize: "2em" }} />
-    )}
+  {trendPlaceholder === "Improved" ? (
+  <MdOutlineTrendingUp style={{ color: "#40B04A", fontSize: "2em" }} />
+) : trendPlaceholder === "Deteriorated" ? (
+  <MdOutlineTrendingDown style={{ color: "red", fontSize: "2em" }} />
+) : trendPlaceholder === "No Change" ? (
+  <MdOutlineTrendingFlat style={{ color: "yellow", fontSize: "2em" }} />
+) : null}
   </td>
 </tr>
 <tr>
@@ -923,189 +1044,17 @@ public componentWillUnmount() {
             </div>
           </div>
           <div style={{ height: "50vh" }}>
-            <table
-              style={{
-                width: "100%",
-                fontSize: "15px",
-                tableLayout: "fixed",
-                borderCollapse: "collapse",
-                backgroundColor: "grey",
-              }}
-            >
-              <thead>
-                <tr>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Milestone
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Title
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Owner
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Impacted by
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Plan Date
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Projected Start
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Plan Finish
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Projected Finish
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      border: "1px solid #ccc",
-                      padding: "8px",
-                    }}
-                  >
-                    Comments
-                  </th>
-                </tr>
-              </thead>
-            </table>
-            <div
-              style={{ height: "100px", overflowY: "auto", display: "flex" ,backgroundColor: backgroundColorVis }}
-            >
-{/*         <div className="loading-circle"></div> 
- */}              <table
-                style={{
-                  width: "100%",
-                  fontSize: "15px",
-                  tableLayout: "fixed",
-                  borderCollapse: "collapse",
-                }}
-              >
-                   {/* <div className="loading-circle"></div>  */}
-                <tbody>
-                  {[
-                    ...new Set(
-                      this.dataArrayList.map((data) => data.milestone)
-                    ),
-                  ].map((milestone, index) => (
-                    <tr key={index}>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).milestone
-                        }
-                      </td>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).title
-                        }
-                      </td>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).owner
-                        }
-                      </td>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).impactedBy
-                        }
-                      </td>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).planDate
-                        }
-                      </td>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).projectedStart
-                        }
-                      </td>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).planFinish
-                        }
-                      </td>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).projectedFinish
-                        }
-                      </td>
-                      <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                        {
-                          this.dataArrayList.find(
-                            (data) => data.milestone === milestone
-                          ).comments
-                        }
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+ <div> 
+ <button style={{ backgroundColor:"blue", color:"white",  width: 'fit'}} >Navigation</button>
+<button style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >TRANST41</button>
+<button style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >{">>"}</button>
+<button  style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >JTRG150</button>
+<button style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >{">>"}</button>
+<button className="flowing-gradient-button" style={{ width: 'fit'}}>JTRG40</button>
+<button  style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}}>X</button>
+
+</div>
+          <DataTable columns={columns} data={data}  expandableRows expandableRowsComponent={ExpandedComponent} customStyles={customStyles} pagination />;
           </div> 
         </div>
       

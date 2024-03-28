@@ -48,6 +48,22 @@
     transform: translate(-50%, -50%) rotate(360deg);
   }
 }
+.flowing-gradient-button {
+  background: linear-gradient(to right, #FF0000, #FFD600, #B93333);
+  color: white;
+  animation: flowing-gradient 10s infinite alternate;
+}
+@keyframes flowing-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 
 /*# sourceMappingURL=https://localhost:8080/assets/visual.css.map*/

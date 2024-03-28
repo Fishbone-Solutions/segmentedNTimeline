@@ -10,6 +10,7 @@ export declare class CircleSettings {
     Segment6Color: string;
     textColor: string;
     SidetextColor: string;
+    DynamicTableHeader: string;
 }
 export declare class VisualSettings extends DataViewObjectsParser {
     circle: CircleSettings;

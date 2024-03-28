@@ -13,6 +13,7 @@ export class CircleSettings {
     public Segment6Color: string = "rgb(188,177,205)";
     public textColor: string = "black";
     public SidetextColor: string = "white";
+    public DynamicTableHeader: string ="grey";
 
     
 

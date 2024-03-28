@@ -168,6 +168,17 @@
                       }
                   }
               },
+              "DynamicTableHeader": {
+                "displayName": " Dynamic Table Header Color",
+                "description": "Dynamic Table Header Color",
+                "type": {
+                    "fill": {
+                        "solid": {
+                            "color": true
+                        }
+                    }
+                }
+            },
                 "circleColor": {
                     "displayName": "Background Color",
                     "description": "The fill color of the circle.",
