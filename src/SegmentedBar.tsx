@@ -347,8 +347,9 @@ public componentWillUnmount() {
           }).map((item) => (item[1]));
         console.log("scroll  pos",Number(scrollpositon[0]));
         console.log("activity",scrollpositon89)
-       if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '' ||  ){
-      }
+        if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '' ||isNaN(Number(scrollpositon[0]))) {
+          // do something
+        }
       else if (offset == 'today'){
         this.scrollReference.current.scrollLeft = todayDateLocation - 250;
 
