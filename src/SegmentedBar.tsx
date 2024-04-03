@@ -5,8 +5,7 @@ import { differenceInCalendarMonths, subMonths } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
 import useImage from "use-image";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown, MdOutlineTrendingFlat } from 'react-icons/md';
-import DataTable,  {TableStyles} from 'react-data-table-component';
-
+import DataTable,  {TableStyles,  ExpanderComponentProps,} from 'react-data-table-component';
 
 
 const StatusIcon = (props) => {
@@ -87,7 +86,10 @@ export interface State {
   scrollPositionIndicator?:number;
   twoDArrayPlaceholder?: any[][]; // 2D array placeholder
   activityPlaceholder?: string,
-  rightSideBar?: string
+  rightSideBar?: string,
+  currentActiveMilestonePlaceholder?:string,
+  dataArray?:DataItem[],
+  predecessorsArray?:  PrecedessorsPointers[]
 }
 export const initialState: State = {
   backgroundColorVis: "white",
@@ -117,13 +119,23 @@ export const initialState: State = {
   lastReportedDatePlaceholder: "",
   slipPlaceholder: "",
   activityPlaceholder:"",
-  rightSideBar: "flex"
+  rightSideBar: "flex",
+  currentActiveMilestonePlaceholder:""
 
 };
 
+
+
+
+
+interface PrecedessorsPointers {
+   milestone: string,
+   scrollpositon: Number
+}
+
 interface DataItem {
-  activeElemnent: string,
-  milestone: string;
+  activeElement: string,
+  milestone: string,
   title: string;
   owner: string;
   impactedBy: string;
@@ -134,10 +146,8 @@ interface DataItem {
   comments: string;
 }
 export class segmentedBar extends React.Component<any, State> {
-  public dataArrayList: DataItem[] = [];
   private static updateCallback: (data: object) => void = null;
   scrollReference: React.RefObject<HTMLDivElement>;
-  scrollIndicator: Number;
   rightSideBar: String;
 
   public static update(newState: State) {
@@ -158,37 +168,44 @@ export class segmentedBar extends React.Component<any, State> {
 
   }
 
-  handleClick = (twoDArray, successorsList, activeElement) => {
-    const cleanedList = successorsList.replace(/\n/g, '');
-    const list = cleanedList.split(',');
-    console.log("activeElement", activeElement);
-    list.unshift(activeElement);
-    console.log(list);
-  
-    const matchingRows = twoDArray.filter((row) => list.includes(row[0]));
-  
-    console.log("matching", matchingRows);
-    const nestedArray = matchingRows;
-    this.dataArrayList = []; // Reset the array before populating new data
+handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
 
-    for (let i = 0; i < nestedArray.length; i++) {
-      let datapoint: DataItem = {
-        activeElemnent: activeElement,
-        milestone: nestedArray[i][0],
-        title: nestedArray[i][1],
-        owner: nestedArray[i][2],
-        impactedBy: nestedArray[i][12],
-        planDate: nestedArray[i][3]?.split("T")[0].split("-").reverse().join("-"),
-       projectedStart: nestedArray[i][4]?.split("T")[0].split("-").reverse().join("-"),
-        planFinish: nestedArray[i][6]?.split("T")[0].split("-").reverse().join("-"),
-        projectedFinish: nestedArray[i][5]?.split("T")[0].split("-").reverse().join("-"),
-        comments: nestedArray[i][11]
-      };
-  
-      this.dataArrayList.push(datapoint);
-    }
-    console.log(this.dataArrayList);
-  }
+
+  const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+   
+  const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));   
+
+
+  this.setState((prevState) => {
+    const filteredDataArray = LookupTable.filter((item) => {
+    const itemActiveElement = item[1];
+      return itemActiveElement === activeElement || successors.includes(itemActiveElement);
+    }).map((item) => ({
+      milestone: item[1],
+      title: item[2],
+      owner: item[3],
+      impactedBy: item[8],
+      planDate: item[4],
+      projectedStart: item[6],
+      planFinish: item[5],
+      projectedFinish: item[7],
+      comments: item[10],
+    }));
+
+    const predDataArray = LookupTable.filter((item) => {
+      const itemActiveElement = item[1];
+      return predecessors.includes(itemActiveElement);
+    }).map((item) => ({
+      ScrollPointer:  Number(item[0]),
+
+    }));
+    return {
+      currentActiveMilestonePlaceholder: String(activeElement),
+      dataArray: filteredDataArray,
+      predecessorsArray: predDataArray
+    };
+  });
+};
 
   handleToggleDisplay = () => {
     this.setState(prevState => ({
@@ -240,7 +257,11 @@ public componentWillUnmount() {
       lastReportedDatePlaceholder,
       slipPlaceholder,
       activityPlaceholder,
-      rightSideBar
+      rightSideBar,
+      currentActiveMilestonePlaceholder,
+      predecessorsArray,
+
+      dataArray
     } = this.state;
 
     let months = [];
@@ -315,90 +336,135 @@ public componentWillUnmount() {
       </div>
     ));
 
+    const handleClickHome = (e, offset) => {
+     const scrollpositon =  LookupTable.filter((item) => {
+        const itemActiveElement = item[1];
+          return itemActiveElement === offset;
+        }).map((item) => (item[0]));
+        const scrollpositon89 =  LookupTable.filter((item) => {
+          const itemActiveElement = item[1];
+            return itemActiveElement === offset;
+          }).map((item) => (item[1]));
+        console.log("scroll  pos",Number(scrollpositon[0]));
+        console.log("activity",scrollpositon89)
+       if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '' ||  ){
+      }
+      else if (offset == 'today'){
+        this.scrollReference.current.scrollLeft = todayDateLocation - 250;
 
-    const handleClickHome = (e) => {
-      this.scrollReference.current.scrollLeft = todayDateLocation - 250;
+      }
+      else {
+        this.scrollReference.current.scrollLeft =  Number(scrollpositon[0])  - 100
+
+      }
+
+      
+      
+      
+      
+      
     };
 
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
 
     const columns = [
       {
         name: "Milestone",
-        selector: row => row.title,
+        selector: row => row.milestone,
+        sortable: false,
+        width: "100px"
+        
       },
       {
         name: "Title",
         selector: row => row.title,
+        width: "270px"
+
       },
       {
         name: "Owner",
         selector: row => row.owner,
+        width: "100px"
+
       },
       {
         name: "Impacted By",
         selector: row => row.impactedBy,
+        width: "100px"
+
+
       },
       {
         name: "Plan Date",
         selector: row => row.planDate,
+        cell: row => formatDate(row.planDate),
+        width: "100px"
+
       },
       {
         name: "Projected Start",
         selector: row => row.projectedStart,
+        cell: row => formatDate(row.projectedStart),
+        width: "100px"
+
       },
       {
         name: "Plan Finish",
         selector: row => row.planFinish,
+        cell: row => formatDate(row.planFinish),
+        width: "100px"
+
       },
       {
         name: "Projected Finish",
         selector: row => row.projectedFinish,
+        cell: row => formatDate(row.projectedFinish),
+        width: "100px"
+
       },
       {
         name: "Comments",
         selector: row => row.comments,
+        width: "100px"
+
       },
     ];
   
+    const ExpandedComponent = ({ data }) => {
     
-    const data = [
-      {
-        activeElement: "Milestone 1",
-        milestone: "Milestone 1",
-        title: "Milestone 1",
-        owner: "John Doe",
-        impactedBy: "Jane Doe",
-        planDate: "2023-01-01",
-        projectedStart: "2023-01-02",
-        planFinish: "2023-01-05",
-        projectedFinish: "2023-01-06",
-        comments: "This is a comment.",
-      },
-      {
-        activeElement: "Milestone 2",
-        milestone: "Milestone 2",
-        title: "Milestone 2",
-        owner: "Jane Doe",
-        impactedBy: "John Doe",
-        planDate: "2023-01-06",
-        projectedStart: "2023-01-07",
-        planFinish: "2023-01-10",
-        projectedFinish: "2023-01-11",
-        comments: "This is a comment.",
-      },
-      {
-        activeElement: "Milestone 3",
-        milestone: "Milestone 3",
-        title: "Milestone 3",
-        owner: "John Doe",
-        impactedBy: "Jane Doe",
-        planDate: "2023-01-11",
-        projectedStart: "2023-01-12",
-        planFinish: "2023-01-15",
-        projectedFinish: "2023-01-16",
-        comments: "This is a comment.",
-      },
-    ];
+      
+      
+      return (
+        <>
+          {data.impactedBy ? (
+            data.impactedBy.split(',').map((value, index) => (
+              <button
+                key={index}
+                onClick={(e) => handleClickHome(e,String(value.trim()) )}
+                style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
+              >
+                {value.trim()}
+              </button>
+            ))
+          ) : (
+            <button
+              onClick={(e) => handleClickHome(e, 250)}
+              style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
+            >
+              No Predecessors 
+            </button>
+          )}
+        </>
+      );
+    };
+    
+ 
 
     var shortCodeSeg1 = [];
     var statusSeg1 = [];
@@ -422,7 +488,9 @@ public componentWillUnmount() {
     var countMap = [];
     var TrendsList = [];
     var predecessorsListSeg1 = [];
-   
+    var LookupTable: string[][] = [];
+    var ScrollValuesTable: Number[][] =[];
+    
 
     const segments = [
       { y: 25, fill: Segment1Color, y1: 380 },
@@ -444,7 +512,6 @@ public componentWillUnmount() {
     });
 
 
-   // console.log("statusNameList",statusNameList)
   
     for (let i = 0; i < activityIDList.length; i++) {
       if (statusNameList[i].toLowerCase().includes("not started")) {
@@ -489,6 +556,7 @@ public componentWillUnmount() {
       plannedStartSeg1.push(projectedStartDateList[i]);
       plannedFinishSeg1.push(projectedFinishDateList[i]);
       predecessorsListSeg1.push(predecessorsList[i]);
+      successorsListSeg1.push(successorsList[i]);
      
 
     
@@ -537,139 +605,129 @@ public componentWillUnmount() {
         commentarySeg1: commentarySeg1[i],
         categoryListDisplaySeg1: categoryListDisplaySeg1[i],
         successorsList: successorsListSeg1[i],
+        predecessorsList: predecessorsListSeg1[i]
       };
+
       Seg1Values.push(circle);
+    } 
+   
+    for (let i = 0; i < activityIDList.length; i++) {
+      LookupTable.push([
+       String(55 * Number(weekNoFromList[i])), //0
+       activityIDList[i], // 1
+        activityNameList[i], // 2
+        ownerList[i], // 3
+        startDateList[i], // 4 
+        finishDateList[i], // 5 
+        projectedStartDateList[i], // 6
+        projectedFinishDateList[i], // 7
+        predecessorsList[i], // 8 
+        successorsList[i], // 9
+        commentaryList[i], // 10
+      ]);
     } 
 
 
+ 
+
+
+
   
-    let twoDArray: any[][] = [];
 
-    for (const element of Seg1Values) {
-      let row: any[] = [];
-      row.push(element.shortCodeSeg); //0
-      row.push(element.titleSeg); //1
-      row.push(element.ownerSeg1); //2
-      row.push(element.beginSeg1); //3
-      row.push(element.plannedStartSeg1); //4 
-      row.push(element.plannedFinishSeg1) //5
-      row.push(element.endSeg1); //6
-      row.push(element.lastReportedEndDateSeg1); //7 
-      row.push(element.slipSeg1); //8
-      row.push(element.commentarySeg1); //9
-      row.push(element.trendSeg); //10
-      row.push(element.commentarySeg1) //11
-      row.push(element.successorsList); //12
-      
-      twoDArray.push(row);
-    }
 
-    const Segment1Categories = finishDateList.map((week, index) => (
-      <>
-        <Circle
-          x={Seg1Values[index]["x"]}
-          y={Seg1Values[index]["y"] + 25.8}
-          radius={30}
-          stroke={Seg1Values[index]["fill"]}
-          strokeWidth={3}
-          fill={backgroundColorVis}
-          onClick={()=>{
-            this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"])}
-          }
+  
+ 
 
-          onMouseEnter={() => {
-            this.setState({
-              titlePlaceholder: Seg1Values[index]["titleSeg"],
-              ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-              baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-              endDatePlaceholder: Seg1Values[index]["endSeg1"],
-              activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-              trendPlaceholder: Seg1Values[index]["trends"],
 
-              lastReportedDatePlaceholder: String(
-                Seg1Values[index]["lastReportedEndDateSeg1"]
-              ),
-              slipPlaceholder: Seg1Values[index]["slipSeg1"],
-            });
-          }}
-          onMouseLeave={() => {
-            this.setState({
-              titlePlaceholder: Seg1Values[index]["titleSeg"],
-              ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-              trendPlaceholder: Seg1Values[index]["trends"],
-              baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
-              activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-              lastReportedDatePlaceholder: String(
-                Seg1Values[index]["lastReportedEndDateSeg1"]
-              ),
-              slipPlaceholder: Seg1Values[index]["slipSeg1"],
-            });
-          }}
-          / >
-     
-       
+    const Segment1Categories = finishDateList.map((week, index) => {
+      const {
+        x,
+        y,
+        fill,
+        shortCodeSeg,
+        titleSeg,
+        ownerSeg,
+        beginSeg1,
+        endSeg1,
+        categoryListDisplaySeg1,
+        trends,
+        lastReportedEndDateSeg1,
+        slipSeg1,
+        successorsList
+      } = Seg1Values[index];
+    
 
-        <StatusIcon
-          x={Seg1Values[index]["x"] - 14}
-          y={Seg1Values[index]["y"] + 10}
-          status={Seg1Values[index]["trends"] }
-          onClick={()=>{
-            this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"])}
-          }
+    
+      const handleMouseEnter = () => {
+        this.setState({
+          titlePlaceholder: titleSeg,
+          ownerPlaceholder: ownerSeg,
+          baseLineDatePlaceholder: String(beginSeg1),
+          endDatePlaceholder: String(endSeg1),
+          activityPlaceholder: categoryListDisplaySeg1,
+          trendPlaceholder: trends,
+          lastReportedDatePlaceholder: String(lastReportedEndDateSeg1),
+          slipPlaceholder: slipSeg1
+        });
+      };
+    
+      const handleMouseLeave = () => {
+        this.setState({
+          titlePlaceholder: titleSeg,
+          ownerPlaceholder: ownerSeg,
+          trendPlaceholder: trends,
+          baseLineDatePlaceholder: String(beginSeg1),
+          endDatePlaceholder: String(endSeg1),
+          activityPlaceholder: categoryListDisplaySeg1,
+          lastReportedDatePlaceholder: String(lastReportedEndDateSeg1),
+          slipPlaceholder: slipSeg1
+        });
+      };
+    
+      return (
+        <React.Fragment key={index}>
+          <Circle
+            x={x}
+            y={y + 25.8}
+            radius={30}
+            stroke={fill}
+            strokeWidth={3}
+            fill={backgroundColorVis}
+            onClick={()=>{
+              this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+            }
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          />
+    
+          <StatusIcon
+            x={x - 14}
+            y={y + 10}
+            status={trends}
+            onClick={()=>{
+              this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+            }
 />
-
-        <Text
-          x={Seg1Values[index]["x"] - 40}
-          y={Seg1Values[index]["y"]}
-          width={40 * 2}
-          height={40 * 2}
-          align="center"
-          verticalAlign="middle"
-          text={Seg1Values[index]["shortCodeSeg"]}
-          fontSize={8}
-         // fill={String(segmentColor[index])}
-         fill={textColor}
-         onClick={()=>{
-            this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"])}
-          }
-
-          onMouseEnter={() => {
-            this.setState({
-              titlePlaceholder: Seg1Values[index]["titleSeg"],
-              ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-              trendPlaceholder: Seg1Values[index]["trends"],
-              baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
-              activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-
-              lastReportedDatePlaceholder: String(
-                Seg1Values[index]["lastReportedEndDateSeg1"]
-              ),
-              slipPlaceholder: Seg1Values[index]["slipSeg1"],
-            });
-          }}
-
-
-
-
-          onMouseLeave={() => {
-            this.setState({
-              titlePlaceholder: Seg1Values[index]["titleSeg"],
-              ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-              trendPlaceholder: Seg1Values[index]["trends"],
-              activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-              baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-              endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
-              lastReportedDatePlaceholder: String(
-                Seg1Values[index]["lastReportedEndDateSeg1"]
-              ),
-              slipPlaceholder: Seg1Values[index]["slipSeg1"],
-            });
-          }}
-        />
-      </>
-      ));
+    
+          <Text
+            x={x - 40}
+            y={y}
+            width={40 * 2}
+            height={40 * 2}
+            align="center"
+            verticalAlign="middle"
+            text={shortCodeSeg}
+            fontSize={8}
+            fill={textColor}
+            onClick={()=>{
+              this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+            }
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          />
+        </React.Fragment>
+      );
+    });
     const Segment1Lines = finishDateList.map((week, index) => (
       <>
       <StatusIcon
@@ -706,20 +764,24 @@ public componentWillUnmount() {
       display: "inline-block",
     };
 
-const ExpandedComponent = ({ data }) => <>
-<p>Precessors Affecting current milestone </p>
-<button style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >TRANST41</button>
-<button  style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >JTRG150</button>
-<button  style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}}>JTRG40</button>
-</>;
 
 
 const customStyles: TableStyles = {
+  
+  rows: {
+		style: {
+			minHeight: '30px', // override the row height
+		},
+	},
+  
     headCells: {
       style: {
         backgroundColor: "#B93333",
         color: "#fff",
-        border: "1px solid black", // add a black border
+        paddingLeft: '8px', // override the cell padding for head cells
+			  paddingRight: '8px',
+        minHeight: '20px', // override the row height
+
       },
     },
 
@@ -734,7 +796,7 @@ const customStyles: TableStyles = {
     return (
       
         <div
-          style={{ display: "flex", flexDirection: "column", height: "80vh",  }}
+          style={{ display: "flex", flexDirection: "column",  }}
         >
           <div style={{ display: "flex", height: " 500px", flexGrow: 3 }}>
             <div style={{ width: "20%", backgroundColor: backgroundColorVis  }}>
@@ -963,7 +1025,7 @@ const customStyles: TableStyles = {
                 </tbody>
                 </table>
               <table >
-              <button style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit', }}   onClick={(e) => handleClickHome(e)}>Today</button>   
+              <button style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit', }}   onClick={(e) => handleClickHome(e, "today")}>Today</button>   
 
                 <tbody style={{ margin: "fixed", borderCollapse: "collapse", /* border: "1px solid black" */  }}>
                   <tr style={{ display: 'block', width: '100%' }}>
@@ -1043,20 +1105,29 @@ const customStyles: TableStyles = {
               </table>
             </div>
           </div>
-          <div style={{ height: "50vh" }}>
- <div> 
- <button style={{ backgroundColor:"blue", color:"white",  width: 'fit'}} >Navigation</button>
-<button style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >TRANST41</button>
-<button style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >{">>"}</button>
-<button  style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >JTRG150</button>
-<button style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}} >{">>"}</button>
-<button className="flowing-gradient-button" style={{ width: 'fit'}}>JTRG40</button>
-<button  style={{ backgroundColor:"#B93333", color:"white",  width: 'fit'}}>X</button>
-
+    <div style={{ height: "200px", overflow:"auto" }}>
+  <button
+    style={{
+      backgroundColor: "blue",
+      color: "white",
+      width: "fit-content",
+    }}
+  >
+    Current Active Milestone {currentActiveMilestonePlaceholder}
+  </button>
+  <DataTable
+    columns={columns}
+    data={dataArray}
+    expandableRows
+    expandableRowsComponent={ExpandedComponent}
+    customStyles={customStyles}
+    pagination
+   
+    dense={true}   
+  />
 </div>
-          <DataTable columns={columns} data={data}  expandableRows expandableRowsComponent={ExpandedComponent} customStyles={customStyles} pagination />;
-          </div> 
-        </div>
+
+        </div> 
       
     );
   }

@@ -44,7 +44,6 @@ export class Visual implements IVisual {
             const object = this.settings.circle;
             this.findColumns(options.dataViews[0].metadata.columns);
             let rows = options.dataViews[0].table.rows;
-
             let activityIDList: string[] = [];
             let categoryList: string[] = [];
             let activityNameList: string[] = [];
@@ -108,7 +107,6 @@ export class Visual implements IVisual {
                 lastReportedEndDateList[i] = `${row[this.columnIndices['c15']]}`;
 
             } 
-
             segmentedBar.update({
                 Segment1Color: object && object.Segment1Color ? object.Segment1Color : undefined,
                 Segment2Color: object && object.Segment2Color ? object.Segment2Color : undefined,

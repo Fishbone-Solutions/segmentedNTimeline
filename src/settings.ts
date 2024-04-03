@@ -14,9 +14,6 @@ export class CircleSettings {
     public textColor: string = "black";
     public SidetextColor: string = "white";
     public DynamicTableHeader: string ="grey";
-
-    
-
 }
 
 export class VisualSettings extends DataViewObjectsParser {

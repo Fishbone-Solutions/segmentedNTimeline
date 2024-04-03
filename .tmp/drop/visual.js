@@ -35840,13 +35840,12 @@ const initialState = {
     lastReportedDatePlaceholder: "",
     slipPlaceholder: "",
     activityPlaceholder: "",
-    rightSideBar: "flex"
+    rightSideBar: "flex",
+    currentActiveMilestonePlaceholder: ""
 };
 class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
-    dataArrayList = [];
     static updateCallback = null;
     scrollReference;
-    scrollIndicator;
     rightSideBar;
     static update(newState) {
         if (typeof segmentedBar.updateCallback === "function") {
@@ -35860,32 +35859,36 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         this.scrollReference = react__WEBPACK_IMPORTED_MODULE_0__.createRef();
         this.rightSideBar = "flex";
     }
-    handleClick = (twoDArray, successorsList, activeElement) => {
-        const cleanedList = successorsList.replace(/\n/g, '');
-        const list = cleanedList.split(',');
-        console.log("activeElement", activeElement);
-        list.unshift(activeElement);
-        console.log(list);
-        const matchingRows = twoDArray.filter((row) => list.includes(row[0]));
-        console.log("matching", matchingRows);
-        const nestedArray = matchingRows;
-        this.dataArrayList = []; // Reset the array before populating new data
-        for (let i = 0; i < nestedArray.length; i++) {
-            let datapoint = {
-                activeElemnent: activeElement,
-                milestone: nestedArray[i][0],
-                title: nestedArray[i][1],
-                owner: nestedArray[i][2],
-                impactedBy: nestedArray[i][12],
-                planDate: nestedArray[i][3]?.split("T")[0].split("-").reverse().join("-"),
-                projectedStart: nestedArray[i][4]?.split("T")[0].split("-").reverse().join("-"),
-                planFinish: nestedArray[i][6]?.split("T")[0].split("-").reverse().join("-"),
-                projectedFinish: nestedArray[i][5]?.split("T")[0].split("-").reverse().join("-"),
-                comments: nestedArray[i][11]
+    handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
+        const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+        const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+        this.setState((prevState) => {
+            const filteredDataArray = LookupTable.filter((item) => {
+                const itemActiveElement = item[1];
+                return itemActiveElement === activeElement || successors.includes(itemActiveElement);
+            }).map((item) => ({
+                milestone: item[1],
+                title: item[2],
+                owner: item[3],
+                impactedBy: item[8],
+                planDate: item[4],
+                projectedStart: item[6],
+                planFinish: item[5],
+                projectedFinish: item[7],
+                comments: item[10],
+            }));
+            const predDataArray = LookupTable.filter((item) => {
+                const itemActiveElement = item[1];
+                return predecessors.includes(itemActiveElement);
+            }).map((item) => ({
+                ScrollPointer: Number(item[0]),
+            }));
+            return {
+                currentActiveMilestonePlaceholder: String(activeElement),
+                dataArray: filteredDataArray,
+                predecessorsArray: predDataArray
             };
-            this.dataArrayList.push(datapoint);
-        }
-        console.log(this.dataArrayList);
+        });
     };
     handleToggleDisplay = () => {
         this.setState(prevState => ({
@@ -35901,7 +35904,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         segmentedBar.updateCallback = null;
     }
     render() {
-        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, SidetextColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, activityPlaceholder, rightSideBar } = this.state;
+        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, SidetextColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, activityPlaceholder, rightSideBar, currentActiveMilestonePlaceholder, predecessorsArray, dataArray } = this.state;
         let months = [];
         let years = [];
         let finalDatesIterator = [];
@@ -35952,85 +35955,88 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const monthsArray = months.map((month, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "monthitem", style: { backgroundColor: backgroundColorVis } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, month),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, years[index]))));
-        const handleClickHome = (e) => {
-            this.scrollReference.current.scrollLeft = todayDateLocation - 250;
+        const handleClickHome = (e, offset) => {
+            const scrollpositon = LookupTable.filter((item) => {
+                const itemActiveElement = item[1];
+                return itemActiveElement === offset;
+            }).map((item) => (item[0]));
+            const scrollpositon89 = LookupTable.filter((item) => {
+                const itemActiveElement = item[1];
+                return itemActiveElement === offset;
+            }).map((item) => (item[1]));
+            console.log("scroll  pos", Number(scrollpositon[0]));
+            console.log("activity", scrollpositon89);
+            if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '') {
+            }
+            else if (offset == 'today') {
+                this.scrollReference.current.scrollLeft = todayDateLocation - 250;
+            }
+            else {
+                this.scrollReference.current.scrollLeft = Number(scrollpositon[0]) - 100;
+            }
         };
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
         const columns = [
             {
                 name: "Milestone",
-                selector: row => row.title,
+                selector: row => row.milestone,
+                sortable: false,
+                width: "100px"
             },
             {
                 name: "Title",
                 selector: row => row.title,
+                width: "270px"
             },
             {
                 name: "Owner",
                 selector: row => row.owner,
+                width: "100px"
             },
             {
                 name: "Impacted By",
                 selector: row => row.impactedBy,
+                width: "100px"
             },
             {
                 name: "Plan Date",
                 selector: row => row.planDate,
+                cell: row => formatDate(row.planDate),
+                width: "100px"
             },
             {
                 name: "Projected Start",
                 selector: row => row.projectedStart,
+                cell: row => formatDate(row.projectedStart),
+                width: "100px"
             },
             {
                 name: "Plan Finish",
                 selector: row => row.planFinish,
+                cell: row => formatDate(row.planFinish),
+                width: "100px"
             },
             {
                 name: "Projected Finish",
                 selector: row => row.projectedFinish,
+                cell: row => formatDate(row.projectedFinish),
+                width: "100px"
             },
             {
                 name: "Comments",
                 selector: row => row.comments,
+                width: "100px"
             },
         ];
-        const data = [
-            {
-                activeElement: "Milestone 1",
-                milestone: "Milestone 1",
-                title: "Milestone 1",
-                owner: "John Doe",
-                impactedBy: "Jane Doe",
-                planDate: "2023-01-01",
-                projectedStart: "2023-01-02",
-                planFinish: "2023-01-05",
-                projectedFinish: "2023-01-06",
-                comments: "This is a comment.",
-            },
-            {
-                activeElement: "Milestone 2",
-                milestone: "Milestone 2",
-                title: "Milestone 2",
-                owner: "Jane Doe",
-                impactedBy: "John Doe",
-                planDate: "2023-01-06",
-                projectedStart: "2023-01-07",
-                planFinish: "2023-01-10",
-                projectedFinish: "2023-01-11",
-                comments: "This is a comment.",
-            },
-            {
-                activeElement: "Milestone 3",
-                milestone: "Milestone 3",
-                title: "Milestone 3",
-                owner: "John Doe",
-                impactedBy: "Jane Doe",
-                planDate: "2023-01-11",
-                projectedStart: "2023-01-12",
-                planFinish: "2023-01-15",
-                projectedFinish: "2023-01-16",
-                comments: "This is a comment.",
-            },
-        ];
+        const ExpandedComponent = ({ data }) => {
+            return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, data.impactedBy ? (data.impactedBy.split(',').map((value, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: index, onClick: (e) => handleClickHome(e, String(value.trim())), style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, value.trim())))) : (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { onClick: (e) => handleClickHome(e, 250), style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, "No Predecessors"))));
+        };
         var shortCodeSeg1 = [];
         var statusSeg1 = [];
         var titleSeg1 = [];
@@ -36053,6 +36059,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var countMap = [];
         var TrendsList = [];
         var predecessorsListSeg1 = [];
+        var LookupTable = [];
+        var ScrollValuesTable = [];
         const segments = [
             { y: 25, fill: Segment1Color, y1: 380 },
             { y: 57, fill: Segment2Color, y1: 320 },
@@ -36068,7 +36076,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 week.getDate() / 7);
             return weekNos;
         });
-        // console.log("statusNameList",statusNameList)
         for (let i = 0; i < activityIDList.length; i++) {
             if (statusNameList[i].toLowerCase().includes("not started")) {
                 statusSeg1.push("grey");
@@ -36112,6 +36119,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             plannedStartSeg1.push(projectedStartDateList[i]);
             plannedFinishSeg1.push(projectedFinishDateList[i]);
             predecessorsListSeg1.push(predecessorsList[i]);
+            successorsListSeg1.push(successorsList[i]);
             for (let j = 0; j < categoryListDisplay.length; j++) {
                 if (categoryList[i].includes(categoryListDisplay[j])) {
                     yBarSeg1.push(segments[j]["y"]);
@@ -36153,83 +36161,62 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 commentarySeg1: commentarySeg1[i],
                 categoryListDisplaySeg1: categoryListDisplaySeg1[i],
                 successorsList: successorsListSeg1[i],
+                predecessorsList: predecessorsListSeg1[i]
             };
             Seg1Values.push(circle);
         }
-        let twoDArray = [];
-        for (const element of Seg1Values) {
-            let row = [];
-            row.push(element.shortCodeSeg); //0
-            row.push(element.titleSeg); //1
-            row.push(element.ownerSeg1); //2
-            row.push(element.beginSeg1); //3
-            row.push(element.plannedStartSeg1); //4 
-            row.push(element.plannedFinishSeg1); //5
-            row.push(element.endSeg1); //6
-            row.push(element.lastReportedEndDateSeg1); //7 
-            row.push(element.slipSeg1); //8
-            row.push(element.commentarySeg1); //9
-            row.push(element.trendSeg); //10
-            row.push(element.commentarySeg1); //11
-            row.push(element.successorsList); //12
-            twoDArray.push(row);
+        for (let i = 0; i < activityIDList.length; i++) {
+            LookupTable.push([
+                String(55 * Number(weekNoFromList[i])),
+                activityIDList[i],
+                activityNameList[i],
+                ownerList[i],
+                startDateList[i],
+                finishDateList[i],
+                projectedStartDateList[i],
+                projectedFinishDateList[i],
+                predecessorsList[i],
+                successorsList[i],
+                commentaryList[i], // 10
+            ]);
         }
-        const Segment1Categories = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: Seg1Values[index]["x"], y: Seg1Values[index]["y"] + 25.8, radius: 30, stroke: Seg1Values[index]["fill"], strokeWidth: 3, fill: backgroundColorVis, onClick: () => {
-                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                }, onMouseEnter: () => {
-                    this.setState({
-                        titlePlaceholder: Seg1Values[index]["titleSeg"],
-                        ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-                        baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-                        endDatePlaceholder: Seg1Values[index]["endSeg1"],
-                        activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-                        trendPlaceholder: Seg1Values[index]["trends"],
-                        lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
-                        slipPlaceholder: Seg1Values[index]["slipSeg1"],
-                    });
-                }, onMouseLeave: () => {
-                    this.setState({
-                        titlePlaceholder: Seg1Values[index]["titleSeg"],
-                        ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-                        trendPlaceholder: Seg1Values[index]["trends"],
-                        baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-                        endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
-                        activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-                        lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
-                        slipPlaceholder: Seg1Values[index]["slipSeg1"],
-                    });
-                } }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: Seg1Values[index]["x"] - 14, y: Seg1Values[index]["y"] + 10, status: Seg1Values[index]["trends"], onClick: () => {
-                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                } }),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: Seg1Values[index]["x"] - 40, y: Seg1Values[index]["y"], width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: Seg1Values[index]["shortCodeSeg"], fontSize: 8, 
-                // fill={String(segmentColor[index])}
-                fill: textColor, onClick: () => {
-                    this.handleClick(twoDArray, String(Seg1Values[index]["successorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                }, onMouseEnter: () => {
-                    this.setState({
-                        titlePlaceholder: Seg1Values[index]["titleSeg"],
-                        ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-                        trendPlaceholder: Seg1Values[index]["trends"],
-                        baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-                        endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
-                        activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-                        lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
-                        slipPlaceholder: Seg1Values[index]["slipSeg1"],
-                    });
-                }, onMouseLeave: () => {
-                    this.setState({
-                        titlePlaceholder: Seg1Values[index]["titleSeg"],
-                        ownerPlaceholder: Seg1Values[index]["ownerSeg"],
-                        trendPlaceholder: Seg1Values[index]["trends"],
-                        activityPlaceholder: Seg1Values[index]["categoryListDisplaySeg1"],
-                        baseLineDatePlaceholder: String(Seg1Values[index]["beginSeg1"]),
-                        endDatePlaceholder: String(Seg1Values[index]["endSeg1"]),
-                        lastReportedDatePlaceholder: String(Seg1Values[index]["lastReportedEndDateSeg1"]),
-                        slipPlaceholder: Seg1Values[index]["slipSeg1"],
-                    });
-                } }))));
+        const Segment1Categories = finishDateList.map((week, index) => {
+            const { x, y, fill, shortCodeSeg, titleSeg, ownerSeg, beginSeg1, endSeg1, categoryListDisplaySeg1, trends, lastReportedEndDateSeg1, slipSeg1, successorsList } = Seg1Values[index];
+            const handleMouseEnter = () => {
+                this.setState({
+                    titlePlaceholder: titleSeg,
+                    ownerPlaceholder: ownerSeg,
+                    baseLineDatePlaceholder: String(beginSeg1),
+                    endDatePlaceholder: String(endSeg1),
+                    activityPlaceholder: categoryListDisplaySeg1,
+                    trendPlaceholder: trends,
+                    lastReportedDatePlaceholder: String(lastReportedEndDateSeg1),
+                    slipPlaceholder: slipSeg1
+                });
+            };
+            const handleMouseLeave = () => {
+                this.setState({
+                    titlePlaceholder: titleSeg,
+                    ownerPlaceholder: ownerSeg,
+                    trendPlaceholder: trends,
+                    baseLineDatePlaceholder: String(beginSeg1),
+                    endDatePlaceholder: String(endSeg1),
+                    activityPlaceholder: categoryListDisplaySeg1,
+                    lastReportedDatePlaceholder: String(lastReportedEndDateSeg1),
+                    slipPlaceholder: slipSeg1
+                });
+            };
+            return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, { key: index },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: x, y: y + 25.8, radius: 30, stroke: fill, strokeWidth: 3, fill: backgroundColorVis, onClick: () => {
+                        this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
+                    }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave }),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: x - 14, y: y + 10, status: trends, onClick: () => {
+                        this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
+                    } }),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: x - 40, y: y, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg, fontSize: 8, fill: textColor, onClick: () => {
+                        this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
+                    }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave })));
+        });
         const Segment1Lines = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: Seg1Values[index]["x"], y: Seg1Values[index]["ybarSeg"], status: Seg1Values[index]["fill"] == "red" ? "flag" : null }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [
@@ -36249,17 +36236,19 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             marginRight: "10px",
             display: "inline-block",
         };
-        const ExpandedComponent = ({ data }) => react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Precessors Affecting current milestone "),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "#B93333", color: "white", width: 'fit' } }, "TRANST41"),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "#B93333", color: "white", width: 'fit' } }, "JTRG150"),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "#B93333", color: "white", width: 'fit' } }, "JTRG40"));
         const customStyles = {
+            rows: {
+                style: {
+                    minHeight: '30px', // override the row height
+                },
+            },
             headCells: {
                 style: {
                     backgroundColor: "#B93333",
                     color: "#fff",
-                    border: "1px solid black", // add a black border
+                    paddingLeft: '8px',
+                    paddingRight: '8px',
+                    minHeight: '20px', // override the row height
                 },
             },
             cells: {
@@ -36269,7 +36258,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             },
         };
         const Xval = [60, 92, 124, 156, 188, 220];
-        return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", height: "80vh", } },
+        return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", height: " 500px", flexGrow: 3 } },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { width: "20%", backgroundColor: backgroundColorVis } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "sidebar" },
@@ -36326,7 +36315,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed", /* borderCollapse: "collapse", border: "1px solid black" */ } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { style: { display: 'block', width: '100%' } }))),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null,
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999, backgroundColor: "#B93333", color: "white", width: 'fit', }, onClick: (e) => handleClickHome(e) }, "Today"),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999, backgroundColor: "#B93333", color: "white", width: 'fit', }, onClick: (e) => handleClickHome(e, "today") }, "Today"),
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed", borderCollapse: "collapse", /* border: "1px solid black" */ } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { style: { display: 'block', width: '100%' } }),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
@@ -36375,17 +36364,15 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: "blue" } }),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "Complete"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null))))))),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "50vh" } },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "blue", color: "white", width: 'fit' } }, "Navigation"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "#B93333", color: "white", width: 'fit' } }, "TRANST41"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "#B93333", color: "white", width: 'fit' } }, ">>"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "#B93333", color: "white", width: 'fit' } }, "JTRG150"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "#B93333", color: "white", width: 'fit' } }, ">>"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { className: "flowing-gradient-button", style: { width: 'fit' } }, "JTRG40"),
-                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: "#B93333", color: "white", width: 'fit' } }, "X")),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_data_table_component__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .ZP, { columns: columns, data: data, expandableRows: true, expandableRowsComponent: ExpandedComponent, customStyles: customStyles, pagination: true }),
-                ";")));
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "200px", overflow: "auto" } },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: {
+                        backgroundColor: "blue",
+                        color: "white",
+                        width: "fit-content",
+                    } },
+                    "Current Active Milestone ",
+                    currentActiveMilestonePlaceholder),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_data_table_component__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .ZP, { columns: columns, data: dataArray, expandableRows: true, expandableRowsComponent: ExpandedComponent, customStyles: customStyles, pagination: true, dense: true }))));
     }
 }
 /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (segmentedBar)));
