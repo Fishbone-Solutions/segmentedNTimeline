@@ -350,11 +350,11 @@ public componentWillUnmount() {
   
     const handleClickHome = (e, offset) => {
      const scrollpositon =  LookupTable.filter((item) => {
-        const itemActiveElement = item[1];
+        const itemActiveElement = item[1].replace(/\s/g, "");
           return itemActiveElement === offset;
         }).map((item) => (item[0]));
         const scrollpositon89 =  LookupTable.filter((item) => {
-          const itemActiveElement = item[1];
+          const itemActiveElement = item[1].replace(/\s/g, "");
             return itemActiveElement === offset;
           }).map((item) => (item[1]));
         console.log("scroll  pos",Number(scrollpositon[0]));
@@ -446,16 +446,13 @@ public componentWillUnmount() {
     ];
   
     const ExpandedComponent = ({ data }) => {
-    
-      
-      
       return (
         <>
           {data.impactedBy ? (
             data.impactedBy.split(',').map((value, index) => (
               <button
                 key={index}
-                onClick={(e) => handleClickHome(e,String(value.trim()) )}
+                onClick={(e) => handleClickHome(e,String(value.trim().replace(/\s/g, "")) )}
                 style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
               >
                 {value.trim()}
@@ -498,7 +495,6 @@ public componentWillUnmount() {
     var TrendsList = [];
     var predecessorsListSeg1 = [];
     var LookupTable: string[][] = [];
-    var ScrollValuesTable: Number[][] =[];
     
 
     const segments = [
@@ -565,12 +561,6 @@ public componentWillUnmount() {
       plannedStartSeg1.push(projectedStartDateList[i]);
       plannedFinishSeg1.push(projectedFinishDateList[i]);
       predecessorsListSeg1.push(predecessorsList[i]);
-      successorsListSeg1.push(successorsList[i]);
-     
-
-    
-      
-
       for (let j = 0; j < categoryListDisplay.length; j++) {
         if (categoryList[i].includes(categoryListDisplay[j])) {
           yBarSeg1.push(segments[j]["y"]);
@@ -585,16 +575,23 @@ public componentWillUnmount() {
       visitedWeeks.forEach((num) => {
         countMap[num] = (countMap[num] || 0) + 1;
       });
+
+
       ypositionLocator = 0;
       if (weekNoFromList[i] % 2 === 0) {
-        ypositionLocator = 200 + Number(countMap[weekNoFromList[i]]) * 35;
+        ypositionLocator = 160 + Number(countMap[weekNoFromList[i]]) * 35;
+        if (ypositionLocator > 400) {
+            ypositionLocator = 390;
+        }
       } else {
-        ypositionLocator = 220 + Number(countMap[weekNoFromList[i]]) * 35;
+        ypositionLocator = 170 + Number(countMap[weekNoFromList[i]]) * 35;
+        if (ypositionLocator > 400) {
+          ypositionLocator = 390;
+      }
       }
 
-      if (ypositionLocator > 400) {
-        ypositionLocator = 390;
-      }
+    
+
       
       let circle = {
         x: 55 * Number(weekNoFromList[i]),
@@ -603,7 +600,7 @@ public componentWillUnmount() {
         id: "SEG1" + i,
         trends: trendLists[i],
         categoryList: categoryList[i],
-        shortCodeSeg: shortCodeSeg1[i],
+        shortCodeSeg: shortCodeSeg1[i].replace(/\s/g, ""),
         titleSeg: titleSeg1[i],
         ybarSeg: yBarSeg1[i],
         ownerSeg1: ownerSeg1[i],
@@ -617,13 +614,23 @@ public componentWillUnmount() {
         predecessorsList: predecessorsListSeg1[i]
       };
 
+      // Check and modify x and y values if needed
+for (const existingCircle of Seg1Values) {
+  if (existingCircle.x === circle.x && existingCircle.y === circle.y) {
+    // Modify x and y values
+    circle.y -= 35; // Decrease y value
+    // You can adjust the modification logic based on your requirements
+  }
+}
+
       Seg1Values.push(circle);
     } 
+
    
     for (let i = 0; i < activityIDList.length; i++) {
       LookupTable.push([
        String(55 * Number(weekNoFromList[i])), //0
-       activityIDList[i], // 1
+        activityIDList[i].replace(/\s/g, ""), // 1
         activityNameList[i], // 2
         ownerList[i], // 3
         startDateList[i], // 4 
@@ -638,6 +645,8 @@ public componentWillUnmount() {
 
 
  
+
+
 
 
 
@@ -772,10 +781,7 @@ public componentWillUnmount() {
       marginRight: "10px",
       display: "inline-block",
     };
-
-
-
-const customStyles: TableStyles = {
+   const customStyles: TableStyles = {
   
   rows: {
 		style: {
@@ -974,7 +980,7 @@ const customStyles: TableStyles = {
                 <div className="relative">{weeksArray}</div>
                 <Stage
                   width={17500}
-                  height={550}
+                  height={450}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
                    <Layer>
@@ -1017,7 +1023,7 @@ const customStyles: TableStyles = {
                 </Stage>
               </div>
             </div>
-            <button           onClick={this.handleToggleDisplay}  style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit' }} >{"||"}</button>   
+            <button onClick={this.handleToggleDisplay}  style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit' }} >{"||"}</button>   
             <div
               style={{
                 width: "40%",
@@ -1028,7 +1034,6 @@ const customStyles: TableStyles = {
               }}
             >
                <table >
-
                 <tbody style={{ margin: "fixed",/* borderCollapse: "collapse", border: "1px solid black" */  }}>
                   <tr style={{ display: 'block', width: '100%' }}></tr>
                 </tbody>

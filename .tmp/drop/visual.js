@@ -35963,11 +35963,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         };
         const handleClickHome = (e, offset) => {
             const scrollpositon = LookupTable.filter((item) => {
-                const itemActiveElement = item[1];
+                const itemActiveElement = item[1].replace(/\s/g, "");
                 return itemActiveElement === offset;
             }).map((item) => (item[0]));
             const scrollpositon89 = LookupTable.filter((item) => {
-                const itemActiveElement = item[1];
+                const itemActiveElement = item[1].replace(/\s/g, "");
                 return itemActiveElement === offset;
             }).map((item) => (item[1]));
             console.log("scroll  pos", Number(scrollpositon[0]));
@@ -36039,7 +36039,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             },
         ];
         const ExpandedComponent = ({ data }) => {
-            return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, data.impactedBy ? (data.impactedBy.split(',').map((value, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: index, onClick: (e) => handleClickHome(e, String(value.trim())), style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, value.trim())))) : (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { onClick: (e) => handleClickHome(e, 250), style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, "No Predecessors"))));
+            return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, data.impactedBy ? (data.impactedBy.split(',').map((value, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: index, onClick: (e) => handleClickHome(e, String(value.trim().replace(/\s/g, ""))), style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, value.trim())))) : (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { onClick: (e) => handleClickHome(e, 250), style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, "No Predecessors"))));
         };
         var shortCodeSeg1 = [];
         var statusSeg1 = [];
@@ -36064,7 +36064,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         var TrendsList = [];
         var predecessorsListSeg1 = [];
         var LookupTable = [];
-        var ScrollValuesTable = [];
         const segments = [
             { y: 25, fill: Segment1Color, y1: 380 },
             { y: 57, fill: Segment2Color, y1: 320 },
@@ -36123,7 +36122,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             plannedStartSeg1.push(projectedStartDateList[i]);
             plannedFinishSeg1.push(projectedFinishDateList[i]);
             predecessorsListSeg1.push(predecessorsList[i]);
-            successorsListSeg1.push(successorsList[i]);
             for (let j = 0; j < categoryListDisplay.length; j++) {
                 if (categoryList[i].includes(categoryListDisplay[j])) {
                     yBarSeg1.push(segments[j]["y"]);
@@ -36139,13 +36137,16 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             });
             ypositionLocator = 0;
             if (weekNoFromList[i] % 2 === 0) {
-                ypositionLocator = 200 + Number(countMap[weekNoFromList[i]]) * 35;
+                ypositionLocator = 160 + Number(countMap[weekNoFromList[i]]) * 35;
+                if (ypositionLocator > 400) {
+                    ypositionLocator = 390;
+                }
             }
             else {
-                ypositionLocator = 220 + Number(countMap[weekNoFromList[i]]) * 35;
-            }
-            if (ypositionLocator > 400) {
-                ypositionLocator = 390;
+                ypositionLocator = 170 + Number(countMap[weekNoFromList[i]]) * 35;
+                if (ypositionLocator > 400) {
+                    ypositionLocator = 390;
+                }
             }
             let circle = {
                 x: 55 * Number(weekNoFromList[i]),
@@ -36154,7 +36155,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 id: "SEG1" + i,
                 trends: trendLists[i],
                 categoryList: categoryList[i],
-                shortCodeSeg: shortCodeSeg1[i],
+                shortCodeSeg: shortCodeSeg1[i].replace(/\s/g, ""),
                 titleSeg: titleSeg1[i],
                 ybarSeg: yBarSeg1[i],
                 ownerSeg1: ownerSeg1[i],
@@ -36167,12 +36168,20 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 successorsList: successorsListSeg1[i],
                 predecessorsList: predecessorsListSeg1[i]
             };
+            // Check and modify x and y values if needed
+            for (const existingCircle of Seg1Values) {
+                if (existingCircle.x === circle.x && existingCircle.y === circle.y) {
+                    // Modify x and y values
+                    circle.y -= 35; // Decrease y value
+                    // You can adjust the modification logic based on your requirements
+                }
+            }
             Seg1Values.push(circle);
         }
         for (let i = 0; i < activityIDList.length; i++) {
             LookupTable.push([
                 String(55 * Number(weekNoFromList[i])),
-                activityIDList[i],
+                activityIDList[i].replace(/\s/g, ""),
                 activityNameList[i],
                 ownerList[i],
                 startDateList[i],
@@ -36295,7 +36304,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis, } }, monthsArray),
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 17500, height: 550, style: { backgroundColor: backgroundColorVis } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 17500, height: 450, style: { backgroundColor: backgroundColorVis } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 0.8, height: 800, fill: "black" }),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation + 3, y: 10, text: "Today: " + todayDateString, fontSize: 15, fill: "black" })),
