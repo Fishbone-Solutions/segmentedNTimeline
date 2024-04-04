@@ -170,11 +170,12 @@ export class segmentedBar extends React.Component<any, State> {
 
 handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
 
-
   const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-   
-  const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));   
+  console.log("successorList",successorsList)
 
+  const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));   
+ 
+  console.log("first ",successors)
 
   this.setState((prevState) => {
     const filteredDataArray = LookupTable.filter((item) => {
@@ -191,6 +192,8 @@ handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => 
       projectedFinish: item[7],
       comments: item[10],
     }));
+  
+    console.log("filter ",filteredDataArray)
 
     const predDataArray = LookupTable.filter((item) => {
       const itemActiveElement = item[1];
@@ -206,6 +209,9 @@ handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => 
     };
   });
 };
+
+
+
 
   handleToggleDisplay = () => {
     this.setState(prevState => ({
@@ -335,7 +341,13 @@ public componentWillUnmount() {
         <button>{years[index]}</button>
       </div>
     ));
+    
+    const handleClickHomeNavigation = (e) => {
+      this.scrollReference.current.scrollLeft = todayDateLocation - 250;
+    };
 
+
+  
     const handleClickHome = (e, offset) => {
      const scrollpositon =  LookupTable.filter((item) => {
         const itemActiveElement = item[1];
@@ -350,10 +362,6 @@ public componentWillUnmount() {
         if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '' ||isNaN(Number(scrollpositon[0]))) {
           // do something
         }
-      else if (offset == 'today'){
-        this.scrollReference.current.scrollLeft = todayDateLocation - 250;
-
-      }
       else {
         this.scrollReference.current.scrollLeft =  Number(scrollpositon[0])  - 100
 
@@ -966,7 +974,7 @@ const customStyles: TableStyles = {
                 <div className="relative">{weeksArray}</div>
                 <Stage
                   width={17500}
-                  height={450}
+                  height={550}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
                    <Layer>
@@ -1026,7 +1034,7 @@ const customStyles: TableStyles = {
                 </tbody>
                 </table>
               <table >
-              <button style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit', }}   onClick={(e) => handleClickHome(e, "today")}>Today</button>   
+              <button style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit', }}   onClick={(e) => handleClickHomeNavigation(e)}>Today</button>   
 
                 <tbody style={{ margin: "fixed", borderCollapse: "collapse", /* border: "1px solid black" */  }}>
                   <tr style={{ display: 'block', width: '100%' }}>

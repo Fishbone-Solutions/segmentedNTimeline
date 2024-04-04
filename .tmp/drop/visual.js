@@ -35861,7 +35861,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }
     handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
         const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+        console.log("successorList", successorsList);
         const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+        console.log("first ", successors);
         this.setState((prevState) => {
             const filteredDataArray = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
@@ -35877,6 +35879,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 projectedFinish: item[7],
                 comments: item[10],
             }));
+            console.log("filter ", filteredDataArray);
             const predDataArray = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
                 return predecessors.includes(itemActiveElement);
@@ -35955,6 +35958,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const monthsArray = months.map((month, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "monthitem", style: { backgroundColor: backgroundColorVis } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, month),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", null, years[index]))));
+        const handleClickHomeNavigation = (e) => {
+            this.scrollReference.current.scrollLeft = todayDateLocation - 250;
+        };
         const handleClickHome = (e, offset) => {
             const scrollpositon = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
@@ -35966,10 +35972,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             }).map((item) => (item[1]));
             console.log("scroll  pos", Number(scrollpositon[0]));
             console.log("activity", scrollpositon89);
-            if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '') {
-            }
-            else if (offset == 'today') {
-                this.scrollReference.current.scrollLeft = todayDateLocation - 250;
+            if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '' || isNaN(Number(scrollpositon[0]))) {
+                // do something
             }
             else {
                 this.scrollReference.current.scrollLeft = Number(scrollpositon[0]) - 100;
@@ -36291,7 +36295,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis, } }, monthsArray),
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 17500, height: 450, style: { backgroundColor: backgroundColorVis } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 17500, height: 550, style: { backgroundColor: backgroundColorVis } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 0.8, height: 800, fill: "black" }),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation + 3, y: 10, text: "Today: " + todayDateString, fontSize: 15, fill: "black" })),
@@ -36315,7 +36319,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed", /* borderCollapse: "collapse", border: "1px solid black" */ } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { style: { display: 'block', width: '100%' } }))),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null,
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999, backgroundColor: "#B93333", color: "white", width: 'fit', }, onClick: (e) => handleClickHome(e, "today") }, "Today"),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999, backgroundColor: "#B93333", color: "white", width: 'fit', }, onClick: (e) => handleClickHomeNavigation(e) }, "Today"),
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed", borderCollapse: "collapse", /* border: "1px solid black" */ } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { style: { display: 'block', width: '100%' } }),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
