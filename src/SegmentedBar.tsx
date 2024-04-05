@@ -84,12 +84,12 @@ export interface State {
   lastReportedDatePlaceholder?: string;
   slipPlaceholder?: string;
   scrollPositionIndicator?:number;
-  twoDArrayPlaceholder?: any[][]; // 2D array placeholder
   activityPlaceholder?: string,
   rightSideBar?: string,
   currentActiveMilestonePlaceholder?:string,
   dataArray?:DataItem[],
-  predecessorsArray?:  PrecedessorsPointers[]
+  predecessorsArray?:  PrecedessorsPointers[],
+  NavigationTracker?: string[];
 }
 export const initialState: State = {
   backgroundColorVis: "white",
@@ -120,7 +120,8 @@ export const initialState: State = {
   slipPlaceholder: "",
   activityPlaceholder:"",
   rightSideBar: "flex",
-  currentActiveMilestonePlaceholder:""
+  currentActiveMilestonePlaceholder:"",
+  NavigationTracker:[]
 
 };
 
@@ -168,48 +169,45 @@ export class segmentedBar extends React.Component<any, State> {
 
   }
 
-handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
-
-  const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-  console.log("successorList",successorsList)
-
-  const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));   
- 
-  console.log("first ",successors)
-
-  this.setState((prevState) => {
-    const filteredDataArray = LookupTable.filter((item) => {
-    const itemActiveElement = item[1];
-      return itemActiveElement === activeElement || successors.includes(itemActiveElement);
-    }).map((item) => ({
-      milestone: item[1],
-      title: item[2],
-      owner: item[3],
-      impactedBy: item[8],
-      planDate: item[4],
-      projectedStart: item[6],
-      planFinish: item[5],
-      projectedFinish: item[7],
-      comments: item[10],
-    }));
+  handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
+    const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+    const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
   
-    console.log("filter ",filteredDataArray)
-
-    const predDataArray = LookupTable.filter((item) => {
-      const itemActiveElement = item[1];
-      return predecessors.includes(itemActiveElement);
-    }).map((item) => ({
-      ScrollPointer:  Number(item[0]),
-
-    }));
-    return {
-      currentActiveMilestonePlaceholder: String(activeElement),
-      dataArray: filteredDataArray,
-      predecessorsArray: predDataArray
-    };
-  });
-};
-
+    this.setState((prevState) => {
+      const filteredDataArray = LookupTable.filter((item) => {
+        const itemActiveElement = item[1];
+        return itemActiveElement === activeElement || successors.includes(itemActiveElement);
+      }).map((item) => ({
+        milestone: item[1],
+        title: item[2],
+        owner: item[3],
+        impactedBy: item[8],
+        planDate: item[4],
+        projectedStart: item[6],
+        planFinish: item[5],
+        projectedFinish: item[7],
+        comments: item[10],
+      }));
+  
+      const predDataArray = LookupTable.filter((item) => {
+        const itemActiveElement = item[1];
+        return predecessors.includes(itemActiveElement);
+      }).map((item) => ({
+        ScrollPointer: Number(item[0]),
+      }));
+  
+      // Insert activeElement as the first item in filteredDataArray
+      const activeElementData = filteredDataArray.find((item) => item.milestone === activeElement);
+      const filteredDataArrayWithoutActive = filteredDataArray.filter((item) => item.milestone !== activeElement);
+      const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
+  
+      return {
+        currentActiveMilestonePlaceholder: String(activeElement),
+        dataArray: updatedFilteredDataArray,
+        predecessorsArray: predDataArray,
+      };
+    });
+  };
 
 
 
@@ -265,8 +263,7 @@ public componentWillUnmount() {
       activityPlaceholder,
       rightSideBar,
       currentActiveMilestonePlaceholder,
-      predecessorsArray,
-
+      NavigationTracker,
       dataArray
     } = this.state;
 
@@ -297,8 +294,6 @@ public componentWillUnmount() {
     const startDate = startDate4.subtract(1, "months");
     let endDate4 = moment(result.max).startOf("months");
     const endDate = endDate4.add(1, "months");
-
-    // Define a variable to hold the current date
     let currentDate = startDate;
 
     while (currentDate.isSameOrBefore(endDate)) {
@@ -307,7 +302,6 @@ public componentWillUnmount() {
 
       months.push(monthNames[month]);
       years.push(year);
-      // Advance the current date by one week
       currentDate = currentDate.add(1, "months");
     }
 
@@ -353,16 +347,11 @@ public componentWillUnmount() {
         const itemActiveElement = item[1].replace(/\s/g, "");
           return itemActiveElement === offset;
         }).map((item) => (item[0]));
-        const scrollpositon89 =  LookupTable.filter((item) => {
-          const itemActiveElement = item[1].replace(/\s/g, "");
-            return itemActiveElement === offset;
-          }).map((item) => (item[1]));
-        console.log("scroll  pos",Number(scrollpositon[0]));
-        console.log("activity",scrollpositon89)
-        if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '' ||isNaN(Number(scrollpositon[0]))) {
-          // do something
+
+          if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '' ||isNaN(Number(scrollpositon[0]))) {
         }
       else {
+        
         this.scrollReference.current.scrollLeft =  Number(scrollpositon[0])  - 100
 
       }
@@ -376,6 +365,9 @@ public componentWillUnmount() {
 
     function formatDate(dateString) {
       const date = new Date(dateString);
+      if (isNaN(date.getTime()) || dateString === null) {
+        return ''; // Return an empty string if the date is NaN or null
+      }
       const day = date.getDate();
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
@@ -434,13 +426,13 @@ public componentWillUnmount() {
         name: "Projected Finish",
         selector: row => row.projectedFinish,
         cell: row => formatDate(row.projectedFinish),
-        width: "100px"
+        width: "130px"
 
       },
       {
         name: "Comments",
         selector: row => row.comments,
-        width: "100px"
+        width: "210px"
 
       },
     ];
@@ -448,25 +440,30 @@ public componentWillUnmount() {
     const ExpandedComponent = ({ data }) => {
       return (
         <>
-          {data.impactedBy ? (
-            data.impactedBy.split(',').map((value, index) => (
-              <button
-                key={index}
-                onClick={(e) => handleClickHome(e,String(value.trim().replace(/\s/g, "")) )}
-                style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
-              >
-                {value.trim()}
-              </button>
-            ))
-          ) : (
+        {data.impactedBy && data.impactedBy.split(',').map((value, index) => (
+          value.trim().includes("NaN") ? null : (
             <button
-              onClick={(e) => handleClickHome(e, 250)}
+              key={index}
+              onClick={(e) => {
+                const trimmedValue = value.trim().replace(/\s/g, "");
+                if (!isNaN(trimmedValue)) {
+                  handleClickHome(e, String(trimmedValue));
+                }
+              }}
               style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
             >
-              No Predecessors 
+              {value.trim()}
             </button>
-          )}
-        </>
+          )
+        ))}
+        {!data.impactedBy && (
+          <button
+            style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
+          >
+            No Predecessors
+          </button>
+        )}
+      </>
       );
     };
     
@@ -568,9 +565,6 @@ public componentWillUnmount() {
           segmentColor.push(segments[j]["fill"]);
         }
       }
-
-      // even numbered weeks
-      //  odd numbered weeks
       visitedWeeks.push(weekNoFromList[i]);
       visitedWeeks.forEach((num) => {
         countMap[num] = (countMap[num] || 0) + 1;
@@ -593,7 +587,7 @@ public componentWillUnmount() {
     
 
       
-      let circle = {
+      let milestone = {
         x: 55 * Number(weekNoFromList[i]),
         y: ypositionLocator,
         fill: statusSeg1[i],
@@ -614,16 +608,12 @@ public componentWillUnmount() {
         predecessorsList: predecessorsListSeg1[i]
       };
 
-      // Check and modify x and y values if needed
-for (const existingCircle of Seg1Values) {
-  if (existingCircle.x === circle.x && existingCircle.y === circle.y) {
-    // Modify x and y values
-    circle.y -= 35; // Decrease y value
-    // You can adjust the modification logic based on your requirements
+for (const existingMilestone of Seg1Values) {
+  if (existingMilestone.x === milestone.x && existingMilestone.y === milestone.y) {
+    milestone.y -= 35; 
   }
 }
-
-      Seg1Values.push(circle);
+      Seg1Values.push(milestone);
     } 
 
    
@@ -642,8 +632,18 @@ for (const existingCircle of Seg1Values) {
         commentaryList[i], // 10
       ]);
     } 
+  
+    console.log(NavigationTracker);
 
-
+    const NavigationBarSegment = (activeName, index) => (
+      <>
+        {NavigationTracker.map((item, i) => (
+          <button key={i} className={activeName === item ? "active" : ""}>
+            {item}
+          </button>
+        ))}
+      </>
+    );
  
 
 
@@ -671,7 +671,6 @@ for (const existingCircle of Seg1Values) {
         trends,
         lastReportedEndDateSeg1,
         slipSeg1,
-        successorsList
       } = Seg1Values[index];
     
 
@@ -717,6 +716,24 @@ for (const existingCircle of Seg1Values) {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           />
+          <Rect
+  x={x-15}
+  y={y}
+  width={30}
+  height={40}
+  fill={"red"}
+  stroke="none"
+  fillEnabled={false}
+  strokeOpacity={0}
+  strokeEnabled={false}
+  pointerEvents="visible"
+  onClick={()=>{
+    this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+  }
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+
+/>
     
           <StatusIcon
             x={x - 14}
@@ -725,6 +742,8 @@ for (const existingCircle of Seg1Values) {
             onClick={()=>{
               this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
             }
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
 />
     
           <Text
@@ -781,7 +800,7 @@ for (const existingCircle of Seg1Values) {
       marginRight: "10px",
       display: "inline-block",
     };
-   const customStyles: TableStyles = {
+    const customStyles: TableStyles = {
   
   rows: {
 		style: {
@@ -1034,27 +1053,27 @@ for (const existingCircle of Seg1Values) {
               }}
             >
                <table >
-                <tbody style={{ margin: "fixed",/* borderCollapse: "collapse", border: "1px solid black" */  }}>
+                <tbody style={{ margin: "fixed"}}>
                   <tr style={{ display: 'block', width: '100%' }}></tr>
                 </tbody>
                 </table>
               <table >
               <button style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit', }}   onClick={(e) => handleClickHomeNavigation(e)}>Today</button>   
 
-                <tbody style={{ margin: "fixed", borderCollapse: "collapse", /* border: "1px solid black" */  }}>
+                <tbody style={{ margin: "fixed", borderCollapse: "collapse"  }}>
                   <tr style={{ display: 'block', width: '100%' }}>
                    
                   </tr>
                   <tr>
-  <td style={{ fontWeight: "bold", /* border: "1px solid black" */ }}>Activity Category</td>
-  <td style={{ /* border: "1px solid black"*/ }}>{activityPlaceholder}</td>
+  <td style={{ fontWeight: "bold" }}>Activity Category</td>
+  <td>{activityPlaceholder}</td>
 </tr>
 <tr>
-  <td style={{ fontWeight: "bold", /* border: "1px solid black" */ }}>Title</td>
+  <td style={{ fontWeight: "bold" }}>Title</td>
   <td style={{ /* border: "1px solid black" */}}>{titlePlaceholder}</td>
 </tr>
 <tr>
-  <td style={{ fontWeight: "bold", /* border: "1px solid black" */ }}>Owner</td>
+  <td style={{ fontWeight: "bold" }}>Owner</td>
   <td style={{/* border: "1px solid black" */ }}>{ownerPlaceholder}</td>
 </tr>
 <tr>
@@ -1071,31 +1090,31 @@ for (const existingCircle of Seg1Values) {
 </tr>
 <tr>
   <td style={{ fontWeight: "bold",/* border: "1px solid black" */}}>BaseLine</td>
-  <td style={{ /*  border: "1px solid black" */ }}>
+  <td>
     {baseLineDatePlaceholder.split("T")[0].split("-").reverse().join("-")}
   </td>
 </tr>
 <tr>
-  <td style={{ fontWeight: "bold",  /* border: "1px solid black" */}}>End Date</td>
-  <td style={{ /* border: "1px solid black" */ }}>
+  <td style={{ fontWeight: "bold"}}>End Date</td>
+  <td >
     {endDatePlaceholder.split("T")[0].split("-").reverse().join("-")}
   </td>
 </tr>
 <tr>
-  <td style={{ fontWeight: "bold", /*border: "1px solid black"*/ }}>Last Reported End Date</td>
-  <td style={{ /* border: "1px solid black" */ }}>
+  <td style={{ fontWeight: "bold" }}>Last Reported End Date</td>
+  <td >
     {lastReportedDatePlaceholder.split("T")[0].split("-").reverse().join("-")}
   </td>
 </tr>
 <tr>
-  <td style={{ fontWeight: "bold", /* border: "1px solid black" */ }}>Slip</td>
-  <td style={{ /* border: "1px solid black" */ }}>{slipPlaceholder} Days</td>
+  <td style={{ fontWeight: "bold" }}>Slip</td>
+  <td >{slipPlaceholder} Days</td>
 </tr>
 
 
                 </tbody>
                 <tr>
-  <td colSpan={2} style={{/* border: "1px solid black"*/ }}>
+  <td colSpan={2}>
     <div> 
       <p style={legendStyle}><b>{"Legend"}</b></p>
       <div style={{ ...colorRectStyle, backgroundColor: "grey" }}></div>
@@ -1120,23 +1139,24 @@ for (const existingCircle of Seg1Values) {
             </div>
           </div>
     <div style={{ height: "200px", overflow:"auto" }}>
-  <button
+   <button
     style={{
       backgroundColor: "blue",
       color: "white",
       width: "fit-content",
     }}
   >
-    Current Active Milestone {currentActiveMilestonePlaceholder}
+   Current Active Milestone {currentActiveMilestonePlaceholder}
   </button>
+  
+
   <DataTable
     columns={columns}
     data={dataArray}
     expandableRows
     expandableRowsComponent={ExpandedComponent}
     customStyles={customStyles}
-    pagination
-   
+    pagination 
     dense={true}   
   />
 </div>

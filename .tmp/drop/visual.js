@@ -35841,7 +35841,8 @@ const initialState = {
     slipPlaceholder: "",
     activityPlaceholder: "",
     rightSideBar: "flex",
-    currentActiveMilestonePlaceholder: ""
+    currentActiveMilestonePlaceholder: "",
+    NavigationTracker: []
 };
 class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     static updateCallback = null;
@@ -35861,9 +35862,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }
     handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
         const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-        console.log("successorList", successorsList);
         const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-        console.log("first ", successors);
         this.setState((prevState) => {
             const filteredDataArray = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
@@ -35879,17 +35878,20 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 projectedFinish: item[7],
                 comments: item[10],
             }));
-            console.log("filter ", filteredDataArray);
             const predDataArray = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
                 return predecessors.includes(itemActiveElement);
             }).map((item) => ({
                 ScrollPointer: Number(item[0]),
             }));
+            // Insert activeElement as the first item in filteredDataArray
+            const activeElementData = filteredDataArray.find((item) => item.milestone === activeElement);
+            const filteredDataArrayWithoutActive = filteredDataArray.filter((item) => item.milestone !== activeElement);
+            const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
             return {
                 currentActiveMilestonePlaceholder: String(activeElement),
-                dataArray: filteredDataArray,
-                predecessorsArray: predDataArray
+                dataArray: updatedFilteredDataArray,
+                predecessorsArray: predDataArray,
             };
         });
     };
@@ -35907,7 +35909,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         segmentedBar.updateCallback = null;
     }
     render() {
-        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, SidetextColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, activityPlaceholder, rightSideBar, currentActiveMilestonePlaceholder, predecessorsArray, dataArray } = this.state;
+        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, SidetextColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, activityPlaceholder, rightSideBar, currentActiveMilestonePlaceholder, NavigationTracker, dataArray } = this.state;
         let months = [];
         let years = [];
         let finalDatesIterator = [];
@@ -35929,14 +35931,12 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         const startDate = startDate4.subtract(1, "months");
         let endDate4 = moment__WEBPACK_IMPORTED_MODULE_2__(result.max).startOf("months");
         const endDate = endDate4.add(1, "months");
-        // Define a variable to hold the current date
         let currentDate = startDate;
         while (currentDate.isSameOrBefore(endDate)) {
             const month = currentDate.month();
             const year = currentDate.year();
             months.push(_CONS_TABLE__WEBPACK_IMPORTED_MODULE_5__/* .monthNames */ .l[month]);
             years.push(year);
-            // Advance the current date by one week
             currentDate = currentDate.add(1, "months");
         }
         const start = (0,date_fns__WEBPACK_IMPORTED_MODULE_6__/* .subMonths */ .W)(result.min, 1);
@@ -35966,14 +35966,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 const itemActiveElement = item[1].replace(/\s/g, "");
                 return itemActiveElement === offset;
             }).map((item) => (item[0]));
-            const scrollpositon89 = LookupTable.filter((item) => {
-                const itemActiveElement = item[1].replace(/\s/g, "");
-                return itemActiveElement === offset;
-            }).map((item) => (item[1]));
-            console.log("scroll  pos", Number(scrollpositon[0]));
-            console.log("activity", scrollpositon89);
             if (Number(scrollpositon[0]) == null || String(scrollpositon[0]) === '' || isNaN(Number(scrollpositon[0]))) {
-                // do something
             }
             else {
                 this.scrollReference.current.scrollLeft = Number(scrollpositon[0]) - 100;
@@ -35981,6 +35974,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         };
         function formatDate(dateString) {
             const date = new Date(dateString);
+            if (isNaN(date.getTime()) || dateString === null) {
+                return ''; // Return an empty string if the date is NaN or null
+            }
             const day = date.getDate();
             const month = date.getMonth() + 1;
             const year = date.getFullYear();
@@ -36030,16 +36026,23 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 name: "Projected Finish",
                 selector: row => row.projectedFinish,
                 cell: row => formatDate(row.projectedFinish),
-                width: "100px"
+                width: "130px"
             },
             {
                 name: "Comments",
                 selector: row => row.comments,
-                width: "100px"
+                width: "210px"
             },
         ];
         const ExpandedComponent = ({ data }) => {
-            return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, data.impactedBy ? (data.impactedBy.split(',').map((value, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: index, onClick: (e) => handleClickHome(e, String(value.trim().replace(/\s/g, ""))), style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, value.trim())))) : (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { onClick: (e) => handleClickHome(e, 250), style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, "No Predecessors"))));
+            return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
+                data.impactedBy && data.impactedBy.split(',').map((value, index) => (value.trim().includes("NaN") ? null : (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: index, onClick: (e) => {
+                        const trimmedValue = value.trim().replace(/\s/g, "");
+                        if (!isNaN(trimmedValue)) {
+                            handleClickHome(e, String(trimmedValue));
+                        }
+                    }, style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, value.trim())))),
+                !data.impactedBy && (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, "No Predecessors"))));
         };
         var shortCodeSeg1 = [];
         var statusSeg1 = [];
@@ -36129,8 +36132,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     segmentColor.push(segments[j]["fill"]);
                 }
             }
-            // even numbered weeks
-            //  odd numbered weeks
             visitedWeeks.push(weekNoFromList[i]);
             visitedWeeks.forEach((num) => {
                 countMap[num] = (countMap[num] || 0) + 1;
@@ -36148,7 +36149,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     ypositionLocator = 390;
                 }
             }
-            let circle = {
+            let milestone = {
                 x: 55 * Number(weekNoFromList[i]),
                 y: ypositionLocator,
                 fill: statusSeg1[i],
@@ -36168,15 +36169,12 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 successorsList: successorsListSeg1[i],
                 predecessorsList: predecessorsListSeg1[i]
             };
-            // Check and modify x and y values if needed
-            for (const existingCircle of Seg1Values) {
-                if (existingCircle.x === circle.x && existingCircle.y === circle.y) {
-                    // Modify x and y values
-                    circle.y -= 35; // Decrease y value
-                    // You can adjust the modification logic based on your requirements
+            for (const existingMilestone of Seg1Values) {
+                if (existingMilestone.x === milestone.x && existingMilestone.y === milestone.y) {
+                    milestone.y -= 35;
                 }
             }
-            Seg1Values.push(circle);
+            Seg1Values.push(milestone);
         }
         for (let i = 0; i < activityIDList.length; i++) {
             LookupTable.push([
@@ -36193,8 +36191,10 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 commentaryList[i], // 10
             ]);
         }
+        console.log(NavigationTracker);
+        const NavigationBarSegment = (activeName, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NavigationTracker.map((item, i) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: i, className: activeName === item ? "active" : "" }, item)))));
         const Segment1Categories = finishDateList.map((week, index) => {
-            const { x, y, fill, shortCodeSeg, titleSeg, ownerSeg, beginSeg1, endSeg1, categoryListDisplaySeg1, trends, lastReportedEndDateSeg1, slipSeg1, successorsList } = Seg1Values[index];
+            const { x, y, fill, shortCodeSeg, titleSeg, ownerSeg, beginSeg1, endSeg1, categoryListDisplaySeg1, trends, lastReportedEndDateSeg1, slipSeg1, } = Seg1Values[index];
             const handleMouseEnter = () => {
                 this.setState({
                     titlePlaceholder: titleSeg,
@@ -36223,9 +36223,12 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: x, y: y + 25.8, radius: 30, stroke: fill, strokeWidth: 3, fill: backgroundColorVis, onClick: () => {
                         this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
                     }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave }),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: x - 15, y: y, width: 30, height: 40, fill: "red", stroke: "none", fillEnabled: false, strokeOpacity: 0, strokeEnabled: false, pointerEvents: "visible", onClick: () => {
+                        this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
+                    }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave }),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: x - 14, y: y + 10, status: trends, onClick: () => {
                         this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                    } }),
+                    }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave }),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: x - 40, y: y, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg, fontSize: 8, fill: textColor, onClick: () => {
                         this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
                     }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave })));
@@ -36325,40 +36328,40 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         display: rightSideBar
                     } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null,
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed", /* borderCollapse: "collapse", border: "1px solid black" */ } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed" } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { style: { display: 'block', width: '100%' } }))),
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null,
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { zIndex: 999, backgroundColor: "#B93333", color: "white", width: 'fit', }, onClick: (e) => handleClickHomeNavigation(e) }, "Today"),
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed", borderCollapse: "collapse", /* border: "1px solid black" */ } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed", borderCollapse: "collapse" } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { style: { display: 'block', width: '100%' } }),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold", /* border: "1px solid black" */ } }, "Activity Category"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black"*/} }, activityPlaceholder)),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Activity Category"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, activityPlaceholder)),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold", /* border: "1px solid black" */ } }, "Title"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Title"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black" */} }, titlePlaceholder)),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold", /* border: "1px solid black" */ } }, "Owner"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Owner"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black" */} }, ownerPlaceholder)),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold", /*border: "1px solid black"*/ } }, "Trend"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black"*/} }, trendPlaceholder === "Improved" ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_8__/* .MdOutlineTrendingUp */ .BsN, { style: { color: "#40B04A", fontSize: "2em" } })) : trendPlaceholder === "Deteriorated" ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_8__/* .MdOutlineTrendingDown */ .PeX, { style: { color: "red", fontSize: "2em" } })) : trendPlaceholder === "No Change" ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_icons_md__WEBPACK_IMPORTED_MODULE_8__/* .MdOutlineTrendingFlat */ .R_6, { style: { color: "yellow", fontSize: "2em" } })) : null)),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold", /* border: "1px solid black" */ } }, "BaseLine"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /*  border: "1px solid black" */} }, baseLineDatePlaceholder.split("T")[0].split("-").reverse().join("-"))),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, baseLineDatePlaceholder.split("T")[0].split("-").reverse().join("-"))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold", /* border: "1px solid black" */ } }, "End Date"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black" */} }, endDatePlaceholder.split("T")[0].split("-").reverse().join("-"))),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "End Date"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, endDatePlaceholder.split("T")[0].split("-").reverse().join("-"))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold", /*border: "1px solid black"*/ } }, "Last Reported End Date"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black" */} }, lastReportedDatePlaceholder.split("T")[0].split("-").reverse().join("-"))),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Last Reported End Date"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, lastReportedDatePlaceholder.split("T")[0].split("-").reverse().join("-"))),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold", /* border: "1px solid black" */ } }, "Slip"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black" */} },
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Slip"),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null,
                                     slipPlaceholder,
                                     " Days"))),
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
-                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { colSpan: 2, style: { /* border: "1px solid black"*/} },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { colSpan: 2 },
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", { style: legendStyle },
                                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, "Legend")),
