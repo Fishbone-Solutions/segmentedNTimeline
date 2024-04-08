@@ -242,8 +242,8 @@ export class segmentedBar extends React.Component<any, State> {
          const activeElementData = filteredDataArray.find((item) => item.milestone === activeElement);
          const filteredDataArrayWithoutActive = filteredDataArray.filter((item) => item.milestone !== activeElement);
          filteredDataArrayWithoutActive.sort((a, b) => {
-          const dateA = new Date(a.planDate);
-          const dateB = new Date(b.planDate);
+          const dateA = new Date(a.planFinish);
+          const dateB = new Date(b.planFinish);
           return dateA.getTime() - dateB.getTime();
         });
          console.log("filteredDataArrayWithoutActive after ",filteredDataArrayWithoutActive)

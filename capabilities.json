@@ -291,5 +291,7 @@
             "name": "ExportContent",
             "essential": false
         }
-    ]
+    ],
+    "supportsLandingPage": true,
+    "supportsEmptyDataView": true
 }
