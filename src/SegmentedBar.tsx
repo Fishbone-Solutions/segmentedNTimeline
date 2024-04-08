@@ -168,46 +168,13 @@ export class segmentedBar extends React.Component<any, State> {
     return segmentedBar.updateCallback;
   }
 
-/*   handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
-    const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-    const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-  
-    this.setState((prevState) => {
-      const filteredDataArray = LookupTable.filter((item) => {
-        const itemActiveElement = item[1];
-        return itemActiveElement === activeElement || successors.includes(itemActiveElement);
-      }).map((item) => ({
-        milestone: item[1],
-        title: item[2],
-        owner: item[3],
-        impactedBy: item[8],
-        planDate: item[4],
-        projectedStart: item[6],
-        planFinish: item[5],
-        projectedFinish: item[7],
-        comments: item[10],
-      }));
-  
-      const predDataArray = LookupTable.filter((item) => {
-        const itemActiveElement = item[1];
-        return predecessors.includes(itemActiveElement);
-      }).map((item) => ({
-        ScrollPointer: Number(item[0]),
-      }));
-  
-      // Insert activeElement as the first item in filteredDataArray
-      const activeElementData = filteredDataArray.find((item) => item.milestone === activeElement);
-      const filteredDataArrayWithoutActive = filteredDataArray.filter((item) => item.milestone !== activeElement);
-      const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
-  
-      return {
-        currentActiveMilestonePlaceholder: String(activeElement),
-        dataArray: updatedFilteredDataArray,
-        predecessorsArray: predDataArray,
-      };
-    });
-  }; */
+
   handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
+
+
+
+
+    
     const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
   //  console.log("successorList",successorsList)
     const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));   
@@ -248,11 +215,12 @@ export class segmentedBar extends React.Component<any, State> {
         });
          console.log("filteredDataArrayWithoutActive after ",filteredDataArrayWithoutActive)
          const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
+         
 
       return {
         currentActiveMilestonePlaceholder: String(activeElement),
         dataArray: updatedFilteredDataArray,
-        predecessorsArray: predDataArray
+        predecessorsArray: predDataArray,
       };
     });
   };
@@ -310,7 +278,7 @@ public componentWillUnmount() {
       activityPlaceholder,
       rightSideBar,
       currentActiveMilestonePlaceholder,
-      NavigationTracker,
+     NavigationTracker,
       dataArray
     } = this.state;
 
@@ -336,6 +304,7 @@ public componentWillUnmount() {
       },
       { min: undefined, max: undefined }
     );
+
 
     let startDate4 = moment(new Date(Date.parse(result.min))).startOf("month");
     const startDate = startDate4.subtract(1, "months");
@@ -484,17 +453,27 @@ public componentWillUnmount() {
         {data.impactedBy && data.impactedBy.split(',').map((value, index) => (
           value.trim().includes("NaN") ? null : (
             <button
-              key={index}
-              onClick={(e) => {
-                const trimmedValue = value.trim().replace(/\s/g, "");
-                console.log(trimmedValue);
-                  handleClickHome(e, String(trimmedValue));
-                
-              }}
-              style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
-            >
-              {value.trim()}
-            </button>
+            key={index}
+            onClick={(e) => {
+              const trimmedValue = value.trim().replace(/\s/g, "");
+              handleClickHome(e, String(trimmedValue));
+          
+              if (trimmedValue !== "null") {
+                this.setState((prevState) => {
+                  const lastValue = prevState.NavigationTracker[prevState.NavigationTracker.length - 1];
+                  if (lastValue !== trimmedValue) {
+                    return {
+                      NavigationTracker: [...prevState.NavigationTracker, trimmedValue],
+                    };
+                  }
+                  return prevState;
+                });
+              }
+            }}
+            style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
+          >
+            {value.trim()}
+          </button>
           )
         ))}
         {!data.impactedBy && (
@@ -674,18 +653,8 @@ for (const existingMilestone of Seg1Values) {
       ]);
     } 
   
-   // console.log("Lookup Table ",LookupTable);
+    console.log("Navigation Tracker ",NavigationTracker);
 
-    const NavigationBarSegment = (activeName, index) => (
-      <>
-        {NavigationTracker.map((item, i) => (
-          <button key={i} className={activeName === item ? "active" : ""}>
-            {item}
-          </button>
-        ))}
-      </>
-    );
- 
 
 
 
@@ -752,6 +721,7 @@ for (const existingMilestone of Seg1Values) {
             strokeWidth={3}
             fill={backgroundColorVis}
             onClick={()=>{
+              this.setState({ NavigationTracker: [] });
               this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
             }
             onPointerEnter={handleMouseEnter}
@@ -763,6 +733,7 @@ for (const existingMilestone of Seg1Values) {
             y={y + 10}
             status={trends}
             onClick={()=>{
+              this.setState({ NavigationTracker: [] });
               this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
             }
             onMouseEnter={handleMouseEnter}
@@ -780,8 +751,11 @@ for (const existingMilestone of Seg1Values) {
             fontSize={8}
             fill={textColor}
             onClick={()=>{
+              this.setState({ NavigationTracker: [] });
               this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+              
             }
+            
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           />
@@ -848,6 +822,9 @@ for (const existingMilestone of Seg1Values) {
       },
     },
   };
+
+
+
   
    const Xval = [60,92,124,156,188,220]
     return (
@@ -1171,7 +1148,28 @@ for (const existingMilestone of Seg1Values) {
   >
    Current Active Milestone {currentActiveMilestonePlaceholder}
   </button>
-  
+  {NavigationTracker.map((item) => (
+          <button
+          onClick={(e) => {
+            const trimmedValue = item.trim().replace(/\s/g, "");
+            console.log(trimmedValue);
+              handleClickHome(e, String(trimmedValue));
+            
+          }}
+          >{item}</button>
+    ))}
+<button
+  onClick={(e) => {
+    this.setState({ NavigationTracker: [] });
+  }}
+  style={{
+    backgroundColor: "blue",
+    color: "white",
+    width: "fit-content",
+  }}
+>
+  X
+</button>
 
   <DataTable
     columns={columns}
