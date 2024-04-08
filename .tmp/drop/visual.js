@@ -35860,9 +35860,53 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         this.scrollReference = react__WEBPACK_IMPORTED_MODULE_0__.createRef();
         this.rightSideBar = "flex";
     }
-    handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
+    static getUpdateCallback() {
+        return segmentedBar.updateCallback;
+    }
+    /*   handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
         const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
         const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+      
+        this.setState((prevState) => {
+          const filteredDataArray = LookupTable.filter((item) => {
+            const itemActiveElement = item[1];
+            return itemActiveElement === activeElement || successors.includes(itemActiveElement);
+          }).map((item) => ({
+            milestone: item[1],
+            title: item[2],
+            owner: item[3],
+            impactedBy: item[8],
+            planDate: item[4],
+            projectedStart: item[6],
+            planFinish: item[5],
+            projectedFinish: item[7],
+            comments: item[10],
+          }));
+      
+          const predDataArray = LookupTable.filter((item) => {
+            const itemActiveElement = item[1];
+            return predecessors.includes(itemActiveElement);
+          }).map((item) => ({
+            ScrollPointer: Number(item[0]),
+          }));
+      
+          // Insert activeElement as the first item in filteredDataArray
+          const activeElementData = filteredDataArray.find((item) => item.milestone === activeElement);
+          const filteredDataArrayWithoutActive = filteredDataArray.filter((item) => item.milestone !== activeElement);
+          const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
+      
+          return {
+            currentActiveMilestonePlaceholder: String(activeElement),
+            dataArray: updatedFilteredDataArray,
+            predecessorsArray: predDataArray,
+          };
+        });
+      }; */
+    handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
+        const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+        //  console.log("successorList",successorsList)
+        const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+        //    console.log("first ",successors)
         this.setState((prevState) => {
             const filteredDataArray = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
@@ -35878,6 +35922,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 projectedFinish: item[7],
                 comments: item[10],
             }));
+            console.log("filter ", filteredDataArray);
             const predDataArray = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
                 return predecessors.includes(itemActiveElement);
@@ -35887,11 +35932,17 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             // Insert activeElement as the first item in filteredDataArray
             const activeElementData = filteredDataArray.find((item) => item.milestone === activeElement);
             const filteredDataArrayWithoutActive = filteredDataArray.filter((item) => item.milestone !== activeElement);
+            filteredDataArrayWithoutActive.sort((a, b) => {
+                const dateA = new Date(a.planDate);
+                const dateB = new Date(b.planDate);
+                return dateA.getTime() - dateB.getTime();
+            });
+            console.log("filteredDataArrayWithoutActive after ", filteredDataArrayWithoutActive);
             const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
             return {
                 currentActiveMilestonePlaceholder: String(activeElement),
                 dataArray: updatedFilteredDataArray,
-                predecessorsArray: predDataArray,
+                predecessorsArray: predDataArray
             };
         });
     };
@@ -36038,9 +36089,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
                 data.impactedBy && data.impactedBy.split(',').map((value, index) => (value.trim().includes("NaN") ? null : (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: index, onClick: (e) => {
                         const trimmedValue = value.trim().replace(/\s/g, "");
-                        if (!isNaN(trimmedValue)) {
-                            handleClickHome(e, String(trimmedValue));
-                        }
+                        console.log(trimmedValue);
+                        handleClickHome(e, String(trimmedValue));
                     }, style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, value.trim())))),
                 !data.impactedBy && (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: { backgroundColor: '#B93333', color: 'white', width: 'fit-content' } }, "No Predecessors"))));
         };
@@ -36191,7 +36241,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 commentaryList[i], // 10
             ]);
         }
-        console.log(NavigationTracker);
+        // console.log("Lookup Table ",LookupTable);
         const NavigationBarSegment = (activeName, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NavigationTracker.map((item, i) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: i, className: activeName === item ? "active" : "" }, item)))));
         const Segment1Categories = finishDateList.map((week, index) => {
             const { x, y, fill, shortCodeSeg, titleSeg, ownerSeg, beginSeg1, endSeg1, categoryListDisplaySeg1, trends, lastReportedEndDateSeg1, slipSeg1, } = Seg1Values[index];
@@ -36222,10 +36272,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, { key: index },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: x, y: y + 25.8, radius: 30, stroke: fill, strokeWidth: 3, fill: backgroundColorVis, onClick: () => {
                         this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                    }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave }),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: x - 15, y: y, width: 30, height: 40, fill: "red", stroke: "none", fillEnabled: false, strokeOpacity: 0, strokeEnabled: false, pointerEvents: "visible", onClick: () => {
-                        this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                    }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave }),
+                    }, onPointerEnter: handleMouseEnter }),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: x - 14, y: y + 10, status: trends, onClick: () => {
                         this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
                     }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave }),

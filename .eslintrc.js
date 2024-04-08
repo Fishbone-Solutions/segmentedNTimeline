@@ -16,5 +16,14 @@ module.exports = {
     extends: [
         "plugin:powerbi-visuals/recommended"
     ],
-    rules: {}
+    rules: {},
+    overrides: [
+          {
+            "files": ["tests/**/*"],
+            "env": {
+              "jest": true
+            }
+          }
+        ]
+      
 };

@@ -5,9 +5,7 @@ import { differenceInCalendarMonths, subMonths } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
 import useImage from "use-image";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown, MdOutlineTrendingFlat } from 'react-icons/md';
-import DataTable,  {TableStyles,  ExpanderComponentProps,} from 'react-data-table-component';
-
-
+import DataTable,  {TableStyles ,} from 'react-data-table-component';
 const StatusIcon = (props) => {
   if (props.status === "Improved") {
     const [image] = useImage(
@@ -125,10 +123,6 @@ export const initialState: State = {
 
 };
 
-
-
-
-
 interface PrecedessorsPointers {
    milestone: string,
    scrollpositon: Number
@@ -169,7 +163,12 @@ export class segmentedBar extends React.Component<any, State> {
 
   }
 
-  handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
+
+  public static getUpdateCallback() {
+    return segmentedBar.updateCallback;
+  }
+
+/*   handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
     const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
     const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
   
@@ -207,8 +206,56 @@ export class segmentedBar extends React.Component<any, State> {
         predecessorsArray: predDataArray,
       };
     });
-  };
+  }; */
+  handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
+    const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
+  //  console.log("successorList",successorsList)
+    const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));   
+//    console.log("first ",successors)
+    this.setState((prevState) => {
+      const filteredDataArray = LookupTable.filter((item) => {
+      const itemActiveElement = item[1];
+        return itemActiveElement === activeElement || successors.includes(itemActiveElement);
+      }).map((item) => ({
+        milestone: item[1],
+        title: item[2],
+        owner: item[3],
+        impactedBy: item[8],
+        planDate: item[4],
+        projectedStart: item[6],
+        planFinish: item[5],
+        projectedFinish: item[7],
+        comments: item[10],
+      }));
+  
+       console.log("filter ",filteredDataArray)
+  
+      const predDataArray = LookupTable.filter((item) => {
+        const itemActiveElement = item[1];
+        return predecessors.includes(itemActiveElement);
+      }).map((item) => ({
+        ScrollPointer:  Number(item[0]),
+        }));
 
+
+         // Insert activeElement as the first item in filteredDataArray
+         const activeElementData = filteredDataArray.find((item) => item.milestone === activeElement);
+         const filteredDataArrayWithoutActive = filteredDataArray.filter((item) => item.milestone !== activeElement);
+         filteredDataArrayWithoutActive.sort((a, b) => {
+          const dateA = new Date(a.planDate);
+          const dateB = new Date(b.planDate);
+          return dateA.getTime() - dateB.getTime();
+        });
+         console.log("filteredDataArrayWithoutActive after ",filteredDataArrayWithoutActive)
+         const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
+
+      return {
+        currentActiveMilestonePlaceholder: String(activeElement),
+        dataArray: updatedFilteredDataArray,
+        predecessorsArray: predDataArray
+      };
+    });
+  };
 
 
   handleToggleDisplay = () => {
@@ -355,13 +402,7 @@ public componentWillUnmount() {
         this.scrollReference.current.scrollLeft =  Number(scrollpositon[0])  - 100
 
       }
-
-      
-      
-      
-      
-      
-    };
+     };
 
     function formatDate(dateString) {
       const date = new Date(dateString);
@@ -446,9 +487,9 @@ public componentWillUnmount() {
               key={index}
               onClick={(e) => {
                 const trimmedValue = value.trim().replace(/\s/g, "");
-                if (!isNaN(trimmedValue)) {
+                console.log(trimmedValue);
                   handleClickHome(e, String(trimmedValue));
-                }
+                
               }}
               style={{ backgroundColor: '#B93333', color: 'white', width: 'fit-content' }}
             >
@@ -633,7 +674,7 @@ for (const existingMilestone of Seg1Values) {
       ]);
     } 
   
-    console.log(NavigationTracker);
+   // console.log("Lookup Table ",LookupTable);
 
     const NavigationBarSegment = (activeName, index) => (
       <>
@@ -713,27 +754,9 @@ for (const existingMilestone of Seg1Values) {
             onClick={()=>{
               this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
             }
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            onPointerEnter={handleMouseEnter}
           />
-          <Rect
-  x={x-15}
-  y={y}
-  width={30}
-  height={40}
-  fill={"red"}
-  stroke="none"
-  fillEnabled={false}
-  strokeOpacity={0}
-  strokeEnabled={false}
-  pointerEvents="visible"
-  onClick={()=>{
-    this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
-  }
-  onMouseEnter={handleMouseEnter}
-  onMouseLeave={handleMouseLeave}
 
-/>
     
           <StatusIcon
             x={x - 14}
@@ -1166,5 +1189,4 @@ for (const existingMilestone of Seg1Values) {
     );
   }
 }
-
 export default segmentedBar;
