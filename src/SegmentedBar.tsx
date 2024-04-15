@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Stage, Layer, Rect, Text, Line, Circle, Image } from "react-konva";
+import { Stage, Layer, Rect, Text, Line, Circle, Image,Group } from "react-konva";
 import * as moment from "moment";
 import { differenceInCalendarMonths, subMonths } from "date-fns";
 import { monthNames } from "./CONS_TABLE";
@@ -215,9 +215,7 @@ export class segmentedBar extends React.Component<any, State> {
         });
          console.log("filteredDataArrayWithoutActive after ",filteredDataArrayWithoutActive)
          const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
-         
-
-      return {
+       return {
         currentActiveMilestonePlaceholder: String(activeElement),
         dataArray: updatedFilteredDataArray,
         predecessorsArray: predDataArray,
@@ -489,6 +487,7 @@ public componentWillUnmount() {
     
  
 
+
     var shortCodeSeg1 = [];
     var statusSeg1 = [];
     var titleSeg1 = [];
@@ -713,53 +712,52 @@ for (const existingMilestone of Seg1Values) {
     
       return (
         <React.Fragment key={index}>
-          <Circle
-            x={x}
-            y={y + 25.8}
-            radius={30}
-            stroke={fill}
-            strokeWidth={3}
-            fill={backgroundColorVis}
-            onClick={()=>{
-              this.setState({ NavigationTracker: [] });
-              this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
-            }
-            onPointerEnter={handleMouseEnter}
-          />
-
-    
-          <StatusIcon
-            x={x - 14}
-            y={y + 10}
-            status={trends}
-            onClick={()=>{
-              this.setState({ NavigationTracker: [] });
-              this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
-            }
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-/>
-    
-          <Text
-            x={x - 40}
-            y={y}
-            width={40 * 2}
-            height={40 * 2}
-            align="center"
-            verticalAlign="middle"
-            text={shortCodeSeg}
-            fontSize={8}
-            fill={textColor}
-            onClick={()=>{
-              this.setState({ NavigationTracker: [] });
-              this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
-              
-            }
-            
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          />
-        </React.Fragment>
+              <Circle
+                x={x}
+                y={y + 25.8}
+                fill={backgroundColorVis}
+                radius={30}
+                stroke={fill}
+                strokeWidth={3}
+            /*   onClick={()=>{
+                this.setState({ NavigationTracker: [] });
+                 this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+              } */
+                onPointerEnter={handleMouseEnter}
+              />
+        
+        
+              <StatusIcon
+                x={x - 14}
+                y={y + 10}
+                status={trends}
+               /*  onClick={()=>{
+                  this.setState({ NavigationTracker: [] });
+                  this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+                } */
+                onMouseEnter={handleMouseEnter}
+        />
+        <Text
+                x={x - 40}
+                y={y}
+                width={80} // Increase the width to expand the clickable area horizontally
+  height={70} 
+                align="center"
+                verticalAlign="middle"
+                text={shortCodeSeg}
+                fontSize={8}
+                fill={textColor}
+                onClick={()=>{
+                  this.setState({ NavigationTracker: [] });
+                  this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+                  
+                }
+                
+                onMouseEnter={handleMouseEnter}
+              />
+             
+             
+            </React.Fragment>
       );
     });
     const Segment1Lines = finishDateList.map((week, index) => (
@@ -823,6 +821,24 @@ for (const existingMilestone of Seg1Values) {
     },
   };
 
+  const NavigationSegment =  NavigationTracker.map((item) => (
+      
+
+    <button
+      key={item}
+      onClick={(e) => {
+        const trimmedValue = item.trim().replace(/\s/g, "");
+        console.log(trimmedValue);
+        handleClickHome(e, String(trimmedValue)); 
+      }}
+      style={{ backgroundColor:"#f87171" , color:"white", fontSize:"16px"}}
+    >
+      {item}
+      
+    </button>
+  
+  
+  ))
 
 
   
@@ -998,8 +1014,8 @@ for (const existingMilestone of Seg1Values) {
                 </div>
                 <div className="relative">{weeksArray}</div>
                 <Stage
-                  width={17500}
-                  height={450}
+                  width={19000}
+                  height={550}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
                    <Layer>
@@ -1046,7 +1062,7 @@ for (const existingMilestone of Seg1Values) {
             <div
               style={{
                 width: "40%",
-                height:"500",
+                height:"550",
                 backgroundColor: backgroundColorVis,
                 display: rightSideBar
 
@@ -1138,38 +1154,45 @@ for (const existingMilestone of Seg1Values) {
               </table>
             </div>
           </div>
-    <div style={{ height: "200px", overflow:"auto" }}>
-   <button
-    style={{
-      backgroundColor: "blue",
-      color: "white",
-      width: "fit-content",
-    }}
-  >
-   Current Active Milestone {currentActiveMilestonePlaceholder}
-  </button>
-  {NavigationTracker.map((item) => (
-          <button
-          onClick={(e) => {
-            const trimmedValue = item.trim().replace(/\s/g, "");
-            console.log(trimmedValue);
-              handleClickHome(e, String(trimmedValue));
-            
-          }}
-          >{item}</button>
-    ))}
-<button
-  onClick={(e) => {
-    this.setState({ NavigationTracker: [] });
-  }}
+    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <tr  style={{ width: "100%", borderCollapse: "collapse" }}>
+  <td
+  onClick={(e) => { 
+    console.log("activityPlaceholder",currentActiveMilestonePlaceholder);
+    handleClickHome(e, String(currentActiveMilestonePlaceholder)); 
+    this.setState({ NavigationTracker: [] }
+
+      
+    ); }}
   style={{
-    backgroundColor: "blue",
+    width: "1.5%",
+    borderCollapse: "collapse",
+    backgroundColor: "red",
     color: "white",
-    width: "fit-content",
+    textAlign: "center",
   }}
 >
   X
-</button>
+</td>
+    <td  style={{borderCollapse: "collapse"   ,width: "25%",backgroundColor: "blue", color: "white", fontSize: ""}}>
+     Selected Milestone :  {currentActiveMilestonePlaceholder}
+    </td>
+    <td >
+    {NavigationSegment}
+
+    </td>
+    
+  </tr>
+</table>
+  <div style={{ display: "grid", gridTemplateColumns: "auto min-content" }}>
+  <div>
+
+</div>
+  </div>
+
+    <div style={{ height: "200px", overflow:"auto" }}>
+ 
+
 
   <DataTable
     columns={columns}

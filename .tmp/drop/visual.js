@@ -36240,18 +36240,22 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 });
             };
             return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, { key: index },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: x, y: y + 25.8, radius: 30, stroke: fill, strokeWidth: 3, fill: backgroundColorVis, onClick: () => {
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Circle */ .Cd, { x: x, y: y + 25.8, fill: backgroundColorVis, radius: 30, stroke: fill, strokeWidth: 3, 
+                    /*   onClick={()=>{
+                        this.setState({ NavigationTracker: [] });
+                         this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+                      } */
+                    onPointerEnter: handleMouseEnter }),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: x - 14, y: y + 10, status: trends, 
+                    /*  onClick={()=>{
+                       this.setState({ NavigationTracker: [] });
+                       this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]),Seg1Values[index]["shortCodeSeg"])}
+                     } */
+                    onMouseEnter: handleMouseEnter }),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: x - 40, y: y, width: 80, height: 70, align: "center", verticalAlign: "middle", text: shortCodeSeg, fontSize: 8, fill: textColor, onClick: () => {
                         this.setState({ NavigationTracker: [] });
                         this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                    }, onPointerEnter: handleMouseEnter }),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: x - 14, y: y + 10, status: trends, onClick: () => {
-                        this.setState({ NavigationTracker: [] });
-                        this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                    }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave }),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: x - 40, y: y, width: 40 * 2, height: 40 * 2, align: "center", verticalAlign: "middle", text: shortCodeSeg, fontSize: 8, fill: textColor, onClick: () => {
-                        this.setState({ NavigationTracker: [] });
-                        this.handleClick(LookupTable, String(Seg1Values[index]["successorsList"]), String(Seg1Values[index]["predecessorsList"]), Seg1Values[index]["shortCodeSeg"]);
-                    }, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave })));
+                    }, onMouseEnter: handleMouseEnter })));
         });
         const Segment1Lines = finishDateList.map((week, index) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: Seg1Values[index]["x"], y: Seg1Values[index]["ybarSeg"], status: Seg1Values[index]["fill"] == "red" ? "flag" : null }),
@@ -36293,6 +36297,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 },
             },
         };
+        const NavigationSegment = NavigationTracker.map((item) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: item, onClick: (e) => {
+                const trimmedValue = item.trim().replace(/\s/g, "");
+                console.log(trimmedValue);
+                handleClickHome(e, String(trimmedValue));
+            }, style: { backgroundColor: "#f87171", color: "white", fontSize: "16px" } }, item)));
         const Xval = [60, 92, 124, 156, 188, 220];
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", height: " 500px", flexGrow: 3 } },
@@ -36327,7 +36336,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis, } }, monthsArray),
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 17500, height: 450, style: { backgroundColor: backgroundColorVis } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 19000, height: 550, style: { backgroundColor: backgroundColorVis } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 0.8, height: 800, fill: "black" }),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation + 3, y: 10, text: "Today: " + todayDateString, fontSize: 15, fill: "black" })),
@@ -36343,7 +36352,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { onClick: this.handleToggleDisplay, style: { zIndex: 999, backgroundColor: "#B93333", color: "white", width: 'fit' } }, "||"),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: {
                         width: "40%",
-                        height: "500",
+                        height: "550",
                         backgroundColor: backgroundColorVis,
                         display: rightSideBar
                     } },
@@ -36400,26 +36409,26 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { ...colorRectStyle, backgroundColor: "blue" } }),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "Complete"),
                                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null))))))),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", borderCollapse: "collapse" } },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { style: { width: "100%", borderCollapse: "collapse" } },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { onClick: (e) => {
+                            console.log("activityPlaceholder", currentActiveMilestonePlaceholder);
+                            handleClickHome(e, String(currentActiveMilestonePlaceholder));
+                            this.setState({ NavigationTracker: [] });
+                        }, style: {
+                            width: "1.5%",
+                            borderCollapse: "collapse",
+                            backgroundColor: "red",
+                            color: "white",
+                            textAlign: "center",
+                        } }, "X"),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { borderCollapse: "collapse", width: "25%", backgroundColor: "blue", color: "white", fontSize: "" } },
+                        "Selected Milestone :  ",
+                        currentActiveMilestonePlaceholder),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, NavigationSegment))),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "grid", gridTemplateColumns: "auto min-content" } },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null)),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { height: "200px", overflow: "auto" } },
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { style: {
-                        backgroundColor: "blue",
-                        color: "white",
-                        width: "fit-content",
-                    } },
-                    "Current Active Milestone ",
-                    currentActiveMilestonePlaceholder),
-                NavigationTracker.map((item) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { onClick: (e) => {
-                        const trimmedValue = item.trim().replace(/\s/g, "");
-                        console.log(trimmedValue);
-                        handleClickHome(e, String(trimmedValue));
-                    } }, item))),
-                react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { onClick: (e) => {
-                        this.setState({ NavigationTracker: [] });
-                    }, style: {
-                        backgroundColor: "blue",
-                        color: "white",
-                        width: "fit-content",
-                    } }, "X"),
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_data_table_component__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .ZP, { columns: columns, data: dataArray, expandableRows: true, expandableRowsComponent: ExpandedComponent, customStyles: customStyles, pagination: true, dense: true }))));
     }
 }
@@ -36518,6 +36527,7 @@ class Visual {
             let totalFloatList = [];
             let trendLists = [];
             let lastReportedEndDateList = [];
+            console.log();
             for (let i = 0; i < rows.length; i++) {
                 let row = rows[i];
                 activityIDList[i] = `${(row[this.columnIndices['c1']])}`;

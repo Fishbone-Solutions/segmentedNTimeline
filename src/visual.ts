@@ -59,6 +59,8 @@ export class Visual implements IVisual {
             let totalFloatList: string[] = [];
             let trendLists: string[] = [];
             let lastReportedEndDateList: string[] = [];
+
+            console.log()
             for (let i = 0; i < rows.length; i++) {
                 let row = rows[i];
                 activityIDList[i] = `${(row[this.columnIndices['c1']])}`;
