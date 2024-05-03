@@ -28,6 +28,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-konva": "^18.2.10",
+    "react-popup": "^0.11.2",
+    "reactjs-popup": "^2.0.6",
     "styled-components": "^6.1.8",
     "use-image": "^1.1.1",
     "uvcanvas": "^0.1.0"

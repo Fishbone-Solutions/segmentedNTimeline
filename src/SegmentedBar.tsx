@@ -6,6 +6,8 @@ import { monthNames } from "./CONS_TABLE";
 import useImage from "use-image";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown, MdOutlineTrendingFlat } from 'react-icons/md';
 import DataTable,  {TableStyles ,} from 'react-data-table-component';
+import { useState } from "react";
+
 const StatusIcon = (props) => {
   if (props.status === "Improved") {
     const [image] = useImage(
@@ -88,6 +90,8 @@ export interface State {
   dataArray?:DataItem[],
   predecessorsArray?:  PrecedessorsPointers[],
   NavigationTracker?: string[];
+  activeLayer?: boolean
+
 }
 export const initialState: State = {
   backgroundColorVis: "white",
@@ -119,7 +123,8 @@ export const initialState: State = {
   activityPlaceholder:"",
   rightSideBar: "flex",
   currentActiveMilestonePlaceholder:"",
-  NavigationTracker:[]
+  NavigationTracker:[],
+  activeLayer: false
 
 };
 
@@ -144,6 +149,8 @@ export class segmentedBar extends React.Component<any, State> {
   private static updateCallback: (data: object) => void = null;
   scrollReference: React.RefObject<HTMLDivElement>;
   rightSideBar: String;
+  scrollPosition: number = 0; // New scrollPosition property
+ 
 
   public static update(newState: State) {
     if (typeof segmentedBar.updateCallback === "function") {
@@ -176,9 +183,7 @@ export class segmentedBar extends React.Component<any, State> {
 
     
     const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-  //  console.log("successorList",successorsList)
     const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));   
-//    console.log("first ",successors)
     this.setState((prevState) => {
       const filteredDataArray = LookupTable.filter((item) => {
       const itemActiveElement = item[1];
@@ -195,7 +200,6 @@ export class segmentedBar extends React.Component<any, State> {
         comments: item[10],
       }));
   
-       console.log("filter ",filteredDataArray)
   
       const predDataArray = LookupTable.filter((item) => {
         const itemActiveElement = item[1];
@@ -213,7 +217,6 @@ export class segmentedBar extends React.Component<any, State> {
           const dateB = new Date(b.planFinish);
           return dateA.getTime() - dateB.getTime();
         });
-         console.log("filteredDataArrayWithoutActive after ",filteredDataArrayWithoutActive)
          const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
        return {
         currentActiveMilestonePlaceholder: String(activeElement),
@@ -277,7 +280,8 @@ public componentWillUnmount() {
       rightSideBar,
       currentActiveMilestonePlaceholder,
      NavigationTracker,
-      dataArray
+      dataArray,
+      activeLayer
     } = this.state;
 
     let months = [];
@@ -370,6 +374,17 @@ public componentWillUnmount() {
 
       }
      };
+
+
+  
+
+
+
+
+
+
+
+
 
     function formatDate(dateString) {
       const date = new Date(dateString);
@@ -588,20 +603,26 @@ public componentWillUnmount() {
       visitedWeeks.forEach((num) => {
         countMap[num] = (countMap[num] || 0) + 1;
       });
-
-
       ypositionLocator = 0;
       if (weekNoFromList[i] % 2 === 0) {
-        ypositionLocator = 160 + Number(countMap[weekNoFromList[i]]) * 35;
-        if (ypositionLocator > 400) {
-            ypositionLocator = 390;
-        }
+        ypositionLocator = 200;
+   
       } else {
-        ypositionLocator = 170 + Number(countMap[weekNoFromList[i]]) * 35;
-        if (ypositionLocator > 400) {
-          ypositionLocator = 390;
+        ypositionLocator = 210;
       }
+
+    
+   
+      const countDict: { [key: number]: number } = {};
+
+      for (const value of weekNoFromList) {
+        if (value in countDict) {
+          countDict[value]++;
+        } else {
+          countDict[value] = 1;
+        }
       }
+      
 
     
 
@@ -627,16 +648,20 @@ public componentWillUnmount() {
         predecessorsList: predecessorsListSeg1[i]
       };
 
+
+
+  
 for (const existingMilestone of Seg1Values) {
   if (existingMilestone.x === milestone.x && existingMilestone.y === milestone.y) {
-    milestone.y -= 35; 
+    milestone.y += 65; 
   }
 }
       Seg1Values.push(milestone);
-    } 
+} 
 
-   
-    for (let i = 0; i < activityIDList.length; i++) {
+
+
+for (let i = 0; i < activityIDList.length; i++) {
       LookupTable.push([
        String(55 * Number(weekNoFromList[i])), //0
         activityIDList[i].replace(/\s/g, ""), // 1
@@ -652,15 +677,13 @@ for (const existingMilestone of Seg1Values) {
       ]);
     } 
   
-    console.log("Navigation Tracker ",NavigationTracker);
 
 
-
+ 
 
 
 
   
-
 
   
  
@@ -684,6 +707,10 @@ for (const existingMilestone of Seg1Values) {
     
 
     
+
+
+
+
       const handleMouseEnter = () => {
         this.setState({
           titlePlaceholder: titleSeg,
@@ -772,9 +799,9 @@ for (const existingMilestone of Seg1Values) {
       <Line
       points={[
         Seg1Values[index]["x"],
-        yBarSeg1[index],
+        yBarSeg1[index]-this.scrollPosition,
         Seg1Values[index]["x"],
-        Seg1Values[index]["y"],
+        Seg1Values[index]["y"]-this.scrollPosition,
       ]}
       stroke={segmentColor[index]}
       strokeWidth={5}
@@ -782,6 +809,10 @@ for (const existingMilestone of Seg1Values) {
 
         </>
     ));
+
+
+   
+
     const legendStyle: React.CSSProperties = {
       fontSize: "18px",
       marginBottom: "10px",
@@ -828,7 +859,6 @@ for (const existingMilestone of Seg1Values) {
       key={item}
       onClick={(e) => {
         const trimmedValue = item.trim().replace(/\s/g, "");
-        console.log(trimmedValue);
         handleClickHome(e, String(trimmedValue)); 
       }}
       style={{ backgroundColor:"#f87171" , color:"white", fontSize:"16px"}}
@@ -841,7 +871,11 @@ for (const existingMilestone of Seg1Values) {
   ))
 
 
-  
+
+  const handleClick = () => {
+    this.setState({ activeLayer: true });
+  };
+
    const Xval = [60,92,124,156,188,220]
     return (
       
@@ -996,6 +1030,7 @@ for (const existingMilestone of Seg1Values) {
   </Stage>
 </div>
             </div>
+
             <div
               ref={this.scrollReference}
               style={{
@@ -1015,7 +1050,7 @@ for (const existingMilestone of Seg1Values) {
                 <div className="relative">{weeksArray}</div>
                 <Stage
                   width={19000}
-                  height={550}
+                  height={800}
                   style={{ backgroundColor: backgroundColorVis }}
                 >
                    <Layer>
@@ -1050,11 +1085,11 @@ for (const existingMilestone of Seg1Values) {
     );
   }
 })}
-                  <Layer>
-                    {Segment1Lines}
-                    {Segment1Categories}
-                  </Layer>
-  
+                
+      <Layer >
+      {Segment1Lines}
+      {Segment1Categories}
+      </Layer>
                 </Stage>
               </div>
             </div>
@@ -1064,7 +1099,9 @@ for (const existingMilestone of Seg1Values) {
                 width: "40%",
                 height:"550",
                 backgroundColor: backgroundColorVis,
-                display: rightSideBar
+                display: rightSideBar,
+                overflow: "auto"
+
 
               }}
             >
@@ -1075,8 +1112,7 @@ for (const existingMilestone of Seg1Values) {
                 </table>
               <table >
               <button style={{ zIndex:999, backgroundColor:"#B93333", color:"white",  width: 'fit', }}   onClick={(e) => handleClickHomeNavigation(e)}>Today</button>   
-
-                <tbody style={{ margin: "fixed", borderCollapse: "collapse"  }}>
+              <tbody style={{ margin: "fixed", borderCollapse: "collapse"  }}>
                   <tr style={{ display: 'block', width: '100%' }}>
                    
                   </tr>
@@ -1086,7 +1122,7 @@ for (const existingMilestone of Seg1Values) {
 </tr>
 <tr>
   <td style={{ fontWeight: "bold" }}>Title</td>
-  <td style={{ /* border: "1px solid black" */}}>{titlePlaceholder}</td>
+  <td style={{ }}>{titlePlaceholder}</td>  
 </tr>
 <tr>
   <td style={{ fontWeight: "bold" }}>Owner</td>
@@ -1158,7 +1194,6 @@ for (const existingMilestone of Seg1Values) {
   <tr  style={{ width: "100%", borderCollapse: "collapse" }}>
   <td
   onClick={(e) => { 
-    console.log("activityPlaceholder",currentActiveMilestonePlaceholder);
     handleClickHome(e, String(currentActiveMilestonePlaceholder)); 
     this.setState({ NavigationTracker: [] }
 

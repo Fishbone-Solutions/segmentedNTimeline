@@ -35842,12 +35842,14 @@ const initialState = {
     activityPlaceholder: "",
     rightSideBar: "flex",
     currentActiveMilestonePlaceholder: "",
-    NavigationTracker: []
+    NavigationTracker: [],
+    activeLayer: false
 };
 class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     static updateCallback = null;
     scrollReference;
     rightSideBar;
+    scrollPosition = 0; // New scrollPosition property
     static update(newState) {
         if (typeof segmentedBar.updateCallback === "function") {
             segmentedBar.updateCallback(newState);
@@ -35865,9 +35867,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }
     handleClick = (LookupTable, successorsList, predecessorsList, activeElement) => {
         const successors = successorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-        //  console.log("successorList",successorsList)
         const predecessors = predecessorsList.split(',').map((item) => item.trim().replace(/\n/g, ''));
-        //    console.log("first ",successors)
         this.setState((prevState) => {
             const filteredDataArray = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
@@ -35883,7 +35883,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 projectedFinish: item[7],
                 comments: item[10],
             }));
-            console.log("filter ", filteredDataArray);
             const predDataArray = LookupTable.filter((item) => {
                 const itemActiveElement = item[1];
                 return predecessors.includes(itemActiveElement);
@@ -35898,7 +35897,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 const dateB = new Date(b.planFinish);
                 return dateA.getTime() - dateB.getTime();
             });
-            console.log("filteredDataArrayWithoutActive after ", filteredDataArrayWithoutActive);
             const updatedFilteredDataArray = [activeElementData, ...filteredDataArrayWithoutActive];
             return {
                 currentActiveMilestonePlaceholder: String(activeElement),
@@ -35921,7 +35919,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         segmentedBar.updateCallback = null;
     }
     render() {
-        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, SidetextColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, activityPlaceholder, rightSideBar, currentActiveMilestonePlaceholder, NavigationTracker, dataArray } = this.state;
+        const { backgroundColorVis, Segment1Color, Segment2Color, Segment3Color, Segment4Color, Segment5Color, Segment6Color, textColor, SidetextColor, activityIDList, categoryList, activityNameList, statusNameList, startDateList, finishDateList, projectedStartDateList, projectedFinishDateList, ownerList, predecessorsList, successorsList, commentaryList, totalFloatList, trendLists, lastReportedEndDateList, titlePlaceholder, ownerPlaceholder, trendPlaceholder, baseLineDatePlaceholder, endDatePlaceholder, lastReportedDatePlaceholder, slipPlaceholder, activityPlaceholder, rightSideBar, currentActiveMilestonePlaceholder, NavigationTracker, dataArray, activeLayer } = this.state;
         let months = [];
         let years = [];
         let finalDatesIterator = [];
@@ -36159,15 +36157,18 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             });
             ypositionLocator = 0;
             if (weekNoFromList[i] % 2 === 0) {
-                ypositionLocator = 160 + Number(countMap[weekNoFromList[i]]) * 35;
-                if (ypositionLocator > 400) {
-                    ypositionLocator = 390;
-                }
+                ypositionLocator = 200;
             }
             else {
-                ypositionLocator = 170 + Number(countMap[weekNoFromList[i]]) * 35;
-                if (ypositionLocator > 400) {
-                    ypositionLocator = 390;
+                ypositionLocator = 210;
+            }
+            const countDict = {};
+            for (const value of weekNoFromList) {
+                if (value in countDict) {
+                    countDict[value]++;
+                }
+                else {
+                    countDict[value] = 1;
                 }
             }
             let milestone = {
@@ -36192,7 +36193,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             };
             for (const existingMilestone of Seg1Values) {
                 if (existingMilestone.x === milestone.x && existingMilestone.y === milestone.y) {
-                    milestone.y -= 35;
+                    milestone.y += 65;
                 }
             }
             Seg1Values.push(milestone);
@@ -36212,7 +36213,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 commentaryList[i], // 10
             ]);
         }
-        console.log("Navigation Tracker ", NavigationTracker);
         const Segment1Categories = finishDateList.map((week, index) => {
             const { x, y, fill, shortCodeSeg, titleSeg, ownerSeg, beginSeg1, endSeg1, categoryListDisplaySeg1, trends, lastReportedEndDateSeg1, slipSeg1, } = Seg1Values[index];
             const handleMouseEnter = () => {
@@ -36261,9 +36261,9 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(StatusIcon, { x: Seg1Values[index]["x"], y: Seg1Values[index]["ybarSeg"], status: Seg1Values[index]["fill"] == "red" ? "flag" : null }),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Line */ .x1, { points: [
                     Seg1Values[index]["x"],
-                    yBarSeg1[index],
+                    yBarSeg1[index] - this.scrollPosition,
                     Seg1Values[index]["x"],
-                    Seg1Values[index]["y"],
+                    Seg1Values[index]["y"] - this.scrollPosition,
                 ], stroke: segmentColor[index], strokeWidth: 5 }))));
         const legendStyle = {
             fontSize: "18px",
@@ -36299,9 +36299,11 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         };
         const NavigationSegment = NavigationTracker.map((item) => (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { key: item, onClick: (e) => {
                 const trimmedValue = item.trim().replace(/\s/g, "");
-                console.log(trimmedValue);
                 handleClickHome(e, String(trimmedValue));
             }, style: { backgroundColor: "#f87171", color: "white", fontSize: "16px" } }, item)));
+        const handleClick = () => {
+            this.setState({ activeLayer: true });
+        };
         const Xval = [60, 92, 124, 156, 188, 220];
         return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", flexDirection: "column", } },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { style: { display: "flex", height: " 500px", flexGrow: 3 } },
@@ -36336,7 +36338,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative", style: { backgroundColor: backgroundColorVis, } }, monthsArray),
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "relative" }, weeksArray),
-                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 19000, height: 550, style: { backgroundColor: backgroundColorVis } },
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Stage */ .Hf, { width: 19000, height: 800, style: { backgroundColor: backgroundColorVis } },
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Layer */ .mh, null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Rect */ .UL, { x: todayDateLocation, y: 5, width: 0.8, height: 800, fill: "black" }),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_konva__WEBPACK_IMPORTED_MODULE_1__/* .Text */ .xv, { x: todayDateLocation + 3, y: 10, text: "Today: " + todayDateString, fontSize: 15, fill: "black" })),
@@ -36354,7 +36356,8 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                         width: "40%",
                         height: "550",
                         backgroundColor: backgroundColorVis,
-                        display: rightSideBar
+                        display: rightSideBar,
+                        overflow: "auto"
                     } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null,
                         react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", { style: { margin: "fixed" } },
@@ -36368,7 +36371,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, activityPlaceholder)),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Title"),
-                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black" */} }, titlePlaceholder)),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: {} }, titlePlaceholder)),
                             react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null,
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { fontWeight: "bold" } }, "Owner"),
                                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { style: { /* border: "1px solid black" */} }, ownerPlaceholder)),
@@ -36412,7 +36415,6 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", { style: { width: "100%", borderCollapse: "collapse" } },
                 react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", { style: { width: "100%", borderCollapse: "collapse" } },
                     react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", { onClick: (e) => {
-                            console.log("activityPlaceholder", currentActiveMilestonePlaceholder);
                             handleClickHome(e, String(currentActiveMilestonePlaceholder));
                             this.setState({ NavigationTracker: [] });
                         }, style: {
