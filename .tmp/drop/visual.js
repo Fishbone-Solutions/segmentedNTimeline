@@ -36172,7 +36172,7 @@ class segmentedBar extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
                 }
             }
             let milestone = {
-                x: 55 * Number(weekNoFromList[i]),
+                x: 55.4 * Number(weekNoFromList[i]),
                 y: ypositionLocator,
                 fill: statusSeg1[i],
                 id: "SEG1" + i,

@@ -628,7 +628,7 @@ public componentWillUnmount() {
 
       
       let milestone = {
-        x: 55 * Number(weekNoFromList[i]),
+        x: 55.4 * Number(weekNoFromList[i]),
         y: ypositionLocator,
         fill: statusSeg1[i],
         id: "SEG1" + i,
