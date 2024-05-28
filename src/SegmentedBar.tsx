@@ -6,8 +6,7 @@ import { monthNames } from "./CONS_TABLE";
 import useImage from "use-image";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown, MdOutlineTrendingFlat } from 'react-icons/md';
 import DataTable,  {TableStyles ,} from 'react-data-table-component';
-import { useState } from "react";
-
+ 
 const StatusIcon = (props) => {
   if (props.status === "Improved") {
     const [image] = useImage(
