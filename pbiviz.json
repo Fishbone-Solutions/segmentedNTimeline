@@ -1,2 +1,26 @@
-{"visual":{"name":"segmentedNtimeline","displayName":"segmentedCVLVISUAL2","guid":"segmentedCVLVISUALV20","visualClassName":"Visual","version":"1.0.0.0","description":"Segmented Timelines","supportUrl":"www.fishbonesolutions.co.uk/support","gitHubUrl":""},"apiVersion":"5.3.0","author":{"name":"Mohammed Saif","email":"mohammed.saif@fishbonesolutions.co.uk"},"assets":{"icon":"assets/icon.png"},"externalJS":null,"style":"style/visual.less","capabilities":"capabilities.json","dependencies":null,"stringResources":[],"version":"1.0.0.0"}
- 
+{
+    "visual": {
+      "name": "segmentedNtimeline",
+      "displayName": "segmentedCVLVISUAL25",
+      "guid": "segmentedCVLVISUALV25",
+      "visualClassName": "Visual",
+      "version": "1.0.0.0",
+      "description": "Segmented Timelines",
+      "supportUrl": "www.fishbonesolutions.co.uk/support",
+      "gitHubUrl": ""
+    },
+    "apiVersion": "5.3.0",
+    "author": {
+      "name": "Mohammed Saif",
+      "email": "mohammed.saif@fishbonesolutions.co.uk"
+    },
+    "assets": {
+      "icon": "assets/icon.png"
+    },
+    "externalJS": null,
+    "style": "style/visual.less",
+    "capabilities": "capabilities.json",
+    "dependencies": null,
+    "stringResources": [],
+    "version": "1.0.0.0"
+  }

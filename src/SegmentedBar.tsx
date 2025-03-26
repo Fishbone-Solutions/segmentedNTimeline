@@ -6,7 +6,8 @@ import { monthNames } from "./CONS_TABLE";
 import useImage from "use-image";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown, MdOutlineTrendingFlat } from 'react-icons/md';
 import DataTable,  {TableStyles ,} from 'react-data-table-component';
- 
+import { useState } from "react";
+
 const StatusIcon = (props) => {
   if (props.status === "Improved") {
     const [image] = useImage(
@@ -285,50 +286,65 @@ public componentWillUnmount() {
 
     let months = [];
     let years = [];
-    let finalDatesIterator = [];
 
-    for (const element of finishDateList) {
-      finalDatesIterator.push(new Date(Date.parse(element)));
+// Convert finishDateList to array of Date objects, filtering out null/undefined values
+const finalDatesIterator: Date[] = [];
+for (const element of finishDateList) {
+    if (element) { // Skip null/undefined values
+        finalDatesIterator.push(new Date(element)); // Parse ISO string directly
     }
-    let categoryListDisplay = [...new Set(categoryList)];
-    categoryListDisplay.sort((a, b) => a.localeCompare(b));
+}
 
-    const result = finalDatesIterator.reduce(
-      (acc, date) => {
+let categoryListDisplay: string[] = [...new Set(categoryList)];
+categoryListDisplay.sort((a: string, b: string) => a.localeCompare(b));
+
+// Define the accumulator type for reduce
+interface DateRange {
+    min: Date | undefined;
+    max: Date | undefined;
+}
+
+// Find min and max dates from the filtered array
+const result: DateRange = finalDatesIterator.reduce(
+    (acc: DateRange, date: Date): DateRange => {
         const min = acc.min ? (date < acc.min ? date : acc.min) : date;
-        const max = acc.max
-          ? date > acc.max
-            ? date
-            : acc.max
-          : date || new Date("2026-01-01");
+        const max = acc.max ? (date > acc.max ? date : acc.max) : date;
         return { min, max };
-      },
-      { min: undefined, max: undefined }
-    );
-
-
-    let startDate4 = moment(new Date(Date.parse(result.min))).startOf("month");
-    const startDate = startDate4.subtract(1, "months");
-    let endDate4 = moment(result.max).startOf("months");
-    const endDate = endDate4.add(1, "months");
-    let currentDate = startDate;
-
-    while (currentDate.isSameOrBefore(endDate)) {
-      const month = currentDate.month();
-      const year = currentDate.year();
-
-      months.push(monthNames[month]);
-      years.push(year);
-      currentDate = currentDate.add(1, "months");
+    },
+    { 
+        min: finalDatesIterator.length > 0 ? undefined : new Date(),
+        max: finalDatesIterator.length > 0 ? undefined : new Date()
     }
+);
 
+// Set startDate and endDate as Date objects
+const startDate: Date = finalDatesIterator.length > 0 
+    ? moment(result.min).startOf('month').toDate()
+    : moment().startOf('month').toDate(); // Current date as default
+
+const endDate: Date = finalDatesIterator.length > 0 
+    ? moment(result.max).add(1, 'month').startOf('month').toDate() // Largest date + 1 month
+    : moment().add(1, 'year').startOf('month').toDate();
+
+
+
+    let currentDate = moment(startDate); // Convert to Moment object
+
+    console.log("startDate, endDate:", startDate.toISOString(), endDate.toISOString());
+    while (currentDate.isSameOrBefore(endDate)) {
+        const month = currentDate.month(); // 0-11
+        const year = currentDate.year();
+        
+        months.push(monthNames[month]);
+        years.push(year);
+        currentDate = currentDate.add(1, "months");
+    }
     const start = subMonths(result.min, 1);
     const todayDate = new Date();
     const todaysLine = todayDate.getDate() + todayDate.getDay();
     const prefix = [0, 1, 2, 3, 4, 5];
     const currentWeek = prefix[0 | (todaysLine / 7)] + 1;
     const todayDateLocation = Math.abs(differenceInCalendarMonths(start, Date.now())) * 5 * 55 +currentWeek * 55 -24;
-    const EndDateLocation = Math.abs(differenceInCalendarMonths(start, endDate.toDate())) * 5 * 55;
     const today = new Date();
     const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
     const todayDateString: string = today.toLocaleDateString('en-UK', options).split('/').join('/');
@@ -352,6 +368,8 @@ public componentWillUnmount() {
         <button>{years[index]}</button>
       </div>
     ));
+
+    console.log("months array", monthsArray)
     
     const handleClickHomeNavigation = (e) => {
       this.scrollReference.current.scrollLeft = todayDateLocation - 250;
@@ -536,6 +554,7 @@ public componentWillUnmount() {
       { y: 185, fill: Segment6Color, y1: 300 },
     ];
     
+    console.log("finishDateList",finishDateList)
     const weekNoFromList = finishDateList.map((element) => {
       const start = subMonths(result.min, 1);
       const week = new Date(Date.parse(element));
@@ -545,6 +564,7 @@ public componentWillUnmount() {
       );
       return weekNos;
     });
+
 
 
   
@@ -658,6 +678,7 @@ for (const existingMilestone of Seg1Values) {
       Seg1Values.push(milestone);
 } 
 
+console.log("Seg1Values",Seg1Values)
 
 
 for (let i = 0; i < activityIDList.length; i++) {

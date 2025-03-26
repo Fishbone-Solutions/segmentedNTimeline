@@ -12,32 +12,31 @@ import VisualObjectInstance = powerbi.VisualObjectInstance;
 import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInstancesOptions;
 import VisualObjectInstanceEnumerationObject = powerbi.VisualObjectInstanceEnumerationObject;
 import "./../style/visual.less";
-import { segmentedBar, initialState } from "./SegmentedBar"
+import { segmentedBar, initialState } from "./SegmentedBar";
+import * as moment from "moment";
 
-// standart imports
 export class Visual implements IVisual {
     private target: HTMLElement;
     private reactRoot: React.ComponentElement<any, any>;
     private settings: VisualSettings;
-    private columnIndices: {};
+    private columnIndices: { [key: string]: number };
 
     constructor(options: VisualConstructorOptions) {
-        // constructor body
         this.target = options.element;
         this.reactRoot = React.createElement(segmentedBar, {});
         ReactDOM.render(this.reactRoot, this.target);
-        this.columnIndices = [];
-        for (let i = 1; i <=15; i++) {
+        this.columnIndices = {};
+        for (let i = 1; i <= 15; i++) {
             let name = "c" + i;
             this.columnIndices[name] = 0;
         }
     }
+
     private clear() {
         segmentedBar.update(initialState);
     }
 
     public update(options: VisualUpdateOptions) {
-
         if (options.dataViews && options.dataViews[0]) {
             const dataView: DataView = options.dataViews[0];
             this.settings = <VisualSettings>VisualSettings.parse(dataView);
@@ -60,55 +59,28 @@ export class Visual implements IVisual {
             let trendLists: string[] = [];
             let lastReportedEndDateList: string[] = [];
 
-            console.log()
             for (let i = 0; i < rows.length; i++) {
                 let row = rows[i];
-                activityIDList[i] = `${(row[this.columnIndices['c1']])}`;
+                activityIDList[i] = `${row[this.columnIndices["c1"]] || ""}`;
+                categoryList[i] = `${row[this.columnIndices["c2"]] || ""}`;
+                activityNameList[i] = `${row[this.columnIndices["c3"]] || ""}`;
+                statusNameList[i] = `${row[this.columnIndices["c4"]] || ""}`;
 
-                // Populate categoryList
-                categoryList[i] = `${row[this.columnIndices['c2']]}`;
+                // Use formatDate for all date fields
+                startDateList[i] = this.formatDate(row[this.columnIndices["c5"]]);
+                finishDateList[i] = `${row[this.columnIndices["c6"]]}`;
+                projectedStartDateList[i] = this.formatDate(row[this.columnIndices["c7"]]);
+                projectedFinishDateList[i] = this.formatDate(row[this.columnIndices["c8"]]);
+                
+                ownerList[i] = `${row[this.columnIndices["c9"]] || ""}`;
+                predecessorsList[i] = `${row[this.columnIndices["c10"]] || ""}`;
+                successorsList[i] = `${row[this.columnIndices["c11"]] || ""}`;
+                commentaryList[i] = `${row[this.columnIndices["c12"]] || ""}`;
+                totalFloatList[i] = `${row[this.columnIndices["c13"]] || ""}`;
+                trendLists[i] = `${row[this.columnIndices["c14"]] || ""}`;
+                lastReportedEndDateList[i] = this.formatDate(row[this.columnIndices["c15"]]);
+            }
 
-                // Populate activityNameList
-                activityNameList[i] = `${row[this.columnIndices['c3']]}`;
-
-                // Populate statusNameList
-                statusNameList[i] = `${row[this.columnIndices['c4']]}`;
-
-
-                // Populate startDateList
-                startDateList[i] = `${row[this.columnIndices['c5']]}`;
-
-                // Populate finishDateList
-                finishDateList[i] = `${row[this.columnIndices['c6']]}`;
-
-                // Populate projectedStartDateList
-                projectedStartDateList[i] = `${row[this.columnIndices['c7']]}`;
-
-                // Populate projectedFinishDateList
-                projectedFinishDateList[i] = `${row[this.columnIndices['c8']]}`;
-
-                // Populate ownerList
-                ownerList[i] = `${row[this.columnIndices['c9']]}`;
-
-                // Populate predecessorsList
-                predecessorsList[i] = `${row[this.columnIndices['c10']]}`;
-
-                // Populate successorsList
-                successorsList[i] = `${row[this.columnIndices['c11']]}`;
-
-                // Populate commentaryList
-                commentaryList[i] = `${row[this.columnIndices['c12']]}`;
-
-                // Populate totalFloatList
-                totalFloatList[i] = `${row[this.columnIndices['c13']]}`;
-
-                // Populate trendLists
-                trendLists[i] = `${row[this.columnIndices['c14']]}`;
-
-                // Populate lastReportedEndDateList
-                lastReportedEndDateList[i] = `${row[this.columnIndices['c15']]}`;
-
-            } 
             segmentedBar.update({
                 Segment1Color: object && object.Segment1Color ? object.Segment1Color : undefined,
                 Segment2Color: object && object.Segment2Color ? object.Segment2Color : undefined,
@@ -135,28 +107,38 @@ export class Visual implements IVisual {
                 lastReportedEndDateList: lastReportedEndDateList,
                 backgroundColorVis: object && object.circleColor ? object.circleColor : undefined,
             });
-
-
         } else {
             this.clear();
         }
     }
 
     private findColumns(columns: DataViewMetadataColumn[]) {
-        //iterate over defined column names
         for (let name in this.columnIndices) {
-            //now iterate over available columns, note that not all columns may be assigned a data field yet
             for (let j = 0; j < columns.length; j++) {
-                //defining the role attribute of the current column, more info in the data view appendix
                 let columnRoles = columns[j].roles;
-                //column name is the property name, so looking in there
-                if (Object.keys(columnRoles).indexOf(name) >= 0) {
-                    //setting the index of the column name to the index of the role
+                if (columnRoles && Object.keys(columnRoles).indexOf(name) >= 0) {
                     this.columnIndices[name] = j;
                     break;
                 }
             }
         }
+    }
+
+    private formatDate(value: any): string {
+        if (!value) return ""; // Handle null or undefined
+
+        // Power BI often passes dates as Date objects or ISO strings
+        const parsed = moment(value, moment.ISO_8601, true); // Parse ISO or Date object strictly
+        const minDate = moment('2022-01-01');
+        const maxDate = moment('2028-01-01');
+
+        // Check if valid and within range
+        if (!parsed.isValid() || parsed.isBefore(minDate) || parsed.isAfter(maxDate)) {
+            return ""; // Return empty string for invalid dates or out-of-range (like 1970)
+        }
+
+        // Format as DD/MM/YYYY (en-GB style)
+        return parsed.format('DD/MM/YYYY');
     }
 
     public enumerateObjectInstances(
