@@ -16,9 +16,11 @@
   },
   "dependencies": {
     "@types/d3": "^7.4.0",
+    "css-loader": "^7.1.2",
     "d3": "^7.8.5",
     "date-fns": "^3.1.0",
     "konva": "^9.3.0",
+    "less-loader": "^12.3.0",
     "moment": "^2.30.1",
     "powerbi-visuals-api": "~5.3.0",
     "powerbi-visuals-utils-dataviewutils": "^6.0.2",
@@ -30,21 +32,24 @@
     "react-konva": "^18.2.10",
     "react-popup": "^0.11.2",
     "reactjs-popup": "^2.0.6",
-    "styled-components": "^6.1.8",
-    "use-image": "^1.1.1",
+    "use-image": "^1.1.4",
     "uvcanvas": "^0.1.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.24.1",
     "@testing-library/dom": "^9.3.4",
     "@testing-library/react": "^14.2.2",
-    "@testing-library/react-native": "^12.4.5",
     "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "buffer": "^6.0.3",
     "eslint": "^8.42.0",
     "eslint-plugin-powerbi-visuals": "^0.8.1",
     "jest": "^29.7.0",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
     "ts-jest": "^29.1.2",
-    "typescript": "4.9.3"
+    "ts-loader": "9.5.1",
+    "typescript": "5.3.3",
+    "util": "^0.12.5"
   }
 }

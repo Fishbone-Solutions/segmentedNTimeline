@@ -6,7 +6,7 @@ node_modules/
 .tmp
 # Ignore Git tracking files
 .git/ 
-
+.tmp/
 # Ignore node_modules and npm files
 node_modules/
 npm-debug.log*

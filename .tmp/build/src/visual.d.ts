@@ -15,5 +15,6 @@ export declare class Visual implements IVisual {
     private clear;
     update(options: VisualUpdateOptions): void;
     private findColumns;
+    private formatDate;
     enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstance[] | VisualObjectInstanceEnumerationObject;
 }
